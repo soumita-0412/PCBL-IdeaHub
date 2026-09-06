@@ -1,0 +1,55 @@
+# ============================================================
+# IDEAS PORTAL — Backend Requirements
+# ============================================================
+
+# ─── Framework ─────────────────────────────────────────────
+fastapi[standard]>=0.115.0,<1.0.0
+uvicorn[standard]>=0.30.0,<1.0.0
+pydantic>=2.8.0,<3.0.0
+pydantic-settings>=2.4.0,<3.0.0
+
+# ─── Database ──────────────────────────────────────────────
+motor>=3.5.0,<4.0.0
+beanie>=1.27.0,<2.0.0
+pymongo>=4.8.0,<5.0.0
+
+# ─── Authentication / Security ─────────────────────────────
+python-jose[cryptography]>=3.3.0,<4.0.0
+cryptography>=43.0.0,<44.0.0
+bcrypt>=4.2.0,<6.0.0
+
+# ─── HTTP Client ───────────────────────────────────────────
+httpx>=0.27.0,<1.0.0
+
+# ─── Logging ───────────────────────────────────────────────
+structlog>=24.4.0,<25.0.0
+
+# ─── Utilities ─────────────────────────────────────────────
+python-multipart>=0.0.9,<1.0.0
+python-dateutil>=2.9.0,<3.0.0
+tenacity>=9.0.0,<10.0.0
+
+# ─── Production ASGI server ────────────────────────────────
+gunicorn>=23.0.0,<24.0.0
+
+# ─── Testing ───────────────────────────────────────────────
+pytest>=8.3.0,<9.0.0
+pytest-asyncio>=0.24.0,<1.0.0
+pytest-cov>=5.0.0,<6.0.0
+pytest-mock>=3.14.0,<4.0.0
+anyio>=4.6.0,<5.0.0
+
+# ─── Test Factories ────────────────────────────────────────
+factory-boy>=3.3.0,<4.0.0
+faker>=30.0.0,<31.0.0
+
+# ─── Linting / Formatting ──────────────────────────────────
+ruff>=0.7.0,<1.0.0
+
+# ─── Type Checking ─────────────────────────────────────────
+mypy>=1.11.0,<2.0.0
+types-python-dateutil>=2.9.0,<3.0.0
+
+# ─── Dev Server ────────────────────────────────────────────
+# watchfiles excluded — requires Rust build, not yet Python 3.14 compatible.
+# uvicorn --reload uses its own file watcher without this package.

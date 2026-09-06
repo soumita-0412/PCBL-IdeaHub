@@ -1,0 +1,55 @@
+"""
+Role-based access control FastAPI dependencies.
+
+Usage:
+    @router.get("/admin-only")
+    async def endpoint(user: CurrentUser = Depends(require_admin)):
+        ...
+
+"And above" means the user's role index in ROLE_HIERARCHY >= the
+minimum required role index.
+"""
+
+from collections.abc import Callable
+
+from fastapi import Depends
+
+from app.core.constants import ROLE_HIERARCHY, Roles
+from app.core.exceptions import ForbiddenException
+from app.dependencies.auth import get_current_user
+from app.schemas.auth import CurrentUser
+
+
+def _require_role(min_role: str) -> Callable:
+    """Factory that returns a FastAPI dependency enforcing a minimum role."""
+    min_index = ROLE_HIERARCHY.index(min_role)
+
+    async def dependency(
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> CurrentUser:
+        try:
+            user_index = ROLE_HIERARCHY.index(current_user.role)
+        except ValueError as exc:
+            raise ForbiddenException(f"Unknown role: {current_user.role}") from exc
+        if user_index < min_index:
+            raise ForbiddenException("Insufficient permissions for this action")
+        return current_user
+
+    return dependency
+
+
+# Reusable dependencies — inject directly into endpoint signatures
+require_employee = _require_role(Roles.EMPLOYEE)
+require_l1_reviewer = _require_role(Roles.L1_REVIEWER)
+require_functional_reviewer = _require_role(Roles.FUNCTIONAL_REVIEWER)
+require_functional_head = _require_role(Roles.FUNCTIONAL_HEAD)
+require_admin = _require_role(Roles.ADMIN)
+
+
+async def require_super_admin(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> CurrentUser:
+    """Exact-match guard — ROLE_SUPER_ADMIN only."""
+    if current_user.role != Roles.SUPER_ADMIN:
+        raise ForbiddenException("Super admin access required")
+    return current_user

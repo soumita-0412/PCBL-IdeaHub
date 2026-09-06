@@ -1,0 +1,157 @@
+# ============================================================
+# IDEAS PORTAL — .gitignore
+# Node.js + Python + Docker + OS
+# ============================================================
+
+# ─── OS ────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ─── Editors ───────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── Environment / Secrets ─────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.local.example
+!.env.*.example
+*.pem
+*.key
+*.crt
+secrets/
+
+# ─── Node.js / Next.js ────────────────────────────────────
+node_modules/
+.npm
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnpm-store/
+
+# Build output
+.next/
+out/
+dist/
+build/
+.vercel/
+.turbo/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Cache
+.eslintcache
+.stylelintcache
+.prettiercache
+
+# ─── Python / FastAPI ─────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+pythonenv*/
+
+# Distribution
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# mypy / pyright / ruff
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# ─── Docker ───────────────────────────────────────────────
+*.tar
+*.gz
+
+# ─── MongoDB ──────────────────────────────────────────────
+data/db/
+mongo_data/
+
+# ─── Pickle user store (Phase 1 dev-only user database) ───
+backend/data/
+!backend/data/.gitkeep
+
+# ─── Terraform ────────────────────────────────────────────
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# ─── Misc ─────────────────────────────────────────────────
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig

@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * IdeaPortal Design Tokens — Dark navy theme (primary)
+ * All CSS variables use HSL channels without the hsl() wrapper
+ * so Tailwind can compose opacity: bg-primary/50
+ */
+
+@layer base {
+  :root {
+    /* ── App background — deep dark navy ──────────────────── */
+    --background: 222 47% 7%;
+    --foreground: 210 40% 97%;
+
+    /* ── Panels / Cards ────────────────────────────────────── */
+    --card: 222 44% 11%;
+    --card-foreground: 210 40% 97%;
+
+    --popover: 222 44% 11%;
+    --popover-foreground: 210 40% 97%;
+
+    /* ── Primary — amber/gold accent ───────────────────────── */
+    --primary: 38 95% 50%;
+    --primary-foreground: 222 47% 7%;
+
+    /* ── Secondary — muted navy ────────────────────────────── */
+    --secondary: 222 35% 18%;
+    --secondary-foreground: 210 40% 97%;
+
+    /* ── Muted ─────────────────────────────────────────────── */
+    --muted: 222 35% 15%;
+    --muted-foreground: 215 16% 55%;
+
+    /* ── Accent — active nav / highlight ───────────────────── */
+    --accent: 222 55% 20%;
+    --accent-foreground: 210 40% 97%;
+
+    /* ── Destructive ───────────────────────────────────────── */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 97%;
+
+    /* ── Borders & Inputs ──────────────────────────────────── */
+    --border: 222 35% 18%;
+    --input: 222 40% 14%;
+    --ring: 38 95% 50%;
+
+    /* ── Sidebar ───────────────────────────────────────────── */
+    --sidebar: 222 47% 9%;
+    --sidebar-foreground: 210 40% 97%;
+    --sidebar-active: 222 55% 20%;
+    --sidebar-active-foreground: 210 40% 97%;
+
+    /* ── Brand amber ───────────────────────────────────────── */
+    --amber: 38 95% 50%;
+    --amber-dim: 35 80% 35%;
+
+    /* ── Status colors ─────────────────────────────────────── */
+    --status-submitted: 217 91% 60%;
+    --status-review: 38 95% 50%;
+    --status-approved: 142 71% 45%;
+    --status-declined: 0 72% 51%;
+
+    --radius: 0.625rem;
+  }
+
+  /* Light mode override (if user toggles) */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 38 95% 50%;
+    --primary-foreground: 222 47% 7%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 38 95% 50%;
+    --sidebar: 0 0% 98%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-active: 38 95% 50%;
+    --sidebar-active-foreground: 222 47% 7%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Scrollbar styling for dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}

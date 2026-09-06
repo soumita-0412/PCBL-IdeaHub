@@ -1,0 +1,53 @@
+# ============================================================
+# IDEAS PORTAL — docker-compose.override.yml
+# Local development overrides — hot-reload, volume mounts,
+# relaxed restart policies.
+# This file is merged automatically by Docker Compose.
+# Do NOT commit secrets.
+# ============================================================
+
+version: "3.9"
+
+services:
+
+  # ── Backend — dev mode ────────────────────────────────────
+  backend:
+    build:
+      target: development
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    environment:
+      DEBUG: "true"
+      LOG_LEVEL: debug
+    restart: "no"
+
+  # ── Frontend — dev mode ───────────────────────────────────
+  frontend:
+    build:
+      target: development
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NODE_ENV: development
+    restart: "no"
+
+  # ── Mongo Express (dev UI) ────────────────────────────────
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: ideas_mongo_express
+    restart: "no"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+      ME_CONFIG_BASICAUTH: "false"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - ideas_network

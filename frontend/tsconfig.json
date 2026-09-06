@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    /* ── Language & Environment ── */
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "es2022"],
+    "jsx": "preserve",
+
+    /* ── Modules ── */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* ── Path Aliases ── */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/layouts/*": ["./src/layouts/*"],
+      "@/theme/*": ["./src/theme/*"],
+      "@/constants/*": ["./src/constants/*"]
+    },
+
+    /* ── Emit ── */
+    "noEmit": true,
+    "incremental": true,
+
+    /* ── Strict Type Checking ── */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ── Interop Constraints ── */
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* ── Next.js ── */
+    "allowJs": true,
+    "skipLibCheck": true,
+
+    /* ── Plugins ── */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "coverage"
+  ]
+}

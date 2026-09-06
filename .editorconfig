@@ -1,0 +1,60 @@
+# ============================================================
+# IDEAS PORTAL — .editorconfig
+# Consistent coding style across all editors and IDEs
+# https://editorconfig.org
+# ============================================================
+
+root = true
+
+# ─── Defaults (all files) ──────────────────────────────────
+[*]
+charset                  = utf-8
+end_of_line              = lf
+indent_style             = space
+indent_size              = 2
+insert_final_newline     = true
+trim_trailing_whitespace = true
+max_line_length          = 100
+
+# ─── TypeScript / JavaScript ───────────────────────────────
+[*.{ts,tsx,js,jsx,mjs,cjs}]
+indent_size = 2
+
+# ─── Python ────────────────────────────────────────────────
+[*.py]
+indent_size    = 4
+max_line_length = 100
+
+# ─── TOML (pyproject, Cargo, etc.) ─────────────────────────
+[*.toml]
+indent_size = 4
+
+# ─── YAML / GitHub Actions ─────────────────────────────────
+[*.{yml,yaml}]
+indent_size = 2
+
+# ─── JSON ──────────────────────────────────────────────────
+[*.json]
+indent_size = 2
+
+# ─── Markdown ──────────────────────────────────────────────
+[*.md]
+trim_trailing_whitespace = false
+max_line_length          = off
+
+# ─── Dockerfile ────────────────────────────────────────────
+[Dockerfile*]
+indent_size = 4
+
+# ─── Shell Scripts ─────────────────────────────────────────
+[*.sh]
+indent_size = 2
+end_of_line = lf
+
+# ─── CSS / SCSS ────────────────────────────────────────────
+[*.{css,scss,sass}]
+indent_size = 2
+
+# ─── SQL ───────────────────────────────────────────────────
+[*.sql]
+indent_size = 4
