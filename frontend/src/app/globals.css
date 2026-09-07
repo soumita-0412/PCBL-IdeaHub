@@ -94,16 +94,15 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
-  html {
-    color-scheme: dark;
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 

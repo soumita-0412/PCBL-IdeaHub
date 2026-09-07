@@ -4,8 +4,8 @@
   width: 220px;
   flex-shrink: 0;
   align-self: stretch;
-  background: hsl(222 47% 9%);
-  border-right: 1px solid hsl(222 35% 15%);
+  background: #ffffff;
+  border-right: 1px solid #890892;
   overflow: hidden;
 }
 
@@ -24,22 +24,22 @@
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  background: rgba(245, 158, 11, 0.15);
-  color: hsl(38 95% 50%);
+  background: rgba(245, 11, 218, 0.15);
+  color: #890892;
   flex-shrink: 0;
 }
 
 .brandName {
   font-size: 0.875rem;
   font-weight: 700;
-  color: hsl(210 40% 97%);
+  color: #000;
   line-height: 1;
   margin: 0;
 }
 
 .brandSub {
   font-size: 0.6875rem;
-  color: hsl(215 16% 50%);
+  color: hsl(309, 16%, 50%);
   margin: 0.2rem 0 0;
   line-height: 1;
 }
@@ -47,7 +47,7 @@
 /* ── Divider ───────────────────────────────────────── */
 .divider {
   height: 1px;
-  background: hsl(222 35% 15%);
+  background: #890892;
   margin: 0 0.75rem 0.5rem;
 }
 
@@ -68,26 +68,27 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(215 16% 55%);
+  color: #000;
   text-decoration: none;
   transition: background 0.12s ease, color 0.12s ease;
   cursor: pointer;
 }
 
 .navItem:hover {
-  background: hsl(222 50% 16%);
-  color: hsl(210 40% 90%);
+  background: #fee6fefc;
+  border: 1px solid #890892;
+  color: #000;
 }
 
 .navItemActive {
-  background: hsl(222 55% 20%);
-  color: hsl(38 95% 50%);
+  background: rgb(161, 62, 168);
+  color: #fff;
   font-weight: 600;
 }
 
 .navItemActive:hover {
-  background: hsl(222 55% 22%);
-  color: hsl(38 95% 55%);
+  background: #890892;
+  color: #fff;
 }
 
 .navIcon {

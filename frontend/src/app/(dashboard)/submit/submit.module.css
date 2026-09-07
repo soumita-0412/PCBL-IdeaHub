@@ -20,8 +20,8 @@
   align-items: flex-start;
   gap: 0.875rem;
   padding: 0.875rem 1.125rem;
-  background: hsl(217 91% 60% / 0.08);
-  border: 1px solid hsl(217 91% 60% / 0.2);
+  background: #fbe7fcc4;
+  border: 1px solid #890892;
   border-radius: 0.75rem;
 }
 
@@ -36,36 +36,36 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  border: 1.5px solid hsl(217 91% 60% / 0.55);
+  border: 1.5px solid #81c451;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.6rem;
   font-weight: 700;
-  color: hsl(217 91% 60%);
+  color: #890892;
   line-height: 1;
 }
 
 .infoTitle {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: hsl(210 40% 97%);
+  color: #000;
   margin: 0 0 0.2rem;
 }
 
 .infoDesc {
   font-size: 0.75rem;
-  color: hsl(215 16% 55%);
+  color: #000;
   margin: 0;
   line-height: 1.45;
 }
 
 .infoHighlight {
-  color: hsl(210 40% 88%);
+  color: #890892;
 }
 
 .infoAccent {
-  color: hsl(38 95% 50%);
+  color: #890892;
 }
 
 /* ── Steps indicator ───────────────────────────────── */
@@ -94,14 +94,14 @@
 }
 
 .stepBubbleActive {
-  background: hsl(38 95% 50%);
-  color: hsl(222 47% 7%);
+  background: #890892;
+  color: #fff;
 }
 
 .stepBubbleInactive {
   background: transparent;
-  border: 1.5px solid hsl(222 35% 28%);
-  color: hsl(215 16% 55%);
+  border: 1.5px solid #890892;
+  color: hsl(294, 16%, 55%);
 }
 
 .stepLabel {
@@ -110,17 +110,17 @@
 }
 
 .stepLabelActive {
-  color: hsl(210 40% 97%);
+  color: #000;
 }
 
 .stepLabelInactive {
-  color: hsl(215 16% 55%);
+  color: hsl(303, 18%, 40%);
 }
 
 .stepLine {
   flex: 1;
   height: 1px;
-  background: hsl(222 35% 20%);
+  background: #890892;
   margin: 0 0.625rem;
   min-width: 2.5rem;
 }
@@ -135,13 +135,13 @@
 .formTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: hsl(210 40% 97%);
+  color: #000;
   margin: 0;
 }
 
 .formSubtitle {
   font-size: 0.8125rem;
-  color: hsl(215 16% 55%);
+  color: hsl(298, 16%, 55%);
   margin: 0.3rem 0 0;
   line-height: 1.45;
 }
@@ -168,11 +168,11 @@
 
 .categoryCard {
   padding: 0.75rem 1rem;
-  background: hsl(222 44% 11%);
-  border: 1.5px solid hsl(222 35% 18%);
+  background: #fef7ff;
+  border: 1px solid #890892;
   border-radius: 0.625rem;
   font-size: 0.875rem;
-  color: hsl(210 40% 80%);
+  color: #000;
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
@@ -181,23 +181,23 @@
 }
 
 .categoryCard:hover {
-  border-color: hsl(38 95% 50% / 0.4);
-  background: hsl(222 44% 13%);
-  color: hsl(210 40% 97%);
+  border-color: #81c451;
+  background: #f3ffea;
+  color: #3d5d27;
 }
 
 .categoryCardSelected {
-  border-color: hsl(38 95% 50%);
-  background: hsl(38 95% 50% / 0.08);
-  color: hsl(210 40% 97%);
+  border-color: #81c451;
+  background: #f3ffea;
+  color: #3d5d27;
 }
 
 /* ── Continue button ───────────────────────────────── */
 .continueBtn {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: hsl(35 75% 33%);
-  color: hsl(38 90% 62%);
+  background: #890892;
+  color: #fff;
   border: none;
   border-radius: 0.625rem;
   font-size: 0.9375rem;
@@ -209,7 +209,9 @@
 }
 
 .continueBtn:hover:not(:disabled) {
-  background: hsl(35 75% 38%);
+  background: #f9effa;
+  border: 1px solid #890892;
+  color: #000;
 }
 
 .continueBtn:disabled {
@@ -234,7 +236,7 @@
 .fieldLabel {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: hsl(210 40% 90%);
+  color: #000;
 }
 
 .required {
@@ -243,7 +245,7 @@
 
 .fieldHint {
   font-size: 0.75rem;
-  color: hsl(215 16% 52%);
+  color: hsla(0, 0%, 0%, 0.596);
   margin: 0;
   line-height: 1.45;
 }
@@ -259,11 +261,11 @@
 .textarea {
   width: 100%;
   padding: 0.6875rem 0.875rem;
-  background: hsl(222 44% 10%);
-  border: 1.5px solid hsl(222 35% 20%);
+  background: #fef9ff;
+  border: 1px solid #890892;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: hsl(210 40% 90%);
+  color: #000;
   font-family: inherit;
   resize: vertical;
   line-height: 1.5;
@@ -272,17 +274,18 @@
 }
 
 .textarea::placeholder {
-  color: hsl(215 16% 38%);
+  color: #0000008f;
 }
 
 .textarea:focus {
   outline: none;
-  border-color: hsl(38 95% 50% / 0.55);
+  background-color: #f6ffef;
+  border-color: #81c451;
 }
 
 .charCount {
   font-size: 0.6875rem;
-  color: hsl(215 16% 42%);
+  color: #000;
   align-self: flex-end;
   margin-top: -0.125rem;
 }
@@ -291,23 +294,24 @@
 .textInput {
   width: 100%;
   padding: 0.6875rem 0.875rem;
-  background: hsl(222 44% 10%);
-  border: 1.5px solid hsl(222 35% 20%);
+  background: #f9effa;
+  border: 1px solid #890892;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: hsl(210 40% 90%);
+  color: #000;
   font-family: inherit;
   transition: border-color 0.15s ease;
   box-sizing: border-box;
 }
 
 .textInput::placeholder {
-  color: hsl(215 16% 38%);
+  color: #0000008e;
 }
 
 .textInput:focus {
   outline: none;
-  border-color: hsl(38 95% 50% / 0.55);
+  background-color: #f3ffea;
+  border-color: #81c451;
 }
 
 /* Remove number input spinner arrows */
@@ -350,8 +354,8 @@
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
-  border: 1.5px solid hsl(222 35% 32%);
-  background: hsl(222 44% 10%);
+  border: 1px solid #890892;
+  background:#f9effa;
   flex-shrink: 0;
   transition: border-color 0.15s ease, background 0.15s ease;
   position: relative;
@@ -366,13 +370,13 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: hsl(38 95% 50%);
+  background: #81c451;
   transition: transform 0.15s ease;
 }
 
 .radioCustomChecked {
-  border-color: hsl(38 95% 50%);
-  background: hsl(38 95% 50% / 0.1);
+  border-color: #81c451;
+  background: #f3ffea;
 }
 
 .radioCustomChecked::after {
@@ -381,7 +385,7 @@
 
 .radioLabel {
   font-size: 0.875rem;
-  color: hsl(210 40% 85%);
+  color: #000;
   font-weight: 500;
 }
 
@@ -416,8 +420,8 @@
 .backBtn {
   padding: 0.875rem 1.25rem;
   background: transparent;
-  color: hsl(215 16% 60%);
-  border: 1.5px solid hsl(222 35% 22%);
+  color: #000;
+  border: 1px solid #890892;
   border-radius: 0.625rem;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -428,8 +432,9 @@
 }
 
 .backBtn:hover {
-  border-color: hsl(222 35% 36%);
-  color: hsl(210 40% 80%);
+  border-color: #81c451;
+  color: #3d5d27;
+  background-color: #f3ffea;
 }
 
 .navRow .continueBtn {
@@ -441,7 +446,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1.5px solid hsl(222 35% 20%);
+  border: 1px solid #890892;
   border-radius: 0.625rem;
   overflow: hidden;
 }
@@ -461,7 +466,7 @@
 .reviewLabel {
   font-size: 0.75rem;
   font-weight: 600;
-  color: hsl(215 16% 52%);
+  color: #000;
   padding-top: 1px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -469,7 +474,7 @@
 
 .reviewValue {
   font-size: 0.875rem;
-  color: hsl(210 40% 88%);
+  color: #000;
   line-height: 1.5;
   word-break: break-word;
 }
@@ -492,8 +497,8 @@
   align-items: center;
   gap: 1rem;
   padding: 2.5rem 2rem;
-  background: hsl(222 44% 11%);
-  border: 1.5px solid hsl(142 71% 35% / 0.35);
+  background: #f6eff7;
+  border: 1px solid #890892;
   border-radius: 1rem;
   text-align: center;
 }
@@ -515,13 +520,13 @@
 .successTitle {
   font-size: 1.375rem;
   font-weight: 700;
-  color: hsl(210 40% 97%);
+  color: #000;
   margin: 0;
 }
 
 .successDesc {
   font-size: 0.875rem;
-  color: hsl(215 16% 55%);
+  color: #0000008c;
   margin: 0;
   max-width: 28rem;
   line-height: 1.5;
@@ -540,18 +545,18 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: hsl(215 16% 45%);
+  color: #00000089;
 }
 
 .successNumber {
   font-size: 1.25rem;
   font-weight: 700;
-  color: hsl(38 95% 55%);
+  color: #890892;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }
 
 .successValue {
   font-size: 0.875rem;
-  color: hsl(210 40% 80%);
+  color: #0000009a;
 }
