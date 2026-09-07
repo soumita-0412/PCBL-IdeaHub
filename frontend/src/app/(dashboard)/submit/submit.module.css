@@ -216,3 +216,222 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* ── Completed step bubble ─────────────────────────── */
+.stepBubbleDone {
+  background: hsl(142 71% 35%);
+  color: hsl(0 0% 100%);
+  font-size: 0.6rem;
+}
+
+/* ── Describe step — field groups ──────────────────── */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.fieldLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: hsl(210 40% 90%);
+}
+
+.required {
+  color: hsl(0 72% 60%);
+}
+
+.fieldHint {
+  font-size: 0.75rem;
+  color: hsl(215 16% 52%);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.subFieldLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(215 16% 60%);
+  margin: 0 0 0.3rem;
+}
+
+/* ── Textarea ──────────────────────────────────────── */
+.textarea {
+  width: 100%;
+  padding: 0.6875rem 0.875rem;
+  background: hsl(222 44% 10%);
+  border: 1.5px solid hsl(222 35% 20%);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: hsl(210 40% 90%);
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.textarea::placeholder {
+  color: hsl(215 16% 38%);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: hsl(38 95% 50% / 0.55);
+}
+
+.charCount {
+  font-size: 0.6875rem;
+  color: hsl(215 16% 42%);
+  align-self: flex-end;
+  margin-top: -0.125rem;
+}
+
+/* ── Text / Number input ───────────────────────────── */
+.textInput {
+  width: 100%;
+  padding: 0.6875rem 0.875rem;
+  background: hsl(222 44% 10%);
+  border: 1.5px solid hsl(222 35% 20%);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: hsl(210 40% 90%);
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.textInput::placeholder {
+  color: hsl(215 16% 38%);
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: hsl(38 95% 50% / 0.55);
+}
+
+/* Remove number input spinner arrows */
+.textInput[type="number"]::-webkit-inner-spin-button,
+.textInput[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputNote {
+  font-size: 0.6875rem;
+  color: hsl(215 16% 42%);
+  margin: 0.2rem 0 0;
+  line-height: 1.4;
+}
+
+/* ── Radio buttons ─────────────────────────────────── */
+.radioGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.radioNative {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.radioCustom {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 1.5px solid hsl(222 35% 32%);
+  background: hsl(222 44% 10%);
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  position: relative;
+}
+
+.radioCustom::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: hsl(38 95% 50%);
+  transition: transform 0.15s ease;
+}
+
+.radioCustomChecked {
+  border-color: hsl(38 95% 50%);
+  background: hsl(38 95% 50% / 0.1);
+}
+
+.radioCustomChecked::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.radioLabel {
+  font-size: 0.875rem;
+  color: hsl(210 40% 85%);
+  font-weight: 500;
+}
+
+/* ── Patent link ───────────────────────────────────── */
+.patentLinkWrap {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ── PCBL Function grid (3-column, tighter) ────────── */
+.functionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+/* ── Two-column layout for name / email ────────────── */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* ── Navigation row (back + continue) ─────────────── */
+.navRow {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.backBtn {
+  padding: 0.875rem 1.25rem;
+  background: transparent;
+  color: hsl(215 16% 60%);
+  border: 1.5px solid hsl(222 35% 22%);
+  border-radius: 0.625rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.backBtn:hover {
+  border-color: hsl(222 35% 36%);
+  color: hsl(210 40% 80%);
+}
+
+.navRow .continueBtn {
+  flex: 1;
+}
