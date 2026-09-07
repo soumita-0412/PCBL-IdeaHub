@@ -90,11 +90,11 @@ export default function SubmitIdeaPage() {
         problem: form.problem,
         idea_description: form.idea,
         patent_search_done: form.patentSearchDone === "yes",
-        patent_link: form.patentSearchDone === "yes" ? form.patentLink || undefined : undefined,
+        ...(form.patentSearchDone === "yes" && form.patentLink ? { patent_link: form.patentLink } : {}),
         pcbl_function: form.pcblFunction,
-        pcbl_function_other: form.pcblFunction === "Other" ? form.pcblFunctionOther : undefined,
-        annual_estimate: form.annualEstimate ? parseFloat(form.annualEstimate) : undefined,
-        additional_info: form.additionalInfo || undefined,
+        ...(form.pcblFunction === "Other" && form.pcblFunctionOther ? { pcbl_function_other: form.pcblFunctionOther } : {}),
+        ...(form.annualEstimate ? { annual_estimate: parseFloat(form.annualEstimate) } : {}),
+        ...(form.additionalInfo ? { additional_info: form.additionalInfo } : {}),
       });
       setSubmitted(result);
     } catch {
