@@ -15,9 +15,12 @@ interface AuthState {
   userProfile: UserProfile | null;
   /** Token stored in sessionStorage only — never in a cookie. */
   accessToken: string | null;
+  /** True once the store has finished loading from sessionStorage. */
+  _hasHydrated: boolean;
 
   setAuth: (token: string, profile: UserProfile) => void;
   clearAuth: () => void;
+  setHasHydrated: (value: boolean) => void;
 
   // Legacy helpers kept for internal use
   isLoading: boolean;
@@ -64,6 +67,7 @@ export const useAuthStore = create<AuthState>()(
         userProfile: null,
         accessToken: null,
         isLoading: false,
+        _hasHydrated: false,
 
         setAuth: (token, profile) =>
           set({ isAuthenticated: true, userProfile: profile, accessToken: token }),
@@ -72,6 +76,8 @@ export const useAuthStore = create<AuthState>()(
           set({ isAuthenticated: false, userProfile: null, accessToken: null }),
 
         setLoading: (isLoading) => set({ isLoading }),
+
+        setHasHydrated: (value) => set({ _hasHydrated: value }),
       }),
       {
         name: "ideas-auth",
@@ -82,10 +88,13 @@ export const useAuthStore = create<AuthState>()(
           userProfile: state.userProfile,
           accessToken: state.accessToken,
         }),
-        // Immediately clear auth if the persisted token is already expired
+        // After loading from sessionStorage: clear expired tokens then mark ready
         onRehydrateStorage: () => (state) => {
-          if (state && isTokenExpired(state.accessToken)) {
-            state.clearAuth();
+          if (state) {
+            if (isTokenExpired(state.accessToken)) {
+              state.clearAuth();
+            }
+            state.setHasHydrated(true);
           }
         },
       },
