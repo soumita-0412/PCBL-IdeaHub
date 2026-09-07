@@ -24,6 +24,38 @@ interface AuthState {
   setLoading: (loading: boolean) => void;
 }
 
+function decodeJwtPayload(token: string): Record<string, unknown> {
+  const segment = token.split(".")[1];
+  if (!segment) throw new Error("invalid jwt");
+  // JWT uses base64url; convert to standard base64 before calling atob
+  const base64 = segment.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, "=");
+  return JSON.parse(atob(padded));
+}
+
+/** Returns true if the token is missing, malformed, or its exp claim is in the past. */
+export function isTokenExpired(token: string | null): boolean {
+  if (!token) return true;
+  try {
+    const payload = decodeJwtPayload(token);
+    return typeof payload.exp !== "number" || payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
+/** Returns ms until the token expires, or 0 if already expired / invalid. */
+export function tokenExpiresIn(token: string | null): number {
+  if (!token) return 0;
+  try {
+    const payload = decodeJwtPayload(token);
+    if (typeof payload.exp !== "number") return 0;
+    return Math.max(0, payload.exp * 1000 - Date.now());
+  } catch {
+    return 0;
+  }
+}
+
 export const useAuthStore = create<AuthState>()(
   devtools(
     persist(
@@ -50,6 +82,12 @@ export const useAuthStore = create<AuthState>()(
           userProfile: state.userProfile,
           accessToken: state.accessToken,
         }),
+        // Immediately clear auth if the persisted token is already expired
+        onRehydrateStorage: () => (state) => {
+          if (state && isTokenExpired(state.accessToken)) {
+            state.clearAuth();
+          }
+        },
       },
     ),
     { name: "AuthStore" },

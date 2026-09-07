@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuthStore } from "@/stores/auth.store";
+import { useAuthStore, isTokenExpired } from "@/stores/auth.store";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,20 +18,25 @@ interface ProtectedRouteProps {
  * - Authenticated but wrong role → redirects to /forbidden
  */
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-  const { isAuthenticated, userProfile } = useAuthStore();
+  const { isAuthenticated, userProfile, accessToken, clearAuth } = useAuthStore();
   const router = useRouter();
 
+  const tokenExpired = isTokenExpired(accessToken);
+
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || tokenExpired) {
+      if (tokenExpired && isAuthenticated) {
+        clearAuth();
+      }
       router.replace("/login");
       return;
     }
     if (allowedRoles && userProfile && !allowedRoles.includes(userProfile.role)) {
       router.replace("/forbidden");
     }
-  }, [isAuthenticated, userProfile, allowedRoles, router]);
+  }, [isAuthenticated, tokenExpired, userProfile, allowedRoles, router, clearAuth]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || tokenExpired) {
     return null;
   }
 
