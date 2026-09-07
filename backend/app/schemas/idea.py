@@ -61,3 +61,11 @@ class IdeaListItem(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class IdeaStats(BaseModel):
+    """Aggregated counts for the current user's ideas."""
+
+    total: int
+    in_review: int
+    approved: int

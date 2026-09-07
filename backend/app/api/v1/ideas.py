@@ -12,7 +12,7 @@ from app.dependencies.auth import get_current_user
 from app.dependencies.permissions import require_employee
 from app.schemas.auth import CurrentUser
 from app.schemas.common import SuccessResponse
-from app.schemas.idea import IdeaCreate, IdeaListItem, IdeaResponse
+from app.schemas.idea import IdeaCreate, IdeaListItem, IdeaResponse, IdeaStats
 from app.services import idea_service
 
 router = APIRouter(prefix="/ideas", tags=["Ideas"])
@@ -40,6 +40,17 @@ async def my_ideas(
 ) -> SuccessResponse[list[IdeaListItem]]:
     ideas = await idea_service.get_my_ideas(current_user)
     return SuccessResponse(data=ideas)
+
+
+@router.get(
+    "/stats",
+    response_model=SuccessResponse[IdeaStats],
+)
+async def my_stats(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> SuccessResponse[IdeaStats]:
+    stats = await idea_service.get_my_stats(current_user)
+    return SuccessResponse(data=stats)
 
 
 @router.get(

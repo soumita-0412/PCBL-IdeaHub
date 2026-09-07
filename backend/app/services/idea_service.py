@@ -5,10 +5,10 @@ Submitter identity is always taken from the authenticated JWT (CurrentUser),
 never from the request body, so users cannot submit as someone else.
 """
 
-from app.models.idea import Idea
+from app.models.idea import Idea, IdeaStatus
 from app.repositories.idea_repository import IdeaRepository
 from app.schemas.auth import CurrentUser
-from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem
+from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem, IdeaStats
 
 _repo = IdeaRepository()
 
@@ -39,6 +39,28 @@ async def submit_idea(payload: IdeaCreate, actor: CurrentUser) -> IdeaResponse:
 async def get_my_ideas(actor: CurrentUser) -> list[IdeaListItem]:
     ideas = await _repo.find_by_submitter(actor.user_id)
     return [_to_list_item(i) for i in ideas]
+
+
+_IN_REVIEW_STATUSES = {
+    IdeaStatus.SUBMITTED,
+    IdeaStatus.UNDER_REVIEW_L1,
+    IdeaStatus.APPROVED_L1,
+    IdeaStatus.UNDER_REVIEW_L2,
+}
+
+_APPROVED_STATUSES = {
+    IdeaStatus.APPROVED_L2,
+    IdeaStatus.IMPLEMENTED,
+}
+
+
+async def get_my_stats(actor: CurrentUser) -> IdeaStats:
+    ideas = await _repo.find_by_submitter(actor.user_id)
+    return IdeaStats(
+        total=len(ideas),
+        in_review=sum(1 for i in ideas if i.status in _IN_REVIEW_STATUSES),
+        approved=sum(1 for i in ideas if i.status in _APPROVED_STATUSES),
+    )
 
 
 async def get_idea_by_id(idea_id: str, actor: CurrentUser) -> IdeaResponse | None:
