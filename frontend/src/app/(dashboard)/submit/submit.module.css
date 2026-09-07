@@ -435,3 +435,123 @@
 .navRow .continueBtn {
   flex: 1;
 }
+
+/* ── Review grid ───────────────────────────────────── */
+.reviewGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1.5px solid hsl(222 35% 20%);
+  border-radius: 0.625rem;
+  overflow: hidden;
+}
+
+.reviewRow {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(222 35% 16%);
+}
+
+.reviewRow:last-child {
+  border-bottom: none;
+}
+
+.reviewLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(215 16% 52%);
+  padding-top: 1px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reviewValue {
+  font-size: 0.875rem;
+  color: hsl(210 40% 88%);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ── Error message ─────────────────────────────────── */
+.errorMsg {
+  font-size: 0.8125rem;
+  color: hsl(0 72% 60%);
+  padding: 0.625rem 0.875rem;
+  background: hsl(0 72% 60% / 0.08);
+  border: 1px solid hsl(0 72% 60% / 0.25);
+  border-radius: 0.5rem;
+  margin: 0;
+}
+
+/* ── Success card ──────────────────────────────────── */
+.successCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  background: hsl(222 44% 11%);
+  border: 1.5px solid hsl(142 71% 35% / 0.35);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.successIcon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: hsl(142 71% 35%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.successTitle {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: hsl(210 40% 97%);
+  margin: 0;
+}
+
+.successDesc {
+  font-size: 0.875rem;
+  color: hsl(215 16% 55%);
+  margin: 0;
+  max-width: 28rem;
+  line-height: 1.5;
+}
+
+.successMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.successLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsl(215 16% 45%);
+}
+
+.successNumber {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: hsl(38 95% 55%);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.successValue {
+  font-size: 0.875rem;
+  color: hsl(210 40% 80%);
+}

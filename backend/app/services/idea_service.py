@@ -1,0 +1,83 @@
+"""
+Business logic for idea submission and retrieval.
+
+Submitter identity is always taken from the authenticated JWT (CurrentUser),
+never from the request body, so users cannot submit as someone else.
+"""
+
+from app.models.idea import Idea
+from app.repositories.idea_repository import IdeaRepository
+from app.schemas.auth import CurrentUser
+from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem
+
+_repo = IdeaRepository()
+
+
+async def submit_idea(payload: IdeaCreate, actor: CurrentUser) -> IdeaResponse:
+    submission_number = await _repo.next_submission_number()
+
+    idea = Idea(
+        submission_number=submission_number,
+        submitter_id=actor.user_id,
+        submitter_name=actor.name,
+        submitter_email=actor.email,
+        category=payload.category,
+        problem=payload.problem,
+        idea_description=payload.idea_description,
+        patent_search_done=payload.patent_search_done,
+        patent_link=payload.patent_link if payload.patent_search_done else None,
+        pcbl_function=payload.pcbl_function,
+        pcbl_function_other=payload.pcbl_function_other if payload.pcbl_function == "Other" else None,
+        annual_estimate=payload.annual_estimate,
+        additional_info=payload.additional_info,
+    )
+    await idea.save_with_actor(actor.user_id)
+
+    return _to_response(idea)
+
+
+async def get_my_ideas(actor: CurrentUser) -> list[IdeaListItem]:
+    ideas = await _repo.find_by_submitter(actor.user_id)
+    return [_to_list_item(i) for i in ideas]
+
+
+async def get_idea_by_id(idea_id: str, actor: CurrentUser) -> IdeaResponse | None:
+    idea = await _repo.get_by_id(idea_id)
+    if idea is None:
+        return None
+    return _to_response(idea)
+
+
+def _to_response(idea: Idea) -> IdeaResponse:
+    return IdeaResponse(
+        id=str(idea.id),
+        submission_number=idea.submission_number,
+        status=idea.status,
+        category=idea.category,
+        problem=idea.problem,
+        idea_description=idea.idea_description,
+        patent_search_done=idea.patent_search_done,
+        patent_link=idea.patent_link,
+        pcbl_function=idea.pcbl_function,
+        pcbl_function_other=idea.pcbl_function_other,
+        annual_estimate=idea.annual_estimate,
+        additional_info=idea.additional_info,
+        submitter_id=idea.submitter_id,
+        submitter_name=idea.submitter_name,
+        submitter_email=idea.submitter_email,
+        created_at=idea.created_at,
+        updated_at=idea.updated_at,
+    )
+
+
+def _to_list_item(idea: Idea) -> IdeaListItem:
+    return IdeaListItem(
+        id=str(idea.id),
+        submission_number=idea.submission_number,
+        status=idea.status,
+        category=idea.category,
+        pcbl_function=idea.pcbl_function,
+        submitter_name=idea.submitter_name,
+        submitter_email=idea.submitter_email,
+        created_at=idea.created_at,
+    )

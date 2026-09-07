@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useAuthStore } from "@/stores/auth.store";
+import { submitIdea } from "@/services/ideaService";
+import type { IdeaResponse } from "@/types/idea";
 import styles from "./submit.module.css";
 
 const CATEGORIES = [
@@ -62,6 +64,9 @@ export default function SubmitIdeaPage() {
     submitterName: userProfile?.name ?? "",
     submitterEmail: userProfile?.email ?? "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState<IdeaResponse | null>(null);
 
   function patch(field: keyof DescribeForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -76,6 +81,29 @@ export default function SubmitIdeaPage() {
     form.submitterName.trim().length > 0 &&
     form.submitterEmail.trim().length > 0;
 
+  async function handleSubmit() {
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const result = await submitIdea({
+        category: category!,
+        problem: form.problem,
+        idea_description: form.idea,
+        patent_search_done: form.patentSearchDone === "yes",
+        patent_link: form.patentSearchDone === "yes" ? form.patentLink || undefined : undefined,
+        pcbl_function: form.pcblFunction,
+        pcbl_function_other: form.pcblFunction === "Other" ? form.pcblFunctionOther : undefined,
+        annual_estimate: form.annualEstimate ? parseFloat(form.annualEstimate) : undefined,
+        additional_info: form.additionalInfo || undefined,
+      });
+      setSubmitted(result);
+    } catch {
+      setSubmitError("Submission failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   function stepBubbleClass(n: number) {
     if (n < step) return `${styles.stepBubble} ${styles.stepBubbleDone}`;
     if (n === step) return `${styles.stepBubble} ${styles.stepBubbleActive}`;
@@ -85,6 +113,58 @@ export default function SubmitIdeaPage() {
   function stepLabelClass(n: number) {
     if (n <= step) return `${styles.stepLabel} ${styles.stepLabelActive}`;
     return `${styles.stepLabel} ${styles.stepLabelInactive}`;
+  }
+
+  // ── Success screen ──────────────────────────────────────
+  if (submitted) {
+    return (
+      <main className={styles.container}>
+        <div className={styles.inner}>
+          <div className={styles.successCard}>
+            <div className={styles.successIcon}>✓</div>
+            <h2 className={styles.successTitle}>Idea submitted!</h2>
+            <p className={styles.successDesc}>
+              Your idea has been recorded and routed to the appropriate reviewer.
+            </p>
+            <div className={styles.successMeta}>
+              <span className={styles.successLabel}>Submission number</span>
+              <span className={styles.successNumber}>{submitted.submission_number}</span>
+            </div>
+            <div className={styles.successMeta}>
+              <span className={styles.successLabel}>Submitted by</span>
+              <span className={styles.successValue}>{submitted.submitter_name} ({submitted.submitter_email})</span>
+            </div>
+            <div className={styles.successMeta}>
+              <span className={styles.successLabel}>Category</span>
+              <span className={styles.successValue}>{submitted.category}</span>
+            </div>
+            <div className={styles.successMeta}>
+              <span className={styles.successLabel}>PCBL Function</span>
+              <span className={styles.successValue}>
+                {submitted.pcbl_function === "Other" ? submitted.pcbl_function_other : submitted.pcbl_function}
+              </span>
+            </div>
+            <button
+              className={styles.continueBtn}
+              onClick={() => {
+                setSubmitted(null);
+                setStep(1);
+                setCategory(null);
+                setForm({
+                  problem: "", idea: "", patentSearchDone: "", patentLink: "",
+                  pcblFunction: "", pcblFunctionOther: "", annualEstimate: "",
+                  additionalInfo: "",
+                  submitterName: userProfile?.name ?? "",
+                  submitterEmail: userProfile?.email ?? "",
+                });
+              }}
+            >
+              Submit another idea
+            </button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -111,16 +191,12 @@ export default function SubmitIdeaPage() {
         {/* Step indicator */}
         <div className={styles.steps}>
           <div className={styles.step}>
-            <span className={stepBubbleClass(1)}>
-              {step > 1 ? "✓" : "1"}
-            </span>
+            <span className={stepBubbleClass(1)}>{step > 1 ? "✓" : "1"}</span>
             <span className={stepLabelClass(1)}>Categorize</span>
           </div>
           <div className={styles.stepLine} />
           <div className={styles.step}>
-            <span className={stepBubbleClass(2)}>
-              {step > 2 ? "✓" : "2"}
-            </span>
+            <span className={stepBubbleClass(2)}>{step > 2 ? "✓" : "2"}</span>
             <span className={stepLabelClass(2)}>Describe</span>
           </div>
           <div className={styles.stepLine} />
@@ -139,16 +215,13 @@ export default function SubmitIdeaPage() {
                 Selecting a category routes your idea to the right managers and reviewers.
               </p>
             </div>
-
             <div className={styles.categoryGroup}>
               <p className={styles.categoryLabel}>Function / Category</p>
               <div className={styles.categoryGrid}>
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
-                    className={`${styles.categoryCard} ${
-                      category === cat ? styles.categoryCardSelected : ""
-                    }`}
+                    className={`${styles.categoryCard} ${category === cat ? styles.categoryCardSelected : ""}`}
                     onClick={() => setCategory(cat)}
                   >
                     {cat}
@@ -156,7 +229,6 @@ export default function SubmitIdeaPage() {
                 ))}
               </div>
             </div>
-
             <button
               className={styles.continueBtn}
               disabled={!category}
@@ -193,9 +265,7 @@ export default function SubmitIdeaPage() {
                 value={form.problem}
                 onChange={(e) => patch("problem", e.target.value)}
               />
-              <span className={styles.charCount}>
-                {form.problem.length}/250
-              </span>
+              <span className={styles.charCount}>{form.problem.length}/250</span>
             </div>
 
             {/* Idea description */}
@@ -214,9 +284,7 @@ export default function SubmitIdeaPage() {
                 value={form.idea}
                 onChange={(e) => patch("idea", e.target.value)}
               />
-              <span className={styles.charCount}>
-                {form.idea.length}/500
-              </span>
+              <span className={styles.charCount}>{form.idea.length}/500</span>
             </div>
 
             {/* PCBL Function */}
@@ -232,9 +300,7 @@ export default function SubmitIdeaPage() {
                   <button
                     key={fn}
                     type="button"
-                    className={`${styles.categoryCard} ${
-                      form.pcblFunction === fn ? styles.categoryCardSelected : ""
-                    }`}
+                    className={`${styles.categoryCard} ${form.pcblFunction === fn ? styles.categoryCardSelected : ""}`}
                     onClick={() => {
                       patch("pcblFunction", fn);
                       if (fn !== "Other") patch("pcblFunctionOther", "");
@@ -293,7 +359,7 @@ export default function SubmitIdeaPage() {
                     onChange={(e) => patch("patentLink", e.target.value)}
                   />
                   <p className={styles.inputNote}>
-                    Upload or paste a link to your search results or potential blocking patents.
+                    Paste a link to your search results or potential blocking patents.
                   </p>
                 </div>
               )}
@@ -323,22 +389,20 @@ export default function SubmitIdeaPage() {
               </p>
               <textarea
                 className={styles.textarea}
-                placeholder="Any supporting context, references, or attachments…"
+                placeholder="Any supporting context, references, or notes…"
                 maxLength={250}
                 rows={3}
                 value={form.additionalInfo}
                 onChange={(e) => patch("additionalInfo", e.target.value)}
               />
-              <span className={styles.charCount}>
-                {form.additionalInfo.length}/250
-              </span>
+              <span className={styles.charCount}>{form.additionalInfo.length}/250</span>
             </div>
 
             {/* Submitter info */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>Your details</label>
               <p className={styles.fieldHint}>
-                Your name and email will be pre-filled automatically once SSO is configured.
+                Pre-filled from your session. Will be fetched automatically from SSO once configured.
               </p>
               <div className={styles.twoCol}>
                 <div>
@@ -365,11 +429,7 @@ export default function SubmitIdeaPage() {
             </div>
 
             <div className={styles.navRow}>
-              <button
-                type="button"
-                className={styles.backBtn}
-                onClick={() => setStep(1)}
-              >
+              <button type="button" className={styles.backBtn} onClick={() => setStep(1)}>
                 ← Back
               </button>
               <button
@@ -384,24 +444,64 @@ export default function SubmitIdeaPage() {
           </div>
         )}
 
-        {/* ── Step 3: Review (placeholder) ── */}
+        {/* ── Step 3: Review & Submit ── */}
         {step === 3 && (
           <div className={styles.formSection}>
             <div>
               <h2 className={styles.formTitle}>Review your submission</h2>
-              <p className={styles.formSubtitle}>Coming soon — review &amp; submit step.</p>
+              <p className={styles.formSubtitle}>Check everything before submitting.</p>
             </div>
-            <button
-              type="button"
-              className={styles.backBtn}
-              onClick={() => setStep(2)}
-            >
-              ← Back
-            </button>
+
+            <div className={styles.reviewGrid}>
+              <ReviewRow label="Category" value={category!} />
+              <ReviewRow label="PCBL Function"
+                value={form.pcblFunction === "Other" ? `Other — ${form.pcblFunctionOther}` : form.pcblFunction}
+              />
+              <ReviewRow label="Problem statement" value={form.problem} />
+              <ReviewRow label="Idea description" value={form.idea} />
+              <ReviewRow label="Patent search done" value={form.patentSearchDone === "yes" ? "Yes" : "No"} />
+              {form.patentSearchDone === "yes" && form.patentLink && (
+                <ReviewRow label="Patent link" value={form.patentLink} />
+              )}
+              {form.annualEstimate && (
+                <ReviewRow label="Annual estimate" value={`₹ ${parseFloat(form.annualEstimate).toLocaleString("en-IN")}`} />
+              )}
+              {form.additionalInfo && (
+                <ReviewRow label="Additional info" value={form.additionalInfo} />
+              )}
+              <ReviewRow label="Submitted by" value={`${form.submitterName} (${form.submitterEmail})`} />
+            </div>
+
+            {submitError && (
+              <p className={styles.errorMsg}>{submitError}</p>
+            )}
+
+            <div className={styles.navRow}>
+              <button type="button" className={styles.backBtn} onClick={() => setStep(2)} disabled={submitting}>
+                ← Back
+              </button>
+              <button
+                type="button"
+                className={styles.continueBtn}
+                disabled={submitting}
+                onClick={handleSubmit}
+              >
+                {submitting ? "Submitting…" : "Submit Idea →"}
+              </button>
+            </div>
           </div>
         )}
 
       </div>
     </main>
+  );
+}
+
+function ReviewRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className={styles.reviewRow}>
+      <span className={styles.reviewLabel}>{label}</span>
+      <span className={styles.reviewValue}>{value}</span>
+    </div>
   );
 }
