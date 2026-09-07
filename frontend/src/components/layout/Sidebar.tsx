@@ -10,86 +10,46 @@ import {
   Archive,
   Lock,
   Lightbulb,
+  LogOut,
 } from "lucide-react";
 
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { useAuthStore } from "@/stores/auth.store";
-import { Roles } from "@/constants/roles";
-import { ROLE_LABELS } from "@/constants/roles";
-import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+import { Roles, ROLE_LABELS } from "@/constants/roles";
+import styles from "./sidebar.module.css";
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
-  badge?: number;
   minRole?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  {
-    label: "Submit Idea",
-    href: "/submit",
-    icon: <Plus className="h-4 w-4" />,
-  },
-  {
-    label: "My Ideas",
-    href: "/my-ideas",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    label: "Review",
-    href: "/review",
-    icon: <ClipboardCheck className="h-4 w-4" />,
-    minRole: Roles.L1_REVIEWER,
-  },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: <BarChart2 className="h-4 w-4" />,
-    minRole: Roles.L1_REVIEWER,
-  },
-  {
-    label: "Repository",
-    href: "/repository",
-    icon: <Archive className="h-4 w-4" />,
-    minRole: Roles.L1_REVIEWER,
-  },
+  { label: "Submit Idea", href: "/submit", icon: <Plus size={16} /> },
+  { label: "My Ideas",    href: "/my-ideas", icon: <FileText size={16} /> },
+  { label: "Review",      href: "/review",   icon: <ClipboardCheck size={16} />, minRole: Roles.L1_REVIEWER },
+  { label: "Dashboard",   href: "/dashboard", icon: <BarChart2 size={16} />,     minRole: Roles.L1_REVIEWER },
+  { label: "Repository",  href: "/repository", icon: <Archive size={16} />,      minRole: Roles.L1_REVIEWER },
 ];
 
-function UserChip({ profile }: { profile: { name: string; role: string } }) {
-  const initials = profile.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+const AVATAR_COLORS = [
+  "#f59e0b", "#8b5cf6", "#3b82f6", "#10b981", "#f43f5e",
+];
 
-  const colors = [
-    "bg-amber-500",
-    "bg-violet-500",
-    "bg-blue-500",
-    "bg-emerald-500",
-    "bg-rose-500",
-  ];
-  const colorIdx =
-    profile.name.charCodeAt(0) % colors.length;
+function UserChip({ name, role }: { name: string; role: string }) {
+  const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+  const color = AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+  const label = ROLE_LABELS[role as keyof typeof ROLE_LABELS] ?? role;
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2">
-      <div
-        className={cn(
-          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
-          colors[colorIdx],
-        )}
-      >
+    <div className={styles.userChip}>
+      <div className={styles.userAvatar} style={{ background: color }}>
         {initials}
       </div>
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{profile.name}</p>
-        <p className="truncate text-xs text-muted-foreground">
-          {ROLE_LABELS[profile.role as keyof typeof ROLE_LABELS] ?? profile.role}
-        </p>
+      <div style={{ minWidth: 0 }}>
+        <p className={styles.userName}>{name}</p>
+        <p className={styles.userRole}>{label}</p>
       </div>
     </div>
   );
@@ -98,68 +58,56 @@ function UserChip({ profile }: { profile: { name: string; role: string } }) {
 export function Sidebar() {
   const pathname = usePathname();
   const { userProfile } = useAuthStore();
+  const { logout } = useAuth();
 
   return (
-    <aside className="flex h-screen w-[200px] shrink-0 flex-col border-r border-border bg-sidebar">
-      {/* ── Brand ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2.5 px-4 py-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-brand/20 text-amber-brand">
-          <Lightbulb className="h-4 w-4" />
+    <aside className={styles.sidebar}>
+      {/* Brand */}
+      <div className={styles.brand}>
+        <div className={styles.brandIcon}>
+          <Lightbulb size={16} />
         </div>
         <div>
-          <p className="text-sm font-bold leading-none text-foreground">IdeaPortal</p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground">Innovation Hub</p>
+          <p className={styles.brandName}>IdeaPortal</p>
+          <p className={styles.brandSub}>Innovation Hub</p>
         </div>
       </div>
 
-      {/* ── Spacer ────────────────────────────────────────── */}
-      <div className="mx-3 mb-3 h-px bg-border" />
+      <div className={styles.divider} />
 
-      {/* ── Navigation ────────────────────────────────────── */}
-      <nav className="flex flex-1 flex-col gap-0.5 px-2">
+      {/* Navigation */}
+      <nav className={styles.nav}>
         {NAV_ITEMS.map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const isRestricted = !!item.minRole;
 
-          const linkContent = (
+          return (
             <Link
               key={item.href}
-              href={isRestricted && userProfile ? item.href : (isRestricted ? "#" : item.href)}
-              className={cn(
-                "group flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors",
-                isActive
-                  ? "bg-sidebar-active font-semibold text-amber-brand"
-                  : "text-muted-foreground hover:bg-sidebar-active/50 hover:text-foreground",
-              )}
+              href={item.href}
+              className={`${styles.navItem} ${isActive ? styles.navItemActive : ""}`}
             >
-              <span
-                className={cn(
-                  isActive ? "text-amber-brand" : "text-muted-foreground group-hover:text-foreground",
-                )}
-              >
-                {item.icon}
-              </span>
-              <span className="flex-1">{item.label}</span>
-              {item.badge != null && item.badge > 0 && (
-                <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-amber-brand px-1.5 text-[10px] font-bold text-amber-dim">
-                  {item.badge}
-                </span>
-              )}
+              <span className={styles.navIcon}>{item.icon}</span>
+              <span className={styles.navLabel}>{item.label}</span>
               {isRestricted && !isActive && (
-                <Lock className="h-3 w-3 opacity-40" />
+                <span className={styles.navLock}>
+                  <Lock size={12} />
+                </span>
               )}
             </Link>
           );
-
-          return linkContent;
         })}
       </nav>
 
-      {/* ── User ──────────────────────────────────────────── */}
-      <div className="mx-3 mb-1 h-px bg-border" />
-      {userProfile && <UserChip profile={userProfile} />}
-      <div className="pb-2" />
+      {/* Footer: user chip + sign out */}
+      <div className={styles.footer}>
+        <div className={styles.userDivider} />
+        {userProfile && <UserChip name={userProfile.name} role={userProfile.role} />}
+        <button className={styles.signOutBtn} onClick={logout}>
+          <LogOut size={14} />
+          Sign out
+        </button>
+      </div>
     </aside>
   );
 }
