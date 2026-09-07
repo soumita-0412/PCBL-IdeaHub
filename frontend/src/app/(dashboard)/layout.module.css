@@ -4,7 +4,7 @@
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: #ffffff;
+  background: linear-gradient(to right, #fef0ff,#f1faea);
 }
 
 .content {

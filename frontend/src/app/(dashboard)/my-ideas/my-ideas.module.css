@@ -3,7 +3,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 2rem 2.5rem;
-  background: #fff;
+  background: linear-gradient(to right, #fef0ff,#f1faea);
   min-height: 100vh;
 }
 
@@ -81,7 +81,7 @@
 
 /* ── Idea card ─────────────────────────────────────── */
 .card {
-  background: #fef3ff;
+  background: #fff;
   border: 1px solid #890892;
   border-radius: 0.75rem;
   padding: 1.125rem 1.375rem 1rem;
