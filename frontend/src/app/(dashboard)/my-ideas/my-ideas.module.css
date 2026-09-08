@@ -211,32 +211,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 3.5rem 2rem;
-  background: #fff;
-  border: 1.5px solid hsl(294, 35%, 18%);
-  border-radius: 0.75rem;
+  gap: 1rem;
+  padding: 5rem 2rem;
   text-align: center;
 }
 
 .emptyTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: hsl(310, 37%, 97%);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: hsl(294, 35%, 28%);
   margin: 0;
-}
-
-.emptyDesc {
-  font-size: 0.8125rem;
-  color: #000000a5;
-  margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .emptyBtn {
-  margin-top: 0.75rem;
+  margin-top: 0.25rem;
   padding: 0.625rem 1.25rem;
-  background: #fff;
-  color: hsl(222 47% 7%);
+  background: hsl(289, 65%, 97%);
+  border: 1px solid #890892;
+  color: #890892;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 700;

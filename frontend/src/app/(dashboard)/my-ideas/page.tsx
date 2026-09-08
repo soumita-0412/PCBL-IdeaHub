@@ -124,8 +124,7 @@ export default function MyIdeasPage() {
 
         {ideas !== null && ideas.length === 0 && (
           <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>No ideas yet</p>
-            <p className={styles.emptyDesc}>Submit your first idea and track its progress here.</p>
+            <p className={styles.emptyTitle}>Yet to submit?</p>
             <Link href="/submit" className={styles.emptyBtn}>Submit your first idea →</Link>
           </div>
         )}
