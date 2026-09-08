@@ -465,8 +465,12 @@ export default function ReviewDashboardPage() {
   }, []);
 
   const handleIdeaReviewed = useCallback((updated: IdeaResponse) => {
-    setIdeas((prev) => prev?.map((i) => (i.id === updated.id ? updated : i)) ?? prev);
-    setSelectedIdea(updated);
+    // Remove the reviewed idea from the list and auto-select the next one
+    setIdeas((prev) => {
+      const next = prev?.filter((i) => i.id !== updated.id) ?? prev;
+      setSelectedIdea(next && next.length > 0 ? next[0]! : null);
+      return next;
+    });
     // If approved, refresh the L2 approvals list so it appears in Management mode immediately
     if (updated.status === "approved_l1") {
       getApprovedManagerApprovals()
@@ -474,7 +478,7 @@ export default function ReviewDashboardPage() {
           setApprovals(data);
           if (data.length > 0 && !selectedApproval) setSelectedApproval(data[0]!);
         })
-        .catch(() => {/* silent — main data already loaded */});
+        .catch(() => {/* silent */});
     }
   }, [selectedApproval]);
 
