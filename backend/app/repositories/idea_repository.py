@@ -19,6 +19,9 @@ class IdeaRepository(BaseRepository[Idea]):
     async def find_by_function(self, pcbl_function: str) -> list[Idea]:
         return await Idea.find(Idea.pcbl_function == pcbl_function).sort("-created_at").to_list()
 
+    async def find_all(self) -> list[Idea]:
+        return await Idea.find_all().sort("-created_at").to_list()
+
     async def next_submission_number(self) -> str:
         count = await Idea.count()
         return f"IDEA-{count + 1:05d}"

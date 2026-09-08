@@ -9,13 +9,39 @@ GET  /api/v1/ideas/{id}   — fetch a single idea by its MongoDB id
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.dependencies.auth import get_current_user
-from app.dependencies.permissions import require_employee
+from app.dependencies.permissions import require_employee, require_l1_reviewer
 from app.schemas.auth import CurrentUser
 from app.schemas.common import SuccessResponse
-from app.schemas.idea import IdeaCreate, IdeaListItem, IdeaResponse, IdeaStats
+from app.schemas.idea import IdeaCreate, IdeaListItem, IdeaResponse, IdeaReviewUpdate, IdeaStats
 from app.services import idea_service
 
 router = APIRouter(prefix="/ideas", tags=["Ideas"])
+
+
+@router.get(
+    "",
+    response_model=SuccessResponse[list[IdeaResponse]],
+)
+async def list_all_ideas(
+    current_user: CurrentUser = Depends(require_l1_reviewer),
+) -> SuccessResponse[list[IdeaResponse]]:
+    ideas = await idea_service.get_all_ideas()
+    return SuccessResponse(data=ideas)
+
+
+@router.patch(
+    "/{idea_id}/review",
+    response_model=SuccessResponse[IdeaResponse],
+)
+async def review_idea(
+    idea_id: str,
+    body: IdeaReviewUpdate,
+    current_user: CurrentUser = Depends(require_l1_reviewer),
+) -> SuccessResponse[IdeaResponse]:
+    idea = await idea_service.review_idea(idea_id, body, current_user)
+    if idea is None:
+        raise HTTPException(status_code=404, detail="Idea not found")
+    return SuccessResponse(data=idea)
 
 
 @router.post(

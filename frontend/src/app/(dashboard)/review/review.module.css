@@ -1,0 +1,400 @@
+/* ── Page shell ─────────────────────────────────────── */
+.container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #f4eef8;
+}
+
+.layout {
+  display: flex;
+  height: 100%;
+}
+
+/* ── Left panel ─────────────────────────────────────── */
+.leftPanel {
+  width: 288px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid #ede8f2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.leftHeader {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid #f0eaf5;
+  flex-shrink: 0;
+}
+
+.leftHeaderLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin: 0 0 0.25rem;
+}
+
+.leftHeaderSub {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #890892;
+  margin: 0;
+}
+
+.leftList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.625rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+/* ── Idea row ────────────────────────────────────────── */
+.ideaRow {
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.625rem;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ideaRow:hover {
+  background: #faf5fc;
+  border-color: #e4d5eb;
+}
+
+.ideaRowSelected {
+  background: #faf0fe;
+  border-color: #890892;
+}
+
+.ideaRowNumber {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.04em;
+}
+
+.ideaRowTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ideaRowSub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ── Right panel ─────────────────────────────────────── */
+.rightPanel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailPanel {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.75rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Detail meta row ─────────────────────────────────── */
+.detailMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.detailNumber {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.04em;
+}
+
+.dotIndicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotGreen  { background: #22c55e; }
+.dotAmber  { background: #f59e0b; }
+.dotRed    { background: #ef4444; }
+
+.detailStatusText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.detailMetaSep {
+  color: #d1d5db;
+  font-size: 0.75rem;
+}
+
+.detailSubmitter {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.detailTitle {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ── Section cards ───────────────────────────────────── */
+.sectionCard {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.sectionLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #890892;
+  margin: 0;
+}
+
+.sectionText {
+  font-size: 0.9375rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.link {
+  color: #890892;
+  text-decoration: underline;
+}
+
+/* ── Review blocks (comment + decision) ──────────────── */
+.reviewBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reviewBlockLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #890892;
+  margin: 0;
+}
+
+/* ── Comment textarea ────────────────────────────────── */
+.commentBox {
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  color: #111827;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  box-sizing: border-box;
+}
+
+.commentBox:focus {
+  border-color: #890892;
+  box-shadow: 0 0 0 3px rgba(137, 8, 146, 0.08);
+}
+
+.commentBox::placeholder {
+  color: #9ca3af;
+}
+
+.commentBox:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+}
+
+/* ── Decision toggle buttons ─────────────────────────── */
+.decisionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+}
+
+.decisionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 0.625rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.decisionBtn:hover:not(:disabled) {
+  border-color: #c4b5c4;
+  color: #374151;
+}
+
+.decisionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.decisionBtnApprove {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.decisionBtnApprove:hover:not(:disabled) {
+  background: #dcfce7;
+  border-color: #4ade80;
+  color: #15803d;
+}
+
+.decisionBtnReject {
+  background: #fff1f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.decisionBtnReject:hover:not(:disabled) {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}
+
+/* ── Submit button ───────────────────────────────────── */
+.submitBtn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #890892, #a855c8);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.12s ease;
+}
+
+.submitBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.submitBtn:not(:disabled):hover {
+  opacity: 0.88;
+}
+
+/* ── Feedback messages ───────────────────────────────── */
+.errorMsg {
+  font-size: 0.8125rem;
+  color: #dc2626;
+  padding: 0.5rem 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  margin: 0;
+}
+
+.successMsg {
+  font-size: 0.8125rem;
+  color: #16a34a;
+  padding: 0.5rem 0.75rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+  margin: 0;
+}
+
+/* ── Empty / loading states ──────────────────────────── */
+.emptyDetail {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.emptyDetailText {
+  font-size: 0.9375rem;
+  color: #9ca3af;
+  margin: 0;
+  text-align: center;
+}
+
+.emptyMsg {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+  padding: 2rem 0.5rem;
+  margin: 0;
+}
+
+.skeletonRow {
+  height: 4.5rem;
+  border-radius: 0.625rem;
+  background: #f3e8f8;
+  animation: pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+/* ── Access denied ───────────────────────────────────── */
+.accessDenied {
+  font-size: 0.9375rem;
+  color: #9ca3af;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 0;
+}

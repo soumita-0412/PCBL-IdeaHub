@@ -36,8 +36,14 @@ export interface IdeaResponse {
   submitter_id: string;
   submitter_name: string;
   submitter_email: string;
+  reviewer_comment: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface IdeaReviewUpdate {
+  status: IdeaStatus;
+  reviewer_comment?: string;
 }
 
 export interface IdeaListItem {

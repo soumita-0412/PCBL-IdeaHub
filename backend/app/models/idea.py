@@ -47,6 +47,7 @@ class Idea(BaseDocument):
 
     # ── Workflow state ──────────────────────────────────────
     status: IdeaStatus = IdeaStatus.SUBMITTED
+    reviewer_comment: Optional[str] = None
 
     class Settings:
         name = "ideas"

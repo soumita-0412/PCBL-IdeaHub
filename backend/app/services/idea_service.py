@@ -8,7 +8,7 @@ never from the request body, so users cannot submit as someone else.
 from app.models.idea import Idea, IdeaStatus
 from app.repositories.idea_repository import IdeaRepository
 from app.schemas.auth import CurrentUser
-from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem, IdeaStats
+from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
 
 _repo = IdeaRepository()
 
@@ -63,6 +63,21 @@ async def get_my_stats(actor: CurrentUser) -> IdeaStats:
     )
 
 
+async def get_all_ideas() -> list[IdeaResponse]:
+    ideas = await _repo.find_all()
+    return [_to_response(i) for i in ideas]
+
+
+async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUser) -> IdeaResponse | None:
+    idea = await _repo.get_by_id(idea_id)
+    if idea is None:
+        return None
+    idea.status = payload.status
+    idea.reviewer_comment = payload.reviewer_comment
+    await idea.save_with_actor(actor.user_id)
+    return _to_response(idea)
+
+
 async def get_idea_by_id(idea_id: str, actor: CurrentUser) -> IdeaResponse | None:
     idea = await _repo.get_by_id(idea_id)
     if idea is None:
@@ -87,6 +102,7 @@ def _to_response(idea: Idea) -> IdeaResponse:
         submitter_id=idea.submitter_id,
         submitter_name=idea.submitter_name,
         submitter_email=idea.submitter_email,
+        reviewer_comment=idea.reviewer_comment,
         created_at=idea.created_at,
         updated_at=idea.updated_at,
     )

@@ -42,6 +42,7 @@ class IdeaResponse(BaseModel):
     submitter_id: str
     submitter_name: str
     submitter_email: str
+    reviewer_comment: Optional[str]
     created_at: datetime
     updated_at: datetime
 
@@ -69,3 +70,10 @@ class IdeaStats(BaseModel):
     total: int
     in_review: int
     approved: int
+
+
+class IdeaReviewUpdate(BaseModel):
+    """Payload for a reviewer approving or rejecting an idea."""
+
+    status: IdeaStatus
+    reviewer_comment: Optional[str] = Field(default=None, max_length=1000)

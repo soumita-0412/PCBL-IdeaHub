@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api/axiosInstance";
-import type { IdeaCreate, IdeaListItem, IdeaResponse } from "@/types/idea";
+import type { IdeaCreate, IdeaListItem, IdeaResponse, IdeaReviewUpdate } from "@/types/idea";
 
 export interface IdeaStats {
   total: number;
@@ -29,5 +29,15 @@ export async function getIdeaById(id: string): Promise<IdeaResponse> {
 
 export async function getMyStats(): Promise<IdeaStats> {
   const { data } = await apiClient.get<Apienvelope<IdeaStats>>("/ideas/stats");
+  return data.data;
+}
+
+export async function getAllIdeas(): Promise<IdeaResponse[]> {
+  const { data } = await apiClient.get<Apienvelope<IdeaResponse[]>>("/ideas");
+  return data.data;
+}
+
+export async function reviewIdea(id: string, payload: IdeaReviewUpdate): Promise<IdeaResponse> {
+  const { data } = await apiClient.patch<Apienvelope<IdeaResponse>>(`/ideas/${id}/review`, payload);
   return data.data;
 }
