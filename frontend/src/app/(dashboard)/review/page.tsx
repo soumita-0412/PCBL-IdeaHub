@@ -467,7 +467,16 @@ export default function ReviewDashboardPage() {
   const handleIdeaReviewed = useCallback((updated: IdeaResponse) => {
     setIdeas((prev) => prev?.map((i) => (i.id === updated.id ? updated : i)) ?? prev);
     setSelectedIdea(updated);
-  }, []);
+    // If approved, refresh the L2 approvals list so it appears in Management mode immediately
+    if (updated.status === "approved_l1") {
+      getApprovedManagerApprovals()
+        .then((data) => {
+          setApprovals(data);
+          if (data.length > 0 && !selectedApproval) setSelectedApproval(data[0]!);
+        })
+        .catch(() => {/* silent — main data already loaded */});
+    }
+  }, [selectedApproval]);
 
   // Remove the approval from the list after L2 review is submitted
   const handleApprovalSubmitted = useCallback((approvalId: string) => {
