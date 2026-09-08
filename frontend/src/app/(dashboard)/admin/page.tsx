@@ -31,6 +31,7 @@ interface MatrixOptionLocal {
 interface CategoryLocal {
   id: string;
   name: string;
+  department: string;
   matrix: MatrixOptionLocal[];
 }
 
@@ -46,6 +47,7 @@ function fromApi(cat: CategoryResponse): CategoryLocal {
   return {
     id: cat.id,
     name: cat.name,
+    department: cat.department,
     matrix: cat.matrix.map((o) => ({ id: uid(), label: o.label, weight: o.weight })),
   };
 }
@@ -158,6 +160,7 @@ function EditCategoryRow({
 }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(category.name);
+  const [department, setDepartment] = useState(category.department);
   const [matrix, setMatrix] = useState<MatrixOptionLocal[]>(category.matrix);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -167,6 +170,7 @@ function EditCategoryRow({
   const matrixValid = matrix.length === 0 || total === 100;
   const canSave =
     name.trim() !== "" &&
+    department.trim() !== "" &&
     matrixValid &&
     matrix.every((o) => o.label.trim() !== "") &&
     !saving;
@@ -178,6 +182,7 @@ function EditCategoryRow({
     try {
       const updated = await updateCategory(category.id, {
         name: name.trim(),
+        department: department.trim(),
         matrix: toApiMatrix(matrix),
       });
       onSaved(fromApi(updated));
@@ -202,6 +207,7 @@ function EditCategoryRow({
 
   const cancel = () => {
     setName(category.name);
+    setDepartment(category.department);
     setMatrix(category.matrix);
     setError(null);
     setEditing(false);
@@ -212,6 +218,9 @@ function EditCategoryRow({
       <div className={styles.catRow}>
         <div className={styles.catInfo}>
           <span className={styles.catName}>{category.name}</span>
+          {category.department && (
+            <span className={styles.deptBadge}>{category.department}</span>
+          )}
           {category.matrix.length > 0 && (
             <span className={styles.matrixBadge}>{category.matrix.length} criteria</span>
           )}
@@ -241,6 +250,17 @@ function EditCategoryRow({
 
   return (
     <div className={styles.catEditPanel}>
+      <div className={styles.field}>
+        <label className={styles.label}>Department</label>
+        <input
+          className={styles.input}
+          type="text"
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          placeholder="e.g. Human Resources"
+        />
+      </div>
+
       <div className={styles.field}>
         <label className={styles.label}>Category Name</label>
         <input
@@ -291,6 +311,7 @@ export default function AdminDashboardPage() {
 
   // Add Category form state
   const [categoryName, setCategoryName] = useState("");
+  const [categoryDepartment, setCategoryDepartment] = useState("");
   const [matrix, setMatrix] = useState<MatrixOptionLocal[]>([newOption()]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -316,6 +337,7 @@ export default function AdminDashboardPage() {
   const total = matrix.reduce((s, o) => s + (o.weight || 0), 0);
   const canSubmit =
     categoryName.trim() !== "" &&
+    categoryDepartment.trim() !== "" &&
     matrix.every((o) => o.label.trim() !== "") &&
     total === 100 &&
     !submitting;
@@ -327,9 +349,11 @@ export default function AdminDashboardPage() {
     try {
       await createCategory({
         name: categoryName.trim(),
+        department: categoryDepartment.trim(),
         matrix: toApiMatrix(matrix),
       });
       setCategoryName("");
+      setCategoryDepartment("");
       setMatrix([newOption()]);
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
@@ -375,6 +399,17 @@ export default function AdminDashboardPage() {
             {submitted && (
               <div className={styles.successBanner}>Category added successfully.</div>
             )}
+
+            <div className={styles.field}>
+              <label className={styles.label}>Department</label>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="e.g. Human Resources"
+                value={categoryDepartment}
+                onChange={(e) => setCategoryDepartment(e.target.value)}
+              />
+            </div>
 
             <div className={styles.field}>
               <label className={styles.label}>Category Name</label>

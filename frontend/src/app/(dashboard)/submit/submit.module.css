@@ -498,7 +498,7 @@
   align-items: center;
   gap: 1rem;
   padding: 2.5rem 2rem;
-  background: #f6eff7;
+  background: linear-gradient(to right,#daf7c8 #fde5ff);
   border: 1px solid #890892;
   border-radius: 1rem;
   text-align: center;
@@ -508,7 +508,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: hsl(142 71% 35%);
+  background: #81c451;
   color: #fff;
   display: flex;
   align-items: center;

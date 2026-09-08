@@ -8,6 +8,7 @@ export interface MatrixOption {
 export interface CategoryResponse {
   id: string;
   name: string;
+  department: string;
   matrix: MatrixOption[];
   created_at: string;
   updated_at: string;
@@ -15,11 +16,13 @@ export interface CategoryResponse {
 
 export interface CategoryCreate {
   name: string;
+  department: string;
   matrix: MatrixOption[];
 }
 
 export interface CategoryUpdate {
   name?: string;
+  department?: string;
   matrix?: MatrixOption[];
 }
 

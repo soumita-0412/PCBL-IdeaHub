@@ -47,6 +47,7 @@ async def create_category(payload: CategoryCreate, actor: CurrentUser) -> Catego
         raise ConflictException(f"Category '{payload.name}' already exists")
     cat = Category(
         name=payload.name,
+        department=payload.department,
         matrix=[MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix],
     )
     await cat.save_with_actor(actor.user_id)
@@ -65,6 +66,8 @@ async def update_category(
         if existing and str(existing.id) != category_id:
             raise ConflictException(f"Category '{payload.name}' already exists")
         cat.name = payload.name
+    if payload.department is not None:
+        cat.department = payload.department
     if payload.matrix is not None:
         _validate_matrix(payload.matrix)
         cat.matrix = [MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix]
@@ -104,6 +107,7 @@ def _to_response(cat: Category) -> CategoryResponse:
     return CategoryResponse(
         id=str(cat.id),
         name=cat.name,
+        department=cat.department,
         matrix=[MatrixOptionOut(label=o.label, weight=o.weight) for o in cat.matrix],
         created_at=cat.created_at,
         updated_at=cat.updated_at,

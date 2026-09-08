@@ -14,11 +14,13 @@ class MatrixOptionIn(BaseModel):
 
 class CategoryCreate(BaseModel):
     name: str = Field(min_length=1)
+    department: str = ""
     matrix: list[MatrixOptionIn] = []
 
 
 class CategoryUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1)
+    department: str | None = None
     matrix: list[MatrixOptionIn] | None = None
 
 
@@ -30,6 +32,7 @@ class MatrixOptionOut(BaseModel):
 class CategoryResponse(BaseModel):
     id: str
     name: str
+    department: str
     matrix: list[MatrixOptionOut]
     created_at: datetime
     updated_at: datetime

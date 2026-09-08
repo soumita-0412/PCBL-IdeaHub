@@ -20,6 +20,7 @@ class MatrixOption(BaseModel):
 
 class Category(BaseDocument):
     name: Annotated[str, Indexed(unique=True)]
+    department: str = ""
     matrix: list[MatrixOption] = []
 
     class Settings:

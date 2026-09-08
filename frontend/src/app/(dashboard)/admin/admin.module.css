@@ -357,6 +357,17 @@
   text-overflow: ellipsis;
 }
 
+.deptBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: #f0f9ff;
+  color: #0369a1;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .matrixBadge {
   font-size: 0.6875rem;
   font-weight: 600;
