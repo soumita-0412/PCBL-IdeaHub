@@ -6,11 +6,14 @@ never from the request body, so users cannot submit as someone else.
 """
 
 from app.models.idea import Idea, IdeaStatus
+from app.models.manager_approval import ManagerApproval
 from app.repositories.idea_repository import IdeaRepository
+from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
 from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
 
 _repo = IdeaRepository()
+_approval_repo = ManagerApprovalRepository()
 
 
 async def submit_idea(payload: IdeaCreate, actor: CurrentUser) -> IdeaResponse:
@@ -75,6 +78,26 @@ async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUse
     idea.status = payload.status
     idea.reviewer_comment = payload.reviewer_comment
     await idea.save_with_actor(actor.user_id)
+
+    decision = "approved" if payload.status == IdeaStatus.APPROVED_L1 else "rejected"
+    approval = ManagerApproval(
+        idea_id=str(idea.id),
+        submission_number=idea.submission_number,
+        category=idea.category,
+        problem=idea.problem,
+        idea_description=idea.idea_description,
+        additional_info=idea.additional_info,
+        annual_estimate=idea.annual_estimate,
+        employee_name=idea.submitter_name,
+        employee_email=idea.submitter_email,
+        decision=decision,
+        reviewer_comment=payload.reviewer_comment,
+        reviewed_by=actor.user_id,
+        reviewed_by_name=actor.name,
+        reviewed_by_email=actor.email,
+    )
+    await approval.save_with_actor(actor.user_id)
+
     return _to_response(idea)
 
 

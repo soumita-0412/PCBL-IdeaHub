@@ -14,6 +14,7 @@ from app.core.config import settings
 from app.models.category import Category
 from app.models.category_criteria import CategoryCriteria
 from app.models.idea import Idea
+from app.models.manager_approval import ManagerApproval
 
 logger = structlog.get_logger(__name__)
 
@@ -44,6 +45,7 @@ async def init_db() -> None:
             Idea,
             Category,
             CategoryCriteria,
+            ManagerApproval,
         ],
     )
     logger.info("database.connected", database=settings.MONGODB_DATABASE)
