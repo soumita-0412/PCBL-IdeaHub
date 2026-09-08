@@ -99,11 +99,17 @@
     margin: 0;
     padding: 0;
     background: #ffffff;
+    font-family: "Cambria Math", Cambria, Georgia, serif;
   }
 
   body {
     @apply text-foreground;
+    font-family: "Cambria Math", Cambria, Georgia, serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  * {
+    font-family: inherit;
   }
 
   /* Scrollbar styling for dark theme */
