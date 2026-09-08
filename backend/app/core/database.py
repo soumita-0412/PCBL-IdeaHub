@@ -12,6 +12,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from app.core.config import settings
 from app.models.category import Category
+from app.models.category_criteria import CategoryCriteria
 from app.models.idea import Idea
 
 logger = structlog.get_logger(__name__)
@@ -42,6 +43,7 @@ async def init_db() -> None:
         document_models=[
             Idea,
             Category,
+            CategoryCriteria,
         ],
     )
     logger.info("database.connected", database=settings.MONGODB_DATABASE)

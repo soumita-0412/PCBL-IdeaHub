@@ -6,6 +6,8 @@ Default categories are seeded once on first startup if the collection is empty.
 
 from app.core.exceptions import ConflictException, NotFoundException, ValidationException
 from app.models.category import Category, MatrixOption
+from app.models.category_criteria import CriteriaItem
+from app.repositories.category_criteria_repository import CategoryCriteriaRepository
 from app.repositories.category_repository import CategoryRepository
 from app.schemas.auth import CurrentUser
 from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate, MatrixOptionOut
@@ -24,6 +26,7 @@ _DEFAULT_NAMES = [
 ]
 
 _repo = CategoryRepository()
+_criteria_repo = CategoryCriteriaRepository()
 
 
 async def seed_defaults() -> None:
@@ -47,6 +50,7 @@ async def create_category(payload: CategoryCreate, actor: CurrentUser) -> Catego
         matrix=[MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix],
     )
     await cat.save_with_actor(actor.user_id)
+    await _sync_criteria(cat)
     return _to_response(cat)
 
 
@@ -65,12 +69,26 @@ async def update_category(
         _validate_matrix(payload.matrix)
         cat.matrix = [MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix]
     await cat.save_with_actor(actor.user_id)
+    await _sync_criteria(cat)
     return _to_response(cat)
 
 
 async def delete_category(category_id: str) -> None:
     if not await _repo.delete(category_id):
         raise NotFoundException(f"Category '{category_id}' not found")
+    await _criteria_repo.delete_by_category_id(category_id)
+
+
+async def _sync_criteria(cat: Category) -> None:
+    """Keep category_criteria in sync with the category's matrix."""
+    if cat.matrix:
+        await _criteria_repo.upsert(
+            category_id=str(cat.id),
+            category_name=cat.name,
+            criteria=[CriteriaItem(label=o.label, weight=o.weight) for o in cat.matrix],
+        )
+    else:
+        await _criteria_repo.delete_by_category_id(str(cat.id))
 
 
 def _validate_matrix(matrix: list) -> None:
