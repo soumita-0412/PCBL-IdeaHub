@@ -35,6 +35,9 @@ class ManagerApproval(BaseDocument):
     reviewed_by_name: str      # reviewer's display name
     reviewed_by_email: str     # reviewer's email
 
+    # ── L2 tracking ─────────────────────────────────────
+    l2_reviewed: bool = False  # set True once group review is submitted
+
     class Settings:
         name = "manager_approvals"
         use_state_management = True

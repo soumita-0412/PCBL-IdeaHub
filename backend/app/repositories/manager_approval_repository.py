@@ -22,7 +22,10 @@ class ManagerApprovalRepository(BaseRepository[ManagerApproval]):
 
     async def find_by_decision(self, decision: str) -> list[ManagerApproval]:
         return (
-            await ManagerApproval.find(ManagerApproval.decision == decision)
+            await ManagerApproval.find(
+                ManagerApproval.decision == decision,
+                ManagerApproval.l2_reviewed == False,  # noqa: E712
+            )
             .sort("-created_at")
             .to_list()
         )

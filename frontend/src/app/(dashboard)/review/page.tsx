@@ -455,10 +455,11 @@ export default function ReviewDashboardPage() {
   useEffect(() => {
     Promise.all([getAllIdeas(), getCategories(), getApprovedManagerApprovals()])
       .then(([ideasData, catsData, approvalsData]) => {
-        setIdeas(ideasData);
+        const pending = ideasData.filter((i) => i.status === "submitted");
+        setIdeas(pending);
         setCategories(catsData);
         setApprovals(approvalsData);
-        if (ideasData.length > 0) setSelectedIdea(ideasData[0]!);
+        if (pending.length > 0) setSelectedIdea(pending[0]!);
         if (approvalsData.length > 0) setSelectedApproval(approvalsData[0]!);
       })
       .catch(() => setFetchError("Failed to load data. Please try again."));
