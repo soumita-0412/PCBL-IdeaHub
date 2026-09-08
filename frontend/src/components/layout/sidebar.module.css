@@ -189,6 +189,68 @@
   color: #d1d5db;
 }
 
+/* ── Review toggle chevron ─────────────────────────── */
+.navToggle {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.navChevron {
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.navChevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Sub-nav (Review sub-items) ────────────────────── */
+.subNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0 0.625rem 0 2rem;
+}
+
+.subNavItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4375rem 0.625rem;
+  border-radius: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.subNavItem:hover {
+  background: rgba(137, 8, 146, 0.06);
+  color: #890892;
+}
+
+.subNavItemActive {
+  color: #890892;
+  font-weight: 600;
+  background: rgba(137, 8, 146, 0.07);
+}
+
+.subNavIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
 /* ── Footer ────────────────────────────────────────── */
 .footer {
   padding: 0.75rem;

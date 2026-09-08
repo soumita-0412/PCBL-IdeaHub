@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Check, X, Minus } from "lucide-react";
 import { getAllIdeas, reviewIdea, l2ReviewIdea } from "@/services/ideaService";
@@ -437,7 +438,9 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
 
 export default function ReviewDashboardPage() {
   const { userProfile } = useAuthStore();
-  const [mode, setMode] = useState<ReviewMode>("manager");
+  const searchParams = useSearchParams();
+  const urlMode = searchParams.get("mode") === "management" ? "management" : "manager";
+  const [mode, setMode] = useState<ReviewMode>(urlMode);
 
   // Manager mode state
   const [ideas, setIdeas] = useState<IdeaResponse[] | null>(null);
@@ -449,6 +452,11 @@ export default function ReviewDashboardPage() {
 
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  // Sync mode when URL param changes (sidebar navigation)
+  useEffect(() => {
+    setMode(urlMode);
+  }, [urlMode]);
 
   const canReview = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
 
@@ -497,11 +505,11 @@ export default function ReviewDashboardPage() {
     [categories, mode, selectedIdea?.category, selectedApproval?.category]
   );
 
-  // Auto-select first when switching modes
+  // Auto-select first item when mode changes
   useEffect(() => {
-    if (mode === "manager" && ideas && ideas.length > 0) setSelectedIdea(ideas[0]!);
-    if (mode === "management" && approvals && approvals.length > 0) setSelectedApproval(approvals[0]!);
-  }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (urlMode === "manager" && ideas && ideas.length > 0) setSelectedIdea(ideas[0]!);
+    if (urlMode === "management" && approvals && approvals.length > 0) setSelectedApproval(approvals[0]!);
+  }, [urlMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!canReview) {
     return (
@@ -519,23 +527,6 @@ export default function ReviewDashboardPage() {
 
         {/* ── Left sidebar ──────────────────────────────────── */}
         <aside className={styles.leftPanel}>
-          <div className={styles.modeSwitcher}>
-            <button
-              type="button"
-              className={`${styles.modeBtn} ${mode === "manager" ? styles.modeBtnActive : ""}`}
-              onClick={() => setMode("manager")}
-            >
-              Review as Manager
-            </button>
-            <button
-              type="button"
-              className={`${styles.modeBtn} ${mode === "management" ? styles.modeBtnActive : ""}`}
-              onClick={() => setMode("management")}
-            >
-              Review as Management
-            </button>
-          </div>
-
           <div className={styles.leftHeader}>
             <p className={styles.leftHeaderLabel}>
               {mode === "manager" ? "Pending Approval" : "Manager Approved"}

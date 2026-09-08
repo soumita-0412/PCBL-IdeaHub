@@ -14,7 +14,10 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Settings,
+  Users,
+  Building2,
 } from "lucide-react";
 
 import { useAuthStore } from "@/stores/auth.store";
@@ -32,10 +35,14 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "Submit Idea",      href: "/submit",     icon: <Plus size={16} /> },
   { label: "My Ideas",         href: "/my-ideas",   icon: <FileText size={16} /> },
-  { label: "Review",           href: "/review",     icon: <ClipboardCheck size={16} />, minRole: Roles.L1_REVIEWER },
   { label: "Dashboard",        href: "/dashboard",  icon: <BarChart2 size={16} /> },
-  { label: "Repository",       href: "/repository", icon: <Archive size={16} />,        minRole: Roles.L1_REVIEWER },
-  { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,       minRole: Roles.ADMIN },
+  { label: "Repository",       href: "/repository", icon: <Archive size={16} />,   minRole: Roles.L1_REVIEWER },
+  { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,  minRole: Roles.ADMIN },
+];
+
+const REVIEW_SUB_ITEMS = [
+  { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> },
+  { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> },
 ];
 
 function UserCard({ name, role, collapsed }: { name: string; role: string; collapsed: boolean }) {
@@ -73,11 +80,19 @@ export function Sidebar() {
   const pathname = usePathname();
   const { userProfile } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
+  const [reviewExpanded, setReviewExpanded] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("sidebar-collapsed");
     if (stored === "true") setCollapsed(true);
   }, []);
+
+  // Auto-expand Review sub-menu when on the review page
+  useEffect(() => {
+    if (pathname.startsWith("/review")) {
+      setReviewExpanded(true);
+    }
+  }, [pathname]);
 
   const toggle = () => {
     setCollapsed((c) => {
@@ -87,6 +102,8 @@ export function Sidebar() {
   };
 
   const userRole = userProfile?.role ?? "";
+  const reviewLocked = !hasMinRole(userRole, Roles.L1_REVIEWER);
+  const isOnReview = pathname.startsWith("/review");
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""}`}>
@@ -116,6 +133,8 @@ export function Sidebar() {
       {/* Navigation */}
       {!collapsed && <span className={styles.navSection}>Navigation</span>}
       <nav className={styles.nav}>
+
+        {/* Regular nav items */}
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
@@ -136,6 +155,64 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Review — expandable item */}
+        {collapsed ? (
+          /* Collapsed: single icon linking to /review */
+          <Link
+            href={reviewLocked ? "#" : "/review"}
+            title="Review"
+            className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
+            tabIndex={reviewLocked ? -1 : undefined}
+          >
+            <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
+          </Link>
+        ) : (
+          <>
+            {/* Review parent toggle */}
+            <button
+              type="button"
+              onClick={() => !reviewLocked && setReviewExpanded((v) => !v)}
+              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""}`}
+              tabIndex={reviewLocked ? -1 : undefined}
+              title={reviewLocked ? "Review (locked)" : undefined}
+            >
+              <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
+              <span className={styles.navLabel}>Review</span>
+              {reviewLocked ? (
+                <span className={styles.navLock}><Lock size={12} /></span>
+              ) : (
+                <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
+                  <ChevronDown size={13} />
+                </span>
+              )}
+            </button>
+
+            {/* Sub-items */}
+            {reviewExpanded && !reviewLocked && (
+              <div className={styles.subNav}>
+                {REVIEW_SUB_ITEMS.map((sub) => {
+                  const isSubActive = isOnReview &&
+                    (sub.href.includes("mode=management")
+                      ? (typeof window !== "undefined" && window.location.search.includes("mode=management"))
+                      : !( typeof window !== "undefined" && window.location.search.includes("mode=management")));
+
+                  return (
+                    <Link
+                      key={sub.href}
+                      href={sub.href}
+                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""}`}
+                    >
+                      <span className={styles.subNavIcon}>{sub.icon}</span>
+                      {sub.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
       </nav>
 
       {/* Footer user card */}
