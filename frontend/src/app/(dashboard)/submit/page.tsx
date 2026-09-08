@@ -1,23 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/auth.store";
+import { getCategories, type CategoryResponse } from "@/services/categoryService";
 import { submitIdea } from "@/services/ideaService";
 import type { IdeaResponse } from "@/types/idea";
 import styles from "./submit.module.css";
-
-const CATEGORIES = [
-  "Cost Optimization",
-  "Cyber Security",
-  "Employee Experience",
-  "Operations",
-  "HR",
-  "Finance",
-  "IT",
-  "Specialty Business",
-  "Rubber Business",
-  "Battery Business",
-];
 
 const PCBL_FUNCTIONS = [
   "Energy",
@@ -49,6 +37,11 @@ interface DescribeForm {
 
 export default function SubmitIdeaPage() {
   const { userProfile } = useAuthStore();
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+
+  useEffect(() => {
+    getCategories().then(setCategories).catch(() => setCategories([]));
+  }, []);
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [category, setCategory] = useState<string | null>(null);
@@ -218,13 +211,13 @@ export default function SubmitIdeaPage() {
             <div className={styles.categoryGroup}>
               <p className={styles.categoryLabel}>Function / Category</p>
               <div className={styles.categoryGrid}>
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <button
-                    key={cat}
-                    className={`${styles.categoryCard} ${category === cat ? styles.categoryCardSelected : ""}`}
-                    onClick={() => setCategory(cat)}
+                    key={cat.id}
+                    className={`${styles.categoryCard} ${category === cat.name ? styles.categoryCardSelected : ""}`}
+                    onClick={() => setCategory(cat.name)}
                   >
-                    {cat}
+                    {cat.name}
                   </button>
                 ))}
               </div>

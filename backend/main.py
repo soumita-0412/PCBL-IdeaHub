@@ -19,6 +19,7 @@ from fastapi.responses import JSONResponse
 from app.api.v1.router import api_router
 from app.core.config import settings
 from app.core.database import close_db, get_database, init_db
+from app.services.category_service import seed_defaults as seed_categories
 from app.core.exception_handlers import app_exception_handler, unhandled_exception_handler
 from app.core.exceptions import AppException
 from app.core.logging import configure_logging
@@ -46,6 +47,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         raise
 
     await init_db()
+    await seed_categories()
     logger.info("startup.complete", env=settings.APP_ENV, version=settings.APP_VERSION)
     yield
     await close_db()

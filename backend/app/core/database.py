@@ -11,6 +11,7 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from app.core.config import settings
+from app.models.category import Category
 from app.models.idea import Idea
 
 logger = structlog.get_logger(__name__)
@@ -40,6 +41,7 @@ async def init_db() -> None:
         database=_client[settings.MONGODB_DATABASE],
         document_models=[
             Idea,
+            Category,
         ],
     )
     logger.info("database.connected", database=settings.MONGODB_DATABASE)

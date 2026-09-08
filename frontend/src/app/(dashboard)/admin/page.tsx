@@ -1,50 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Plus, Trash2, Pencil, X, Check } from "lucide-react";
+import {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  type CategoryResponse,
+} from "@/services/categoryService";
 import styles from "./admin.module.css";
 
-const INITIAL_CATEGORIES = [
-  "Cost Optimization",
-  "Cyber Security",
-  "Employee Experience",
-  "Operations",
-  "HR",
-  "Finance",
-  "IT",
-  "Specialty Business",
-  "Rubber Business",
-  "Battery Business",
-];
+function apiErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    const msg = err.response?.data?.error?.message as string | undefined;
+    if (msg) return msg;
+  }
+  return fallback;
+}
 
-interface MatrixOption {
+// ── Local types (id is client-only for React keys) ───────────────────────────
+
+interface MatrixOptionLocal {
   id: string;
   label: string;
   weight: number;
 }
 
-interface Category {
+interface CategoryLocal {
   id: string;
   name: string;
-  matrix: MatrixOption[];
+  matrix: MatrixOptionLocal[];
 }
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function newOption(): MatrixOption {
+function newOption(): MatrixOptionLocal {
   return { id: uid(), label: "", weight: 0 };
 }
 
-// ── Shared scoring matrix editor ────────────────────────────────────────────
+function fromApi(cat: CategoryResponse): CategoryLocal {
+  return {
+    id: cat.id,
+    name: cat.name,
+    matrix: cat.matrix.map((o) => ({ id: uid(), label: o.label, weight: o.weight })),
+  };
+}
+
+function toApiMatrix(matrix: MatrixOptionLocal[]) {
+  return matrix.map(({ label, weight }) => ({ label, weight }));
+}
+
+// ── Shared scoring matrix editor ─────────────────────────────────────────────
 
 function MatrixEditor({
   options,
   onChange,
 }: {
-  options: MatrixOption[];
-  onChange: (options: MatrixOption[]) => void;
+  options: MatrixOptionLocal[];
+  onChange: (options: MatrixOptionLocal[]) => void;
 }) {
   const total = options.reduce((s, o) => s + (o.weight || 0), 0);
 
@@ -128,34 +145,65 @@ function MatrixEditor({
   );
 }
 
-// ── Edit row for existing categories ────────────────────────────────────────
+// ── Edit row for existing categories ─────────────────────────────────────────
 
 function EditCategoryRow({
   category,
-  onSave,
-  onDelete,
+  onSaved,
+  onDeleted,
 }: {
-  category: Category;
-  onSave: (updated: Category) => void;
-  onDelete: (id: string) => void;
+  category: CategoryLocal;
+  onSaved: (updated: CategoryLocal) => void;
+  onDeleted: (id: string) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(category.name);
-  const [matrix, setMatrix] = useState<MatrixOption[]>(category.matrix);
+  const [matrix, setMatrix] = useState<MatrixOptionLocal[]>(category.matrix);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const total = matrix.reduce((s, o) => s + (o.weight || 0), 0);
   const matrixValid = matrix.length === 0 || total === 100;
-  const canSave = name.trim() !== "" && matrixValid && matrix.every((o) => o.label.trim() !== "");
+  const canSave =
+    name.trim() !== "" &&
+    matrixValid &&
+    matrix.every((o) => o.label.trim() !== "") &&
+    !saving;
 
-  const save = () => {
+  const save = async () => {
     if (!canSave) return;
-    onSave({ ...category, name: name.trim(), matrix });
-    setEditing(false);
+    setSaving(true);
+    setError(null);
+    try {
+      const updated = await updateCategory(category.id, {
+        name: name.trim(),
+        matrix: toApiMatrix(matrix),
+      });
+      onSaved(fromApi(updated));
+      setEditing(false);
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to save. Please try again."));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const remove = async () => {
+    setDeleting(true);
+    try {
+      await deleteCategory(category.id);
+      onDeleted(category.id);
+    } catch {
+      setDeleting(false);
+      setError("Failed to delete. Please try again.");
+    }
   };
 
   const cancel = () => {
     setName(category.name);
     setMatrix(category.matrix);
+    setError(null);
     setEditing(false);
   };
 
@@ -179,9 +227,10 @@ function EditCategoryRow({
           </button>
           <button
             className={styles.deleteBtn}
-            onClick={() => onDelete(category.id)}
+            onClick={remove}
             title="Delete"
             type="button"
+            disabled={deleting}
           >
             <Trash2 size={13} />
           </button>
@@ -211,6 +260,8 @@ function EditCategoryRow({
         </p>
       )}
 
+      {error && <p className={styles.warning}>{error}</p>}
+
       <div className={styles.editFooter}>
         <button
           className={styles.saveBtn}
@@ -218,7 +269,7 @@ function EditCategoryRow({
           disabled={!canSave}
           type="button"
         >
-          <Check size={13} /> Save
+          <Check size={13} /> {saving ? "Saving…" : "Save"}
         </button>
         <button className={styles.cancelBtn} onClick={cancel} type="button">
           <X size={13} /> Cancel
@@ -228,37 +279,68 @@ function EditCategoryRow({
   );
 }
 
-// ── Main page ────────────────────────────────────────────────────────────────
+// ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<"add" | "edit">("add");
 
+  // Categories list (edit tab)
+  const [categories, setCategories] = useState<CategoryLocal[]>([]);
+  const [loadingCats, setLoadingCats] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
   // Add Category form state
   const [categoryName, setCategoryName] = useState("");
-  const [matrix, setMatrix] = useState<MatrixOption[]>([newOption()]);
+  const [matrix, setMatrix] = useState<MatrixOptionLocal[]>([newOption()]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  // All categories (edit tab)
-  const [categories, setCategories] = useState<Category[]>(
-    INITIAL_CATEGORIES.map((name) => ({ id: uid(), name, matrix: [] }))
-  );
+  const fetchCategories = async () => {
+    setLoadingCats(true);
+    setFetchError(null);
+    try {
+      const data = await getCategories();
+      setCategories(data.map(fromApi));
+    } catch {
+      setFetchError("Failed to load categories.");
+    } finally {
+      setLoadingCats(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const total = matrix.reduce((s, o) => s + (o.weight || 0), 0);
   const canSubmit =
     categoryName.trim() !== "" &&
     matrix.every((o) => o.label.trim() !== "") &&
-    total === 100;
+    total === 100 &&
+    !submitting;
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!canSubmit) return;
-    setCategories((prev) => [
-      ...prev,
-      { id: uid(), name: categoryName.trim(), matrix },
-    ]);
-    setCategoryName("");
-    setMatrix([newOption()]);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      await createCategory({
+        name: categoryName.trim(),
+        matrix: toApiMatrix(matrix),
+      });
+      setCategoryName("");
+      setMatrix([newOption()]);
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+      // Refresh edit tab list
+      const data = await getCategories();
+      setCategories(data.map(fromApi));
+    } catch (err) {
+      setSubmitError(apiErrorMessage(err, "Failed to add category. Please try again."));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -287,13 +369,11 @@ export default function AdminDashboardPage() {
           </button>
         </div>
 
-        {/* ── Add Category tab ─────────────────────────────────── */}
+        {/* ── Add Category tab ───────────────────────────────── */}
         {activeTab === "add" && (
           <div className={styles.panel}>
             {submitted && (
-              <div className={styles.successBanner}>
-                Category added successfully.
-              </div>
+              <div className={styles.successBanner}>Category added successfully.</div>
             )}
 
             <div className={styles.field}>
@@ -315,21 +395,32 @@ export default function AdminDashboardPage() {
               </p>
             )}
 
+            {submitError && <p className={styles.warning}>{submitError}</p>}
+
             <button
               className={styles.submitBtn}
               onClick={handleAdd}
               disabled={!canSubmit}
               type="button"
             >
-              Add Category
+              {submitting ? "Adding…" : "Add Category"}
             </button>
           </div>
         )}
 
-        {/* ── Edit Existing Category tab ────────────────────────── */}
+        {/* ── Edit Existing Category tab ─────────────────────── */}
         {activeTab === "edit" && (
           <div className={styles.panel}>
-            {categories.length === 0 ? (
+            {loadingCats ? (
+              <p className={styles.emptyMsg}>Loading categories…</p>
+            ) : fetchError ? (
+              <div>
+                <p className={styles.warning}>{fetchError}</p>
+                <button className={styles.addRowBtn} onClick={fetchCategories} type="button">
+                  Retry
+                </button>
+              </div>
+            ) : categories.length === 0 ? (
               <p className={styles.emptyMsg}>No categories yet. Add one first.</p>
             ) : (
               <div className={styles.categoryList}>
@@ -337,12 +428,12 @@ export default function AdminDashboardPage() {
                   <EditCategoryRow
                     key={cat.id}
                     category={cat}
-                    onSave={(updated) =>
+                    onSaved={(updated) =>
                       setCategories((prev) =>
-                        prev.map((c) => (c.id === cat.id ? updated : c))
+                        prev.map((c) => (c.id === updated.id ? updated : c))
                       )
                     }
-                    onDelete={(id) =>
+                    onDeleted={(id) =>
                       setCategories((prev) => prev.filter((c) => c.id !== id))
                     }
                   />
