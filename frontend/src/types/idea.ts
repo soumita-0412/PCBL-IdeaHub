@@ -37,6 +37,9 @@ export interface IdeaResponse {
   submitter_name: string;
   submitter_email: string;
   reviewer_comment: string | null;
+  l2_scores: Record<string, number> | null;
+  l2_comment: string | null;
+  l2_weighted_score: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -44,6 +47,13 @@ export interface IdeaResponse {
 export interface IdeaReviewUpdate {
   status: IdeaStatus;
   reviewer_comment?: string;
+}
+
+export interface IdeaL2ReviewUpdate {
+  status: IdeaStatus;
+  l2_scores: Record<string, number>;
+  l2_weighted_score: number;
+  l2_comment?: string;
 }
 
 export interface IdeaListItem {

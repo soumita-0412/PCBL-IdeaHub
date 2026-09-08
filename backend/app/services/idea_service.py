@@ -8,7 +8,7 @@ never from the request body, so users cannot submit as someone else.
 from app.models.idea import Idea, IdeaStatus
 from app.repositories.idea_repository import IdeaRepository
 from app.schemas.auth import CurrentUser
-from app.schemas.idea import IdeaCreate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
+from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
 
 _repo = IdeaRepository()
 
@@ -78,6 +78,18 @@ async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUse
     return _to_response(idea)
 
 
+async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: CurrentUser) -> IdeaResponse | None:
+    idea = await _repo.get_by_id(idea_id)
+    if idea is None:
+        return None
+    idea.status = payload.status
+    idea.l2_scores = payload.l2_scores
+    idea.l2_weighted_score = payload.l2_weighted_score
+    idea.l2_comment = payload.l2_comment
+    await idea.save_with_actor(actor.user_id)
+    return _to_response(idea)
+
+
 async def get_idea_by_id(idea_id: str, actor: CurrentUser) -> IdeaResponse | None:
     idea = await _repo.get_by_id(idea_id)
     if idea is None:
@@ -103,6 +115,9 @@ def _to_response(idea: Idea) -> IdeaResponse:
         submitter_name=idea.submitter_name,
         submitter_email=idea.submitter_email,
         reviewer_comment=idea.reviewer_comment,
+        l2_scores=idea.l2_scores,
+        l2_comment=idea.l2_comment,
+        l2_weighted_score=idea.l2_weighted_score,
         created_at=idea.created_at,
         updated_at=idea.updated_at,
     )

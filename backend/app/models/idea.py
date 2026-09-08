@@ -49,6 +49,11 @@ class Idea(BaseDocument):
     status: IdeaStatus = IdeaStatus.SUBMITTED
     reviewer_comment: Optional[str] = None
 
+    # ── L2 group scoring ────────────────────────────────────
+    l2_scores: Optional[dict[str, int]] = None
+    l2_comment: Optional[str] = None
+    l2_weighted_score: Optional[float] = None
+
     class Settings:
         name = "ideas"
         use_state_management = True

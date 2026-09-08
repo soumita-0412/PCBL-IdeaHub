@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api/axiosInstance";
-import type { IdeaCreate, IdeaListItem, IdeaResponse, IdeaReviewUpdate } from "@/types/idea";
+import type { IdeaCreate, IdeaL2ReviewUpdate, IdeaListItem, IdeaResponse, IdeaReviewUpdate } from "@/types/idea";
 
 export interface IdeaStats {
   total: number;
@@ -39,5 +39,10 @@ export async function getAllIdeas(): Promise<IdeaResponse[]> {
 
 export async function reviewIdea(id: string, payload: IdeaReviewUpdate): Promise<IdeaResponse> {
   const { data } = await apiClient.patch<Apienvelope<IdeaResponse>>(`/ideas/${id}/review`, payload);
+  return data.data;
+}
+
+export async function l2ReviewIdea(id: string, payload: IdeaL2ReviewUpdate): Promise<IdeaResponse> {
+  const { data } = await apiClient.patch<Apienvelope<IdeaResponse>>(`/ideas/${id}/l2-review`, payload);
   return data.data;
 }

@@ -43,6 +43,9 @@ class IdeaResponse(BaseModel):
     submitter_name: str
     submitter_email: str
     reviewer_comment: Optional[str]
+    l2_scores: Optional[dict[str, int]]
+    l2_comment: Optional[str]
+    l2_weighted_score: Optional[float]
     created_at: datetime
     updated_at: datetime
 
@@ -77,3 +80,12 @@ class IdeaReviewUpdate(BaseModel):
 
     status: IdeaStatus
     reviewer_comment: Optional[str] = Field(default=None, max_length=1000)
+
+
+class IdeaL2ReviewUpdate(BaseModel):
+    """Payload for L2 group scoring and decision."""
+
+    status: IdeaStatus
+    l2_scores: dict[str, int]
+    l2_weighted_score: float
+    l2_comment: Optional[str] = Field(default=None, max_length=2000)

@@ -222,7 +222,7 @@
 
 /* ── Completed step bubble ─────────────────────────── */
 .stepBubbleDone {
-  background: hsl(142 71% 35%);
+  background: #81c451;
   color: hsl(0 0% 100%);
   font-size: 0.6rem;
 }
