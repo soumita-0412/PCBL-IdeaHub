@@ -89,3 +89,4 @@ class IdeaL2ReviewUpdate(BaseModel):
     l2_scores: dict[str, int]
     l2_weighted_score: float
     l2_comment: Optional[str] = Field(default=None, max_length=2000)
+    manager_approval_id: str

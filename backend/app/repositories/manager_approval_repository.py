@@ -20,6 +20,13 @@ class ManagerApprovalRepository(BaseRepository[ManagerApproval]):
             .to_list()
         )
 
+    async def find_by_decision(self, decision: str) -> list[ManagerApproval]:
+        return (
+            await ManagerApproval.find(ManagerApproval.decision == decision)
+            .sort("-created_at")
+            .to_list()
+        )
+
     async def find_by_idea(self, idea_id: str) -> list[ManagerApproval]:
         return (
             await ManagerApproval.find(ManagerApproval.idea_id == idea_id)

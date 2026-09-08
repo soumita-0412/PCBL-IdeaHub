@@ -441,6 +441,12 @@
   margin: -0.5rem 0 0;
 }
 
+/* ── Manager approved-by inline text ────────────────── */
+.managerApprovedBy {
+  color: #890892;
+  font-weight: 600;
+}
+
 /* ── L2 badge + meta ─────────────────────────────────── */
 .l2Badge {
   display: inline-flex;

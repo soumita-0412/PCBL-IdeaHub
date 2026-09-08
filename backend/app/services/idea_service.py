@@ -5,8 +5,10 @@ Submitter identity is always taken from the authenticated JWT (CurrentUser),
 never from the request body, so users cannot submit as someone else.
 """
 
+from app.models.group_review import GroupReview
 from app.models.idea import Idea, IdeaStatus
 from app.models.manager_approval import ManagerApproval
+from app.repositories.group_review_repository import GroupReviewRepository
 from app.repositories.idea_repository import IdeaRepository
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
@@ -14,6 +16,7 @@ from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaResponse, IdeaL
 
 _repo = IdeaRepository()
 _approval_repo = ManagerApprovalRepository()
+_group_review_repo = GroupReviewRepository()
 
 
 async def submit_idea(payload: IdeaCreate, actor: CurrentUser) -> IdeaResponse:
@@ -101,6 +104,13 @@ async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUse
     return _to_response(idea)
 
 
+_L2_DECISION_MAP = {
+    IdeaStatus.APPROVED_L2: "approved",
+    IdeaStatus.UNDER_REVIEW_L2: "held",
+    IdeaStatus.REJECTED_L2: "declined",
+}
+
+
 async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: CurrentUser) -> IdeaResponse | None:
     idea = await _repo.get_by_id(idea_id)
     if idea is None:
@@ -110,6 +120,31 @@ async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: Curre
     idea.l2_weighted_score = payload.l2_weighted_score
     idea.l2_comment = payload.l2_comment
     await idea.save_with_actor(actor.user_id)
+
+    manager_approval = await _approval_repo.get_by_id(payload.manager_approval_id)
+    group_review = GroupReview(
+        idea_id=str(idea.id),
+        submission_number=idea.submission_number,
+        manager_approval_id=payload.manager_approval_id,
+        category=idea.category,
+        problem=idea.problem,
+        idea_description=idea.idea_description,
+        additional_info=idea.additional_info,
+        annual_estimate=idea.annual_estimate,
+        employee_name=idea.submitter_name,
+        employee_email=idea.submitter_email,
+        manager_who_approved_name=manager_approval.reviewed_by_name if manager_approval else "",
+        manager_who_approved_email=manager_approval.reviewed_by_email if manager_approval else "",
+        criteria_scores=payload.l2_scores,
+        weighted_score=payload.l2_weighted_score,
+        decision=_L2_DECISION_MAP.get(payload.status, "unknown"),
+        qualitative_feedback=payload.l2_comment,
+        reviewed_by=actor.user_id,
+        reviewed_by_name=actor.name,
+        reviewed_by_email=actor.email,
+    )
+    await group_review.save_with_actor(actor.user_id)
+
     return _to_response(idea)
 
 

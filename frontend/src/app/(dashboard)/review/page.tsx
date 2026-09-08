@@ -4,8 +4,10 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Check, X, Minus } from "lucide-react";
 import { getAllIdeas, reviewIdea, l2ReviewIdea } from "@/services/ideaService";
+import { getApprovedManagerApprovals } from "@/services/managerApprovalService";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
 import type { IdeaResponse, IdeaStatus } from "@/types/idea";
+import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import { useAuthStore } from "@/stores/auth.store";
 import { hasMinRole, Roles } from "@/constants/roles";
 import styles from "./review.module.css";
@@ -35,12 +37,14 @@ function statusDotClass(s: IdeaStatus): string {
 // ── Left panel: compact idea row ──────────────────────────────────────────────
 
 interface IdeaRowProps {
-  idea: IdeaResponse;
+  submissionNumber: string;
+  title: string;
+  sub: string;
   selected: boolean;
   onClick: () => void;
 }
 
-function IdeaRow({ idea, selected, onClick }: IdeaRowProps) {
+function IdeaRow({ submissionNumber, title, sub, selected, onClick }: IdeaRowProps) {
   return (
     <div
       className={`${styles.ideaRow} ${selected ? styles.ideaRowSelected : ""}`}
@@ -49,9 +53,9 @@ function IdeaRow({ idea, selected, onClick }: IdeaRowProps) {
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onClick()}
     >
-      <span className={styles.ideaRowNumber}>{idea.submission_number}</span>
-      <p className={styles.ideaRowTitle}>{idea.category}</p>
-      <p className={styles.ideaRowSub}>{idea.pcbl_function}</p>
+      <span className={styles.ideaRowNumber}>{submissionNumber}</span>
+      <p className={styles.ideaRowTitle}>{title}</p>
+      <p className={styles.ideaRowSub}>{sub}</p>
     </div>
   );
 }
@@ -152,11 +156,8 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
           <span className={styles.detailMetaSep}>·</span>
           <span className={styles.detailSubmitter}>{idea.submitter_name}</span>
         </div>
-
         <h2 className={styles.detailTitle}>{idea.category}</h2>
-        <p className={styles.detailSubtitle}>
-          Submitted by {idea.submitter_name} on {date}
-        </p>
+        <p className={styles.detailSubtitle}>Submitted by {idea.submitter_name} on {date}</p>
 
         <div className={styles.sectionCard}>
           <p className={styles.sectionLabel}>Problem Statement</p>
@@ -232,20 +233,20 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
 // ── L2 Management detail panel ────────────────────────────────────────────────
 
 interface L2DetailPanelProps {
-  idea: IdeaResponse;
+  approval: ManagerApprovalResponse;
   category: CategoryResponse | undefined;
-  onReviewed: (updated: IdeaResponse) => void;
+  onSubmitted: (id: string) => void;
 }
 
-function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
+function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) {
   const initialScores = useMemo(() => {
     const map: Record<string, number> = {};
-    category?.matrix.forEach((c) => { map[c.label] = idea.l2_scores?.[c.label] ?? 0; });
+    category?.matrix.forEach((c) => { map[c.label] = 0; });
     return map;
-  }, [category, idea.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [category]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [scores, setScores] = useState<Record<string, number>>(initialScores);
-  const [comment, setComment] = useState(idea.l2_comment ?? "");
+  const [comment, setComment] = useState("");
   const [decision, setDecision] = useState<L2Decision>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -253,17 +254,15 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
 
   useEffect(() => {
     setScores(initialScores);
-    setComment(idea.l2_comment ?? "");
+    setComment("");
     setDecision(null);
     setError(null);
     setSuccess(false);
-  }, [idea.id, initialScores]);
+  }, [approval.id, initialScores]);
 
   const weightedScore = useMemo(() => {
     if (!category?.matrix.length) return 0;
-    return category.matrix.reduce((acc, c) => {
-      return acc + ((scores[c.label] ?? 0) * c.weight) / 100;
-    }, 0);
+    return category.matrix.reduce((acc, c) => acc + ((scores[c.label] ?? 0) * c.weight) / 100, 0);
   }, [scores, category]);
 
   const handleSubmit = useCallback(async () => {
@@ -276,22 +275,23 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
     setSubmitting(true);
     setError(null);
     try {
-      const updated = await l2ReviewIdea(idea.id, {
+      await l2ReviewIdea(approval.idea_id, {
         status: statusMap[decision],
         l2_scores: scores,
         l2_weighted_score: weightedScore,
+        manager_approval_id: approval.id,
         ...(comment ? { l2_comment: comment } : {}),
       });
-      onReviewed(updated);
       setSuccess(true);
+      onSubmitted(approval.id);
     } catch (err) {
       setError(apiErrorMessage(err, "Action failed. Please try again."));
     } finally {
       setSubmitting(false);
     }
-  }, [idea.id, decision, scores, weightedScore, comment, onReviewed]);
+  }, [approval.id, approval.idea_id, decision, scores, weightedScore, comment, onSubmitted]);
 
-  const date = new Date(idea.created_at).toLocaleDateString("en-IN", {
+  const date = new Date(approval.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
   });
 
@@ -299,31 +299,35 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
     <div className={styles.detailPanel}>
       <div className={styles.detailScroll}>
 
-        {/* Badge + meta */}
         <div className={styles.l2Badge}>Level 2 — Group Scoring</div>
-        <p className={styles.l2IdeaMeta}>{idea.submission_number} · {idea.category}</p>
-        <h2 className={styles.detailTitle}>{idea.category}</h2>
-        <p className={styles.detailSubtitle}>Submitted by {idea.submitter_name} on {date}</p>
+        <p className={styles.l2IdeaMeta}>{approval.submission_number} · {approval.category}</p>
+        <h2 className={styles.detailTitle}>{approval.category}</h2>
+        <p className={styles.detailSubtitle}>
+          Submitted by {approval.employee_name} on {date}
+          &ensp;·&ensp;
+          <span className={styles.managerApprovedBy}>
+            Approved by manager: {approval.reviewed_by_name}
+          </span>
+        </p>
 
-        {/* Idea detail cards */}
         <div className={styles.sectionCard}>
           <p className={styles.sectionLabel}>Problem Statement</p>
-          <p className={styles.sectionText}>{idea.problem}</p>
+          <p className={styles.sectionText}>{approval.problem}</p>
         </div>
         <div className={styles.sectionCard}>
           <p className={styles.sectionLabel}>Proposed Solution</p>
-          <p className={styles.sectionText}>{idea.idea_description}</p>
+          <p className={styles.sectionText}>{approval.idea_description}</p>
         </div>
-        {idea.additional_info && (
+        {approval.additional_info && (
           <div className={styles.sectionCard}>
             <p className={styles.sectionLabel}>Expected Benefits</p>
-            <p className={styles.sectionText}>{idea.additional_info}</p>
+            <p className={styles.sectionText}>{approval.additional_info}</p>
           </div>
         )}
-        {idea.annual_estimate != null && (
+        {approval.annual_estimate != null && (
           <div className={styles.sectionCard}>
             <p className={styles.sectionLabel}>Estimated Savings</p>
-            <p className={styles.sectionText}>₹ {idea.annual_estimate.toLocaleString("en-IN")} annual</p>
+            <p className={styles.sectionText}>₹ {approval.annual_estimate.toLocaleString("en-IN")} annual</p>
           </div>
         )}
 
@@ -345,18 +349,16 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
 
           {!category && (
             <p className={styles.matrixEmpty}>
-              Could not load scoring criteria for category &ldquo;{idea.category}&rdquo;.
+              Could not load scoring criteria for &ldquo;{approval.category}&rdquo;.
               Ensure this category exists in the Admin Dashboard.
             </p>
           )}
-
           {category && category.matrix.length === 0 && (
             <p className={styles.matrixEmpty}>
               No scoring criteria defined for &ldquo;{category.name}&rdquo; yet.
               Add criteria in the Admin Dashboard.
             </p>
           )}
-
           {category && category.matrix.length > 0 && (
             <div className={styles.matrixRows}>
               {category.matrix.map((c) => (
@@ -372,7 +374,6 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
           )}
         </div>
 
-        {/* Qualitative feedback */}
         <div className={styles.reviewBlock}>
           <p className={styles.reviewBlockLabel}>Qualitative Feedback</p>
           <textarea
@@ -385,7 +386,6 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
           />
         </div>
 
-        {/* Decision — 3 buttons */}
         <div className={styles.reviewBlock}>
           <p className={styles.reviewBlockLabel}>Decision</p>
           <div className={styles.decisionRow3}>
@@ -417,13 +417,13 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
         </div>
 
         {error && <p className={styles.errorMsg}>{error}</p>}
-        {success && <p className={styles.successMsg}>Group review submitted successfully.</p>}
+        {success && <p className={styles.successMsg}>Group review submitted and saved successfully.</p>}
 
         <button
           type="button"
           className={styles.submitBtn}
           onClick={handleSubmit}
-          disabled={!decision || submitting}
+          disabled={!decision || submitting || success}
         >
           {submitting ? "Submitting…" : "Submit Group Review"}
         </button>
@@ -438,47 +438,56 @@ function L2DetailPanel({ idea, category, onReviewed }: L2DetailPanelProps) {
 export default function ReviewDashboardPage() {
   const { userProfile } = useAuthStore();
   const [mode, setMode] = useState<ReviewMode>("manager");
+
+  // Manager mode state
   const [ideas, setIdeas] = useState<IdeaResponse[] | null>(null);
+  const [selectedIdea, setSelectedIdea] = useState<IdeaResponse | null>(null);
+
+  // Management mode state
+  const [approvals, setApprovals] = useState<ManagerApprovalResponse[] | null>(null);
+  const [selectedApproval, setSelectedApproval] = useState<ManagerApprovalResponse | null>(null);
+
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
-  const [selected, setSelected] = useState<IdeaResponse | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const canReview = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
 
   useEffect(() => {
-    Promise.all([getAllIdeas(), getCategories()])
-      .then(([ideasData, catsData]) => {
+    Promise.all([getAllIdeas(), getCategories(), getApprovedManagerApprovals()])
+      .then(([ideasData, catsData, approvalsData]) => {
         setIdeas(ideasData);
         setCategories(catsData);
-        if (ideasData.length > 0) setSelected(ideasData[0]!);
+        setApprovals(approvalsData);
+        if (ideasData.length > 0) setSelectedIdea(ideasData[0]!);
+        if (approvalsData.length > 0) setSelectedApproval(approvalsData[0]!);
       })
       .catch(() => setFetchError("Failed to load data. Please try again."));
   }, []);
 
-  const handleReviewed = useCallback((updated: IdeaResponse) => {
+  const handleIdeaReviewed = useCallback((updated: IdeaResponse) => {
     setIdeas((prev) => prev?.map((i) => (i.id === updated.id ? updated : i)) ?? prev);
-    setSelected(updated);
+    setSelectedIdea(updated);
   }, []);
 
-  const visibleIdeas = useMemo(() => {
-    if (!ideas) return null;
-    if (mode === "management") return ideas.filter((i) => i.status === "approved_l1");
-    return ideas;
-  }, [ideas, mode]);
+  // Remove the approval from the list after L2 review is submitted
+  const handleApprovalSubmitted = useCallback((approvalId: string) => {
+    setApprovals((prev) => {
+      const next = prev?.filter((a) => a.id !== approvalId) ?? prev;
+      setSelectedApproval(next && next.length > 0 ? next[0]! : null);
+      return next;
+    });
+  }, []);
+
+  const selectedCategory = useMemo(
+    () => categories.find((c) => c.name === (mode === "manager" ? selectedIdea?.category : selectedApproval?.category)),
+    [categories, mode, selectedIdea?.category, selectedApproval?.category]
+  );
 
   // Auto-select first when switching modes
   useEffect(() => {
-    if (visibleIdeas && visibleIdeas.length > 0) {
-      setSelected(visibleIdeas[0]!);
-    } else {
-      setSelected(null);
-    }
+    if (mode === "manager" && ideas && ideas.length > 0) setSelectedIdea(ideas[0]!);
+    if (mode === "management" && approvals && approvals.length > 0) setSelectedApproval(approvals[0]!);
   }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const selectedCategory = useMemo(
-    () => categories.find((c) => c.name === selected?.category),
-    [categories, selected?.category]
-  );
 
   if (!canReview) {
     return (
@@ -488,14 +497,14 @@ export default function ReviewDashboardPage() {
     );
   }
 
+  const listData = mode === "manager" ? ideas : approvals;
+
   return (
     <main className={styles.container}>
       <div className={styles.layout}>
 
         {/* ── Left sidebar ──────────────────────────────────── */}
         <aside className={styles.leftPanel}>
-
-          {/* Mode switcher */}
           <div className={styles.modeSwitcher}>
             <button
               type="button"
@@ -525,24 +534,35 @@ export default function ReviewDashboardPage() {
           <div className={styles.leftList}>
             {fetchError && <p className={styles.errorMsg}>{fetchError}</p>}
 
-            {!fetchError && visibleIdeas === null && (
+            {!fetchError && listData === null && (
               <>{[1, 2, 3].map((n) => <div key={n} className={styles.skeletonRow} />)}</>
             )}
 
-            {visibleIdeas !== null && visibleIdeas.length === 0 && (
+            {listData !== null && listData.length === 0 && (
               <p className={styles.emptyMsg}>
-                {mode === "management"
-                  ? "No manager-approved ideas yet."
-                  : "No ideas to review."}
+                {mode === "management" ? "No manager-approved ideas yet." : "No ideas to review."}
               </p>
             )}
 
-            {visibleIdeas !== null && visibleIdeas.map((idea) => (
+            {mode === "manager" && ideas !== null && ideas.map((idea) => (
               <IdeaRow
                 key={idea.id}
-                idea={idea}
-                selected={selected?.id === idea.id}
-                onClick={() => setSelected(idea)}
+                submissionNumber={idea.submission_number}
+                title={idea.category}
+                sub={idea.pcbl_function}
+                selected={selectedIdea?.id === idea.id}
+                onClick={() => setSelectedIdea(idea)}
+              />
+            ))}
+
+            {mode === "management" && approvals !== null && approvals.map((approval) => (
+              <IdeaRow
+                key={approval.id}
+                submissionNumber={approval.submission_number}
+                title={approval.category}
+                sub={approval.employee_name}
+                selected={selectedApproval?.id === approval.id}
+                onClick={() => setSelectedApproval(approval)}
               />
             ))}
           </div>
@@ -550,29 +570,31 @@ export default function ReviewDashboardPage() {
 
         {/* ── Right content ─────────────────────────────────── */}
         <div className={styles.rightPanel}>
-          {selected ? (
-            mode === "manager" ? (
+          {mode === "manager" ? (
+            selectedIdea ? (
               <L1DetailPanel
-                key={`l1-${selected.id}`}
-                idea={selected}
-                onReviewed={handleReviewed}
+                key={`l1-${selectedIdea.id}`}
+                idea={selectedIdea}
+                onReviewed={handleIdeaReviewed}
               />
             ) : (
-              <L2DetailPanel
-                key={`l2-${selected.id}`}
-                idea={selected}
-                category={selectedCategory}
-                onReviewed={handleReviewed}
-              />
+              <div className={styles.emptyDetail}>
+                <p className={styles.emptyDetailText}>Select an idea from the list to begin review.</p>
+              </div>
             )
           ) : (
-            <div className={styles.emptyDetail}>
-              <p className={styles.emptyDetailText}>
-                {mode === "management"
-                  ? "No manager-approved ideas available for group scoring."
-                  : "Select an idea from the list to begin review."}
-              </p>
-            </div>
+            selectedApproval ? (
+              <L2DetailPanel
+                key={`l2-${selectedApproval.id}`}
+                approval={selectedApproval}
+                category={selectedCategory}
+                onSubmitted={handleApprovalSubmitted}
+              />
+            ) : (
+              <div className={styles.emptyDetail}>
+                <p className={styles.emptyDetailText}>No manager-approved ideas available for group scoring.</p>
+              </div>
+            )
           )}
         </div>
 

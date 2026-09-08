@@ -5,7 +5,9 @@ GET /api/v1/manager-approvals          — list all approval/rejection records (
 GET /api/v1/manager-approvals/{id}     — fetch a single record
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.dependencies.permissions import require_l1_reviewer
 from app.models.manager_approval import ManagerApproval
@@ -45,9 +47,10 @@ def _to_response(doc: ManagerApproval) -> ManagerApprovalResponse:
     response_model=SuccessResponse[list[ManagerApprovalResponse]],
 )
 async def list_approvals(
+    decision: Optional[str] = Query(default=None, description="Filter by decision: approved | rejected"),
     current_user: CurrentUser = Depends(require_l1_reviewer),
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
-    docs = await _repo.find_all()
+    docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
     return SuccessResponse(data=[_to_response(d) for d in docs])
 
 

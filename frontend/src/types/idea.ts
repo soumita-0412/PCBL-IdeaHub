@@ -54,6 +54,7 @@ export interface IdeaL2ReviewUpdate {
   l2_scores: Record<string, number>;
   l2_weighted_score: number;
   l2_comment?: string;
+  manager_approval_id: string;
 }
 
 export interface IdeaListItem {
