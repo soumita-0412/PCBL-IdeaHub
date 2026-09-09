@@ -103,7 +103,7 @@ export default function MyIdeasPage() {
 
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>My Submissions</h1>
+            <h1 className={styles.title}>My Ideas</h1>
             <p className={styles.subtitle}>Track your ideas through the two-stage review process</p>
           </div>
           <div className={styles.headerRight}>
