@@ -4,8 +4,10 @@ import { useEffect, useState, useMemo } from "react";
 import { TrendingUp, IndianRupee, Star, User, Search, X } from "lucide-react";
 import { getAllIdeas } from "@/services/ideaService";
 import { getAllManagerApprovals } from "@/services/managerApprovalService";
+import { getGroupReviews } from "@/services/groupReviewService";
 import type { IdeaResponse, IdeaStatus } from "@/types/idea";
 import type { ManagerApprovalResponse } from "@/types/managerApproval";
+import type { GroupReviewResponse } from "@/types/groupReview";
 import { hasMinRole, Roles } from "@/constants/roles";
 import { useAuthStore } from "@/stores/auth.store";
 import styles from "./repository.module.css";
@@ -87,14 +89,22 @@ function ScoreBar({ score }: { score: number }) {
 
 // ── Right panel: detail view ──────────────────────────────────────────────────
 
-function DetailPanel({ idea, reviewer }: { idea: IdeaResponse; reviewer: ManagerApprovalResponse | undefined }) {
+function DetailPanel({
+  idea,
+  l1Approval,
+  groupReview,
+}: {
+  idea: IdeaResponse;
+  l1Approval: ManagerApprovalResponse | undefined;
+  groupReview: GroupReviewResponse | undefined;
+}) {
   const { label, cls } = statusMeta(idea.status);
   const date = new Date(idea.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
   });
   const hasL2      = idea.l2_weighted_score != null;
   const hasScores  = idea.l2_scores && Object.keys(idea.l2_scores).length > 0;
-  const hasReviewer = !!reviewer;
+  const hasReviewer = !!l1Approval || !!groupReview;
 
   return (
     <div className={styles.detailPanel}>
@@ -145,21 +155,34 @@ function DetailPanel({ idea, reviewer }: { idea: IdeaResponse; reviewer: Manager
         </div>
 
         {/* ── Reviewer + Score block ── */}
-        {(hasReviewer || hasL2) && (
+        {hasReviewer && (
           <div className={styles.reviewerRow}>
-            {hasReviewer && (
+            {l1Approval && (
               <div className={styles.reviewerCard}>
                 <User size={14} className={styles.reviewerIconUser} />
                 <div className={styles.reviewerCardBody}>
-                  <p className={styles.reviewerCardLabel}>L1 Reviewer</p>
-                  <p className={styles.reviewerCardName}>{reviewer!.reviewed_by_name}</p>
-                  {reviewer!.reviewer_comment && (
-                    <p className={styles.reviewerCardComment}>&ldquo;{reviewer!.reviewer_comment}&rdquo;</p>
+                  <p className={styles.reviewerCardLabel}>L1 Approved by</p>
+                  <p className={styles.reviewerCardName}>{l1Approval.reviewed_by_name}</p>
+                  {l1Approval.reviewer_comment && (
+                    <p className={styles.reviewerCardComment}>&ldquo;{l1Approval.reviewer_comment}&rdquo;</p>
                   )}
                 </div>
               </div>
             )}
-            {hasL2 && (
+            {groupReview && (
+              <div className={styles.reviewerCard}>
+                <Star size={14} className={styles.reviewerIconStar} />
+                <div className={styles.reviewerCardBody}>
+                  <p className={styles.reviewerCardLabel}>L2 Approved by</p>
+                  <p className={styles.reviewerCardName}>{groupReview.reviewed_by_name}</p>
+                  {hasL2 && <ScoreBar score={idea.l2_weighted_score!} />}
+                  {idea.l2_comment && (
+                    <p className={styles.reviewerCardComment}>&ldquo;{idea.l2_comment}&rdquo;</p>
+                  )}
+                </div>
+              </div>
+            )}
+            {!groupReview && hasL2 && (
               <div className={styles.reviewerCard}>
                 <Star size={14} className={styles.reviewerIconStar} />
                 <div className={styles.reviewerCardBody}>
@@ -239,8 +262,9 @@ function DetailPanel({ idea, reviewer }: { idea: IdeaResponse; reviewer: Manager
 
 export default function RepositoryPage() {
   const { userProfile } = useAuthStore();
-  const [ideas, setIdeas]       = useState<IdeaResponse[] | null>(null);
-  const [approvals, setApprovals] = useState<ManagerApprovalResponse[]>([]);
+  const [ideas, setIdeas]           = useState<IdeaResponse[] | null>(null);
+  const [approvals, setApprovals]   = useState<ManagerApprovalResponse[]>([]);
+  const [groupReviews, setGroupReviews] = useState<GroupReviewResponse[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [filter, setFilter]     = useState<FilterValue>("all");
   const [search, setSearch]     = useState("");
@@ -253,9 +277,11 @@ export default function RepositoryPage() {
     Promise.all([
       getAllIdeas(),
       getAllManagerApprovals().catch(() => [] as ManagerApprovalResponse[]),
-    ]).then(([ideasData, approvalsData]) => {
+      getGroupReviews().catch(() => [] as GroupReviewResponse[]),
+    ]).then(([ideasData, approvalsData, groupReviewsData]) => {
       setIdeas(ideasData);
       setApprovals(approvalsData);
+      setGroupReviews(groupReviewsData);
       if (ideasData.length > 0) setSelectedId(ideasData[0]!.id);
     }).catch(() => setFetchError("Failed to load repository data. Please try again."));
   }, [canAccess]);
@@ -265,6 +291,12 @@ export default function RepositoryPage() {
     approvals.forEach((a) => map.set(a.idea_id, a));
     return map;
   }, [approvals]);
+
+  const groupReviewByIdeaId = useMemo(() => {
+    const map = new Map<string, GroupReviewResponse>();
+    groupReviews.forEach((gr) => map.set(gr.idea_id, gr));
+    return map;
+  }, [groupReviews]);
 
   const filtered = useMemo(() => {
     if (!ideas) return null;
@@ -410,7 +442,8 @@ export default function RepositoryPage() {
             <DetailPanel
               key={selectedIdea.id}
               idea={selectedIdea}
-              reviewer={approvalByIdeaId.get(selectedIdea.id)}
+              l1Approval={approvalByIdeaId.get(selectedIdea.id)}
+              groupReview={groupReviewByIdeaId.get(selectedIdea.id)}
             />
           ) : (
             <div className={styles.emptyDetail}>
