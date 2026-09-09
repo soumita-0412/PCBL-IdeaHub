@@ -60,29 +60,37 @@ export default function DashboardPage() {
     <main className={styles.container}>
       <div className={styles.inner}>
 
+        {/* ── Page header ── */}
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>Innovation Dashboard</h1>
+          <p className={styles.pageSubtitle}>
+            YTD performance across all idea categories
+          </p>
+        </div>
+
         {/* ── Stats ── */}
         <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
+          <div className={`${styles.statCard} ${styles.statCardPurple}`}>
             <p className={styles.statLabel}>TOTAL SUBMITTED</p>
-            <p className={`${styles.statValue} ${styles.valBlack}`}>
+            <p className={`${styles.statValue} ${styles.valPurple}`}>
               {stats?.total_submitted ?? "—"}
             </p>
           </div>
-          <div className={styles.statCard}>
+          <div className={`${styles.statCard} ${styles.statCardYellow}`}>
             <p className={styles.statLabel}>MANAGER APPROVED</p>
-            <p className={`${styles.statValue} ${styles.valPurple}`}>
+            <p className={`${styles.statValue} ${styles.valAmber}`}>
               {stats?.manager_approved ?? "—"}
             </p>
           </div>
-          <div className={styles.statCard}>
+          <div className={`${styles.statCard} ${styles.statCardGreen}`}>
             <p className={styles.statLabel}>GROUP APPROVED</p>
             <p className={`${styles.statValue} ${styles.valGreen}`}>
               {stats?.group_approved ?? "—"}
             </p>
           </div>
-          <div className={styles.statCard}>
+          <div className={`${styles.statCard} ${styles.statCardPurple}`}>
             <p className={styles.statLabel}>IMPLEMENTED</p>
-            <p className={`${styles.statValue} ${styles.valGreen}`}>
+            <p className={`${styles.statValue} ${styles.valPurple}`}>
               {stats?.implemented ?? "—"}
             </p>
           </div>
@@ -130,7 +138,7 @@ export default function DashboardPage() {
                           className={styles.fBar}
                           style={{
                             width: `${(f.l1_approved / maxSubmitted) * 100}%`,
-                            background: "#890892",
+                            background: "#c27ec6",
                             opacity: 0.75,
                           }}
                         />
@@ -138,7 +146,7 @@ export default function DashboardPage() {
                           className={styles.fBar}
                           style={{
                             width: `${(f.l2_approved / maxSubmitted) * 100}%`,
-                            background: "#81c451",
+                            background: "#abd18f",
                           }}
                         />
                       </div>

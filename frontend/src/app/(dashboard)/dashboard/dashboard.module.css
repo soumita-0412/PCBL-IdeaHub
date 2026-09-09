@@ -14,6 +14,24 @@
   max-width: 1100px;
 }
 
+/* ── Page header ───────────────────────────────────── */
+.pageHeader {
+  margin-bottom: 0.25rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.2rem;
+}
+
+.pageSubtitle {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
 /* ── Stats grid ────────────────────────────────────── */
 .statsGrid {
   display: grid;
@@ -23,17 +41,23 @@
 
 .statCard {
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8e8ee;
+  border-left: 4px solid transparent;
   border-radius: 0.875rem;
-  padding: 1.125rem 1.25rem 1rem;
+  padding: 1.125rem 1.375rem 1rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  gap: 0.25rem;
+  box-shadow: 0 1px 6px rgba(137, 8, 146, 0.05);
 }
 
+/* left accent colors — lighter shades of the given base colors */
+.statCardPurple { border-left-color: #d9a0dc; }   /* lighter #890892 */
+.statCardYellow { border-left-color: #fde68a; }   /* lighter yellow  */
+.statCardGreen  { border-left-color: #b3dca0; }   /* lighter #81c451 */
+
 .statLabel {
-  font-size: 0.625rem;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.09em;
   color: #9ca3af;
@@ -43,19 +67,13 @@
 .statValue {
   font-size: 2rem;
   font-weight: 700;
-  margin: 0.125rem 0 0;
+  margin: 0.1rem 0 0;
   line-height: 1;
 }
 
-.valBlack  { color: #111827; }
 .valPurple { color: #890892; }
-.valGreen  { color: #16a34a; }
-
-.statSub {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin: 0;
-}
+.valAmber  { color: #d97706; }
+.valGreen  { color: #81c451; }
 
 /* ── Charts row ────────────────────────────────────── */
 .chartsRow {
@@ -310,7 +328,7 @@
   border: 2px solid #81c451;
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #15803d;
+  color: #4c653b;
 }
 
 .scoreDash {
