@@ -2,7 +2,7 @@
 Request / response schemas for the Ideas API.
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -89,4 +89,6 @@ class IdeaL2ReviewUpdate(BaseModel):
     l2_scores: dict[str, int]
     l2_weighted_score: float
     l2_comment: Optional[str] = Field(default=None, max_length=2000)
+    l2_next_step: Optional[str] = Field(default=None, max_length=1000)
+    l2_expected_timeline: Optional[date] = None
     manager_approval_id: str

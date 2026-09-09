@@ -248,6 +248,8 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
 
   const [scores, setScores] = useState<Record<string, number>>(initialScores);
   const [comment, setComment] = useState("");
+  const [nextStep, setNextStep] = useState("");
+  const [expectedTimeline, setExpectedTimeline] = useState("");
   const [decision, setDecision] = useState<L2Decision>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -256,6 +258,8 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
   useEffect(() => {
     setScores(initialScores);
     setComment("");
+    setNextStep("");
+    setExpectedTimeline("");
     setDecision(null);
     setError(null);
     setSuccess(false);
@@ -282,6 +286,8 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
         l2_weighted_score: weightedScore,
         manager_approval_id: approval.id,
         ...(comment ? { l2_comment: comment } : {}),
+        ...(nextStep ? { l2_next_step: nextStep } : {}),
+        ...(expectedTimeline ? { l2_expected_timeline: expectedTimeline } : {}),
       });
       setSuccess(true);
       onSubmitted(approval.id);
@@ -290,7 +296,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
     } finally {
       setSubmitting(false);
     }
-  }, [approval.id, approval.idea_id, decision, scores, weightedScore, comment, onSubmitted]);
+  }, [approval.id, approval.idea_id, decision, scores, weightedScore, comment, nextStep, expectedTimeline, onSubmitted]);
 
   const date = new Date(approval.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
@@ -376,13 +382,36 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
         </div>
 
         <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Qualitative Feedback</p>
+          <p className={styles.reviewBlockLabel}>Recommendations</p>
           <textarea
             className={styles.commentBox}
             placeholder="Observations, recommendations…"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={4}
+            disabled={submitting}
+          />
+        </div>
+
+        <div className={styles.reviewBlock}>
+          <p className={styles.reviewBlockLabel}>Next Step</p>
+          <textarea
+            className={styles.commentBox}
+            placeholder="Describe the proposed next steps for this idea…"
+            value={nextStep}
+            onChange={(e) => setNextStep(e.target.value)}
+            rows={3}
+            disabled={submitting}
+          />
+        </div>
+
+        <div className={styles.reviewBlock}>
+          <p className={styles.reviewBlockLabel}>Expected Timeline</p>
+          <input
+            type="date"
+            className={styles.dateInput}
+            value={expectedTimeline}
+            onChange={(e) => setExpectedTimeline(e.target.value)}
             disabled={submitting}
           />
         </div>

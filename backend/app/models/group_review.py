@@ -6,6 +6,7 @@ on a manager-approved idea, capturing all scoring criteria, the decision,
 and a reference back to the manager who originally approved the idea.
 """
 
+from datetime import date
 from typing import Annotated, Optional
 
 from beanie import Indexed
@@ -41,6 +42,8 @@ class GroupReview(BaseDocument):
     # ── Decision ────────────────────────────────────────
     decision: str                   # "approved" | "held" | "declined"
     qualitative_feedback: Optional[str] = None
+    next_step: Optional[str] = None
+    expected_timeline: Optional[date] = None
 
     # ── L2 reviewer identity ────────────────────────────
     reviewed_by: str

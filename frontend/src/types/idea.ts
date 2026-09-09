@@ -39,6 +39,7 @@ export interface IdeaResponse {
   reviewer_comment: string | null;
   l2_scores: Record<string, number> | null;
   l2_comment: string | null;
+  l2_next_step: string | null;
   l2_weighted_score: number | null;
   created_at: string;
   updated_at: string;
@@ -54,6 +55,8 @@ export interface IdeaL2ReviewUpdate {
   l2_scores: Record<string, number>;
   l2_weighted_score: number;
   l2_comment?: string;
+  l2_next_step?: string;
+  l2_expected_timeline?: string;
   manager_approval_id: string;
 }
 

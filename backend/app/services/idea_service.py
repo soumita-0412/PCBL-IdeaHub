@@ -143,6 +143,8 @@ async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: Curre
         weighted_score=payload.l2_weighted_score,
         decision=_L2_DECISION_MAP.get(payload.status, "unknown"),
         qualitative_feedback=payload.l2_comment,
+        next_step=payload.l2_next_step,
+        expected_timeline=payload.l2_expected_timeline,
         reviewed_by=actor.user_id,
         reviewed_by_name=actor.name,
         reviewed_by_email=actor.email,
