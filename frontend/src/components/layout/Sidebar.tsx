@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Plus,
   FileText,
@@ -103,6 +103,7 @@ export function Sidebar() {
 
   const userRole = userProfile?.role ?? "";
   const reviewLocked = !hasMinRole(userRole, Roles.L1_REVIEWER);
+  const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
 
   return (
@@ -192,10 +193,9 @@ export function Sidebar() {
             {reviewExpanded && !reviewLocked && (
               <div className={styles.subNav}>
                 {REVIEW_SUB_ITEMS.map((sub) => {
+                  const isManagementMode = searchParams.get("mode") === "management";
                   const isSubActive = isOnReview &&
-                    (sub.href.includes("mode=management")
-                      ? (typeof window !== "undefined" && window.location.search.includes("mode=management"))
-                      : !( typeof window !== "undefined" && window.location.search.includes("mode=management")));
+                    (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);
 
                   return (
                     <Link
