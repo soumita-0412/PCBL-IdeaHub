@@ -447,17 +447,18 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1px solid #890892;
-  border-radius: 0.625rem;
+  background: #fff;
+  border: 1px solid hsl(220 15% 88%);
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 
 .reviewRow {
   display: grid;
-  grid-template-columns: 10rem 1fr;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid hsl(222 35% 16%);
+  grid-template-columns: 9rem 1fr;
+  gap: 1rem;
+  padding: 0.875rem 1.125rem;
+  border-bottom: 1px solid hsl(220 15% 92%);
 }
 
 .reviewRow:last-child {
@@ -465,19 +466,50 @@
 }
 
 .reviewLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #000;
-  padding-top: 1px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #890892;
+  padding-top: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .reviewValue {
   font-size: 0.875rem;
-  color: #000;
+  color: #1a1a1a;
   line-height: 1.5;
   word-break: break-word;
+}
+
+.reviewValueHighlight {
+  color: #890892;
+  font-weight: 500;
+}
+
+/* ── Review notice ─────────────────────────────────── */
+.reviewNotice {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.875rem 1rem;
+  background: hsl(220 20% 97%);
+  border: 1px solid hsl(220 15% 88%);
+  border-radius: 0.625rem;
+}
+
+.reviewNoticeIcon {
+  font-size: 1rem;
+  color: hsl(220 15% 50%);
+  flex-shrink: 0;
+  padding-top: 1px;
+  line-height: 1.5;
+}
+
+.reviewNoticeText {
+  font-size: 0.8125rem;
+  color: hsl(220 10% 35%);
+  margin: 0;
+  line-height: 1.55;
 }
 
 /* ── Error message ─────────────────────────────────── */

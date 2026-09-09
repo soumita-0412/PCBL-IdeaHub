@@ -444,11 +444,11 @@ export default function SubmitIdeaPage() {
           <div className={styles.formSection}>
             <div>
               <h2 className={styles.formTitle}>Review your submission</h2>
-              <p className={styles.formSubtitle}>Check everything before submitting.</p>
+              <p className={styles.formSubtitle}>Confirm the details below before submitting.</p>
             </div>
 
             <div className={styles.reviewGrid}>
-              <ReviewRow label="Category" value={category!} />
+              <ReviewRow label="Category" value={category!} highlight />
               <ReviewRow label="PCBL Function"
                 value={form.pcblFunction === "Other" ? `Other — ${form.pcblFunctionOther}` : form.pcblFunction}
               />
@@ -465,6 +465,14 @@ export default function SubmitIdeaPage() {
                 <ReviewRow label="Additional info" value={form.additionalInfo} />
               )}
               <ReviewRow label="Submitted by" value={`${form.submitterName} (${form.submitterEmail})`} />
+            </div>
+
+            <div className={styles.reviewNotice}>
+              <span className={styles.reviewNoticeIcon}>ⓘ</span>
+              <p className={styles.reviewNoticeText}>
+                Submissions cannot be edited after this point. Your idea will enter Level 1 manager review, then
+                proceed to the <span className={styles.infoHighlight}>{category}</span> group panel if approved.
+              </p>
             </div>
 
             {submitError && (
@@ -492,11 +500,11 @@ export default function SubmitIdeaPage() {
   );
 }
 
-function ReviewRow({ label, value }: { label: string; value: string }) {
+function ReviewRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className={styles.reviewRow}>
       <span className={styles.reviewLabel}>{label}</span>
-      <span className={styles.reviewValue}>{value}</span>
+      <span className={highlight ? styles.reviewValueHighlight : styles.reviewValue}>{value}</span>
     </div>
   );
 }
