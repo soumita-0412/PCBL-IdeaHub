@@ -19,8 +19,10 @@ class ManagerApproval(BaseDocument):
 
     # ── Idea snapshot ───────────────────────────────────
     category: str
+    idea_title: Optional[str] = None
     problem: str
     idea_description: str
+    benefit: Optional[str] = None
     additional_info: Optional[str] = None
     annual_estimate: Optional[float] = None
 

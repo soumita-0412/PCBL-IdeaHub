@@ -12,6 +12,8 @@ export interface IdeaCreate {
   category: string;
   problem: string;
   idea_description: string;
+  idea_title: string;
+  benefit: string;
   patent_search_done: boolean;
   patent_link?: string;
   pcbl_function: string;
@@ -27,6 +29,8 @@ export interface IdeaResponse {
   category: string;
   problem: string;
   idea_description: string;
+  idea_title: string | null;
+  benefit: string | null;
   patent_search_done: boolean;
   patent_link: string | null;
   pcbl_function: string;

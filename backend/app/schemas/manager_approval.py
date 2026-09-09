@@ -13,8 +13,10 @@ class ManagerApprovalResponse(BaseModel):
     idea_id: str
     submission_number: str
     category: str
+    idea_title: Optional[str]
     problem: str
     idea_description: str
+    benefit: Optional[str]
     additional_info: Optional[str]
     annual_estimate: Optional[float]
     employee_name: str

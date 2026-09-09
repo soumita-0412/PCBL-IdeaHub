@@ -160,6 +160,12 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
         <h2 className={styles.detailTitle}>{idea.category}</h2>
         <p className={styles.detailSubtitle}>Submitted by {idea.submitter_name} on {date}</p>
 
+        {idea.idea_title && (
+          <div className={styles.sectionCard}>
+            <p className={styles.sectionLabel}>Idea Title</p>
+            <p className={styles.sectionText}>{idea.idea_title}</p>
+          </div>
+        )}
         <div className={styles.sectionCard}>
           <p className={styles.sectionLabel}>Problem Statement</p>
           <p className={styles.sectionText}>{idea.problem}</p>
@@ -168,9 +174,15 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
           <p className={styles.sectionLabel}>Proposed Solution</p>
           <p className={styles.sectionText}>{idea.idea_description}</p>
         </div>
+        {idea.benefit && (
+          <div className={styles.sectionCard}>
+            <p className={styles.sectionLabel}>Benefit</p>
+            <p className={styles.sectionText}>{idea.benefit}</p>
+          </div>
+        )}
         {idea.additional_info && (
           <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Expected Benefits</p>
+            <p className={styles.sectionLabel}>Additional Information</p>
             <p className={styles.sectionText}>{idea.additional_info}</p>
           </div>
         )}
@@ -317,6 +329,12 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
           </span>
         </p>
 
+        {approval.idea_title && (
+          <div className={styles.sectionCard}>
+            <p className={styles.sectionLabel}>Idea Title</p>
+            <p className={styles.sectionText}>{approval.idea_title}</p>
+          </div>
+        )}
         <div className={styles.sectionCard}>
           <p className={styles.sectionLabel}>Problem Statement</p>
           <p className={styles.sectionText}>{approval.problem}</p>
@@ -325,9 +343,15 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
           <p className={styles.sectionLabel}>Proposed Solution</p>
           <p className={styles.sectionText}>{approval.idea_description}</p>
         </div>
+        {approval.benefit && (
+          <div className={styles.sectionCard}>
+            <p className={styles.sectionLabel}>Benefit</p>
+            <p className={styles.sectionText}>{approval.benefit}</p>
+          </div>
+        )}
         {approval.additional_info && (
           <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Expected Benefits</p>
+            <p className={styles.sectionLabel}>Additional Information</p>
             <p className={styles.sectionText}>{approval.additional_info}</p>
           </div>
         )}

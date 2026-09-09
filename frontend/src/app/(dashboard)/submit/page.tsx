@@ -25,6 +25,8 @@ const PCBL_FUNCTIONS = [
 interface DescribeForm {
   problem: string;
   idea: string;
+  ideaTitle: string;
+  benefit: string;
   patentSearchDone: "yes" | "no" | "not_applicable" | "";
   patentLink: string;
   pcblFunction: string;
@@ -48,6 +50,8 @@ export default function SubmitIdeaPage() {
   const [form, setForm] = useState<DescribeForm>({
     problem: "",
     idea: "",
+    ideaTitle: "",
+    benefit: "",
     patentSearchDone: "",
     patentLink: "",
     pcblFunction: "",
@@ -68,6 +72,8 @@ export default function SubmitIdeaPage() {
   const describeValid =
     form.problem.trim().length > 0 &&
     form.idea.trim().length > 0 &&
+    form.ideaTitle.trim().length > 0 &&
+    form.benefit.trim().length > 0 &&
     form.patentSearchDone !== "" &&
     form.pcblFunction !== "" &&
     (form.pcblFunction !== "Other" || form.pcblFunctionOther.trim().length > 0) &&
@@ -82,6 +88,8 @@ export default function SubmitIdeaPage() {
         category: category!,
         problem: form.problem,
         idea_description: form.idea,
+        idea_title: form.ideaTitle,
+        benefit: form.benefit,
         patent_search_done: form.patentSearchDone === "yes",
         ...(form.patentSearchDone === "yes" && form.patentLink ? { patent_link: form.patentLink } : {}),
         pcbl_function: form.pcblFunction,
@@ -144,7 +152,8 @@ export default function SubmitIdeaPage() {
                 setStep(1);
                 setCategory(null);
                 setForm({
-                  problem: "", idea: "", patentSearchDone: "", patentLink: "",
+                  problem: "", idea: "", ideaTitle: "", benefit: "",
+                  patentSearchDone: "", patentLink: "",
                   pcblFunction: "", pcblFunctionOther: "", annualEstimate: "",
                   additionalInfo: "",
                   submitterName: userProfile?.name ?? "",
@@ -240,6 +249,25 @@ export default function SubmitIdeaPage() {
               <p className={styles.formSubtitle}>
                 Category: <span className={styles.infoHighlight}>{category}</span>
               </p>
+            </div>
+
+            {/* Idea title */}
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Idea title <span className={styles.required}>*</span>
+              </label>
+              <p className={styles.fieldHint}>
+                Give your idea a concise, descriptive title.
+              </p>
+              <input
+                type="text"
+                className={styles.textInput}
+                placeholder="Enter a short title for your idea…"
+                maxLength={150}
+                value={form.ideaTitle}
+                onChange={(e) => patch("ideaTitle", e.target.value)}
+              />
+              <span className={styles.charCount}>{form.ideaTitle.length}/150</span>
             </div>
 
             {/* Problem statement */}
@@ -360,6 +388,25 @@ export default function SubmitIdeaPage() {
               )}
             </div>
 
+            {/* Benefit */}
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Benefit <span className={styles.required}>*</span>
+              </label>
+              <p className={styles.fieldHint}>
+                Describe the key benefit(s) this idea will deliver to PCBL Chemical.
+              </p>
+              <textarea
+                className={styles.textarea}
+                placeholder="Outline the expected benefits…"
+                maxLength={500}
+                rows={4}
+                value={form.benefit}
+                onChange={(e) => patch("benefit", e.target.value)}
+              />
+              <span className={styles.charCount}>{form.benefit.length}/500</span>
+            </div>
+
             {/* Annual estimate */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>Annual value estimate (₹)</label>
@@ -452,8 +499,10 @@ export default function SubmitIdeaPage() {
               <ReviewRow label="PCBL Function"
                 value={form.pcblFunction === "Other" ? `Other — ${form.pcblFunctionOther}` : form.pcblFunction}
               />
+              <ReviewRow label="Idea title" value={form.ideaTitle} />
               <ReviewRow label="Problem statement" value={form.problem} />
               <ReviewRow label="Idea description" value={form.idea} />
+              <ReviewRow label="Benefit" value={form.benefit} />
               <ReviewRow label="Patent search done" value={form.patentSearchDone === "yes" ? "Yes" : form.patentSearchDone === "not_applicable" ? "Not Applicable" : "No"} />
               {form.patentSearchDone === "yes" && form.patentLink && (
                 <ReviewRow label="Patent link" value={form.patentLink} />

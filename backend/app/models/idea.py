@@ -36,8 +36,10 @@ class Idea(BaseDocument):
     category: str
 
     # ── Step 2: Describe ────────────────────────────────────
+    idea_title: Optional[str] = Field(default=None, max_length=150)
     problem: str = Field(max_length=250)
     idea_description: str = Field(max_length=500)
+    benefit: Optional[str] = Field(default=None, max_length=500)
     patent_search_done: bool = False
     patent_link: Optional[str] = None
     pcbl_function: str

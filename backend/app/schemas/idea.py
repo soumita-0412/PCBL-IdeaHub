@@ -14,8 +14,10 @@ class IdeaCreate(BaseModel):
     """Payload sent by the frontend when submitting an idea."""
 
     category: str
+    idea_title: Optional[str] = Field(default=None, max_length=150)
     problem: str = Field(max_length=250)
     idea_description: str = Field(max_length=500)
+    benefit: Optional[str] = Field(default=None, max_length=500)
     patent_search_done: bool = False
     patent_link: Optional[str] = None
     pcbl_function: str
@@ -33,6 +35,8 @@ class IdeaResponse(BaseModel):
     category: str
     problem: str
     idea_description: str
+    idea_title: Optional[str]
+    benefit: Optional[str]
     patent_search_done: bool
     patent_link: Optional[str]
     pcbl_function: str
