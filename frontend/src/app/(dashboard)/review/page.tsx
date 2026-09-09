@@ -112,7 +112,7 @@ interface L1DetailPanelProps {
 
 function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
   const [comment, setComment] = useState(idea.reviewer_comment ?? "");
-  const [decision, setDecision] = useState<"approve" | "reject" | null>(null);
+  const [decision, setDecision] = useState<"approve" | "decline" | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -206,11 +206,11 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
             </button>
             <button
               type="button"
-              className={`${styles.decisionBtn} ${decision === "reject" ? styles.decisionBtnReject : ""}`}
-              onClick={() => setDecision(decision === "reject" ? null : "reject")}
+              className={`${styles.decisionBtn} ${decision === "decline" ? styles.decisionBtnReject : ""}`}
+              onClick={() => setDecision(decision === "decline" ? null : "decline")}
               disabled={submitting}
             >
-              <X size={15} /> Reject
+              <X size={15} /> Decline
             </button>
           </div>
         </div>

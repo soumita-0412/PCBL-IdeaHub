@@ -25,7 +25,7 @@ const PCBL_FUNCTIONS = [
 interface DescribeForm {
   problem: string;
   idea: string;
-  patentSearchDone: "yes" | "no" | "";
+  patentSearchDone: "yes" | "no" | "not_applicable" | "";
   patentLink: string;
   pcblFunction: string;
   pcblFunctionOther: string;
@@ -324,7 +324,7 @@ export default function SubmitIdeaPage() {
                 If your idea is for a new product or process, have you performed a basic patent search (Google Patents) to determine what competing intellectual property might block PCBL Chemical from practising your idea?
               </p>
               <div className={styles.radioGroup}>
-                {(["yes", "no"] as const).map((val) => (
+                {(["yes", "no", "not_applicable"] as const).map((val) => (
                   <label key={val} className={styles.radioOption}>
                     <input
                       type="radio"
@@ -333,12 +333,14 @@ export default function SubmitIdeaPage() {
                       checked={form.patentSearchDone === val}
                       onChange={() => {
                         patch("patentSearchDone", val);
-                        if (val === "no") patch("patentLink", "");
+                        if (val !== "yes") patch("patentLink", "");
                       }}
                       className={styles.radioNative}
                     />
                     <span className={`${styles.radioCustom} ${form.patentSearchDone === val ? styles.radioCustomChecked : ""}`} />
-                    <span className={styles.radioLabel}>{val === "yes" ? "Yes" : "No"}</span>
+                    <span className={styles.radioLabel}>
+                      {val === "yes" ? "Yes" : val === "no" ? "No" : "Not Applicable"}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -452,7 +454,7 @@ export default function SubmitIdeaPage() {
               />
               <ReviewRow label="Problem statement" value={form.problem} />
               <ReviewRow label="Idea description" value={form.idea} />
-              <ReviewRow label="Patent search done" value={form.patentSearchDone === "yes" ? "Yes" : "No"} />
+              <ReviewRow label="Patent search done" value={form.patentSearchDone === "yes" ? "Yes" : form.patentSearchDone === "not_applicable" ? "Not Applicable" : "No"} />
               {form.patentSearchDone === "yes" && form.patentLink && (
                 <ReviewRow label="Patent link" value={form.patentLink} />
               )}
