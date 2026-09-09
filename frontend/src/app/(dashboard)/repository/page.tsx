@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { TrendingUp, IndianRupee, Star, User, Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import { getAllIdeas } from "@/services/ideaService";
 import { getAllManagerApprovals } from "@/services/managerApprovalService";
 import { getGroupReviews } from "@/services/groupReviewService";
@@ -12,26 +12,28 @@ import { hasMinRole, Roles } from "@/constants/roles";
 import { useAuthStore } from "@/stores/auth.store";
 import styles from "./repository.module.css";
 
-function statusMeta(s: IdeaStatus): { label: string; cls: string } {
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function statusMeta(s: IdeaStatus): { label: string; dotCls: string; textCls: string } {
   switch (s) {
-    case "submitted":       return { label: "Submitted",   cls: styles.badgeBlue! };
-    case "under_review_l1": return { label: "L1 Review",   cls: styles.badgeAmber! };
-    case "under_review_l2": return { label: "L2 Review",   cls: styles.badgeAmber! };
-    case "approved_l1":     return { label: "L1 Approved", cls: styles.badgeGreen! };
-    case "approved_l2":     return { label: "L2 Approved", cls: styles.badgeGreen! };
-    case "implemented":     return { label: "Implemented", cls: styles.badgeGreen! };
-    case "rejected_l1":     return { label: "L1 Declined", cls: styles.badgeRed! };
-    case "rejected_l2":     return { label: "L2 Declined", cls: styles.badgeRed! };
+    case "submitted":       return { label: "Submitted",    dotCls: styles.dotBlue!,  textCls: styles.textBlue! };
+    case "under_review_l1": return { label: "Under Review", dotCls: styles.dotAmber!, textCls: styles.textAmber! };
+    case "under_review_l2": return { label: "Under Review", dotCls: styles.dotAmber!, textCls: styles.textAmber! };
+    case "approved_l1":     return { label: "Approved",     dotCls: styles.dotGreen!, textCls: styles.textGreen! };
+    case "approved_l2":     return { label: "Approved",     dotCls: styles.dotGreen!, textCls: styles.textGreen! };
+    case "implemented":     return { label: "Implemented",  dotCls: styles.dotGreen!, textCls: styles.textGreen! };
+    case "rejected_l1":     return { label: "Declined",     dotCls: styles.dotRed!,   textCls: styles.textRed! };
+    case "rejected_l2":     return { label: "Declined",     dotCls: styles.dotRed!,   textCls: styles.textRed! };
   }
 }
 
-const STATUS_FILTERS = [
+const STATUS_OPTIONS = [
   { value: "all",      label: "All" },
-  { value: "pending",  label: "Pending" },
+  { value: "pending",  label: "Under Review" },
   { value: "approved", label: "Approved" },
   { value: "declined", label: "Declined" },
 ] as const;
-type FilterValue = (typeof STATUS_FILTERS)[number]["value"];
+type FilterValue = (typeof STATUS_OPTIONS)[number]["value"];
 
 function matchesFilter(status: IdeaStatus, f: FilterValue): boolean {
   if (f === "all") return true;
@@ -41,217 +43,101 @@ function matchesFilter(status: IdeaStatus, f: FilterValue): boolean {
   return true;
 }
 
-// ── Left panel: compact idea row ──────────────────────────────────────────────
+// ── Score circle ──────────────────────────────────────────────────────────────
 
-function IdeaRow({ idea, selected, onClick }: { idea: IdeaResponse; selected: boolean; onClick: () => void }) {
-  const { label, cls } = statusMeta(idea.status);
-  return (
-    <div
-      className={`${styles.ideaRow} ${selected ? styles.ideaRowSelected : ""}`}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
-    >
-      <div className={styles.ideaRowTop}>
-        <span className={styles.ideaRowNumber}>{idea.submission_number}</span>
-        <span className={`${styles.badge} ${cls}`}>{label}</span>
-      </div>
-      <p className={styles.ideaRowTitle}>{idea.idea_title ?? idea.category}</p>
-      <div className={styles.ideaRowBottom}>
-        <span className={styles.ideaRowSub}>{idea.submitter_name}</span>
-        {idea.annual_estimate != null && (
-          <span className={styles.ideaRowValue}>
-            ₹{idea.annual_estimate >= 100000
-              ? `${(idea.annual_estimate / 100000).toFixed(1)}L`
-              : idea.annual_estimate.toLocaleString("en-IN")}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── Score bar ─────────────────────────────────────────────────────────────────
-
-function ScoreBar({ score }: { score: number }) {
+function ScoreCircle({ score }: { score: number }) {
   const pct = Math.min(100, Math.round(score * 10));
-  const color = pct >= 70 ? "#16a34a" : pct >= 40 ? "#d97706" : "#dc2626";
+  const r = 22;
+  const circ = 2 * Math.PI * r;
+  const filled = (pct / 100) * circ;
+  const color = pct >= 70 ? "#22c55e" : pct >= 40 ? "#f59e0b" : "#ef4444";
   return (
-    <div className={styles.scoreBarWrap}>
-      <div className={styles.scoreBarTrack}>
-        <div className={styles.scoreBarFill} style={{ width: `${pct}%`, background: color }} />
-      </div>
-      <span className={styles.scoreBarLabel} style={{ color }}>{pct}%</span>
-    </div>
+    <svg width="56" height="56" viewBox="0 0 56 56" className={styles.scoreCircleSvg}>
+      <circle cx="28" cy="28" r={r} fill="none" stroke="#f0eaf5" strokeWidth="4" />
+      <circle
+        cx="28" cy="28" r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth="4"
+        strokeDasharray={`${filled} ${circ}`}
+        strokeLinecap="round"
+        transform="rotate(-90 28 28)"
+      />
+      <text
+        x="28" y="29"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="13"
+        fontWeight="700"
+        fill="#111827"
+        fontFamily="Cambria Math, Cambria, Georgia, serif"
+      >
+        {pct}
+      </text>
+    </svg>
   );
 }
 
-// ── Right panel: detail view ──────────────────────────────────────────────────
+// ── Idea card ─────────────────────────────────────────────────────────────────
 
-function DetailPanel({
-  idea,
-  l1Approval,
-  groupReview,
-}: {
+interface IdeaCardProps {
   idea: IdeaResponse;
   l1Approval: ManagerApprovalResponse | undefined;
   groupReview: GroupReviewResponse | undefined;
-}) {
-  const { label, cls } = statusMeta(idea.status);
+}
+
+function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
+  const { label, dotCls, textCls } = statusMeta(idea.status);
   const date = new Date(idea.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
   });
-  const hasL2      = idea.l2_weighted_score != null;
-  const hasScores  = idea.l2_scores && Object.keys(idea.l2_scores).length > 0;
-  const hasReviewer = !!l1Approval || !!groupReview;
+  const reviewer = groupReview?.reviewed_by_name ?? l1Approval?.reviewed_by_name ?? null;
+  const hasScore = idea.l2_weighted_score != null;
 
   return (
-    <div className={styles.detailPanel}>
-      <div className={styles.detailScroll}>
+    <div className={styles.card}>
+      <div className={styles.cardLayout}>
 
-        {/* Header */}
-        <div className={styles.detailHeader}>
-          <div className={styles.detailHeaderLeft}>
-            <span className={styles.detailNumber}>{idea.submission_number}</span>
-            <span className={`${styles.badge} ${cls}`}>{label}</span>
-          </div>
-          <span className={styles.detailDate}>{date}</span>
-        </div>
-
-        <h2 className={styles.detailTitle}>{idea.idea_title ?? idea.category}</h2>
-        <p className={styles.detailSubtitle}>
-          {idea.category}&ensp;·&ensp;Submitted by <strong>{idea.submitter_name}</strong>&ensp;·&ensp;{idea.pcbl_function}
-        </p>
-
-        {/* ── Hero: Benefits + Annual Value ── */}
-        <div className={styles.heroGrid}>
-          <div className={styles.heroCard}>
-            <div className={styles.heroCardIconWrap} data-color="green">
-              <TrendingUp size={17} />
-            </div>
-            <div className={styles.heroCardBody}>
-              <p className={styles.heroCardLabel}>Benefits</p>
-              <p className={styles.heroCardText}>{idea.benefit || "Not specified"}</p>
-            </div>
+        {/* Left: all content */}
+        <div className={styles.cardMain}>
+          <div className={styles.cardTopRow}>
+            <span className={styles.cardMeta}>
+              {idea.submission_number}&ensp;·&ensp;{idea.category}&ensp;·&ensp;{date}
+            </span>
+            <span className={`${styles.statusBadge} ${textCls}`}>
+              <span className={`${styles.statusDot} ${dotCls}`} />
+              {label}
+            </span>
           </div>
 
-          <div className={styles.heroCard}>
-            <div className={styles.heroCardIconWrap} data-color="orange">
-              <IndianRupee size={17} />
-            </div>
-            <div className={styles.heroCardBody}>
-              <p className={styles.heroCardLabel}>Annual Value Estimate</p>
-              {idea.annual_estimate != null ? (
-                <p className={styles.heroCardValue}>
-                  ₹ {idea.annual_estimate.toLocaleString("en-IN")}
-                  <span className={styles.heroCardValueSub}> / year</span>
-                </p>
-              ) : (
-                <p className={styles.heroCardText}>Not specified</p>
-              )}
-            </div>
-          </div>
-        </div>
+          <h3 className={styles.cardTitle}>{idea.idea_title ?? idea.category}</h3>
+          <p className={styles.cardDesc}>{idea.idea_description}</p>
 
-        {/* ── Reviewer + Score block ── */}
-        {hasReviewer && (
-          <div className={styles.reviewerRow}>
-            {l1Approval && (
-              <div className={styles.reviewerCard}>
-                <User size={14} className={styles.reviewerIconUser} />
-                <div className={styles.reviewerCardBody}>
-                  <p className={styles.reviewerCardLabel}>L1 Approved by</p>
-                  <p className={styles.reviewerCardName}>{l1Approval.reviewed_by_name}</p>
-                  {l1Approval.reviewer_comment && (
-                    <p className={styles.reviewerCardComment}>&ldquo;{l1Approval.reviewer_comment}&rdquo;</p>
-                  )}
-                </div>
+          <div className={styles.cardChips}>
+            {idea.benefit && (
+              <div className={styles.chipBox}>
+                <span className={styles.chipBoxLabel}>Benefits</span>
+                <span className={styles.chipBoxText}>{idea.benefit}</span>
               </div>
             )}
-            {groupReview && (
-              <div className={styles.reviewerCard}>
-                <Star size={14} className={styles.reviewerIconStar} />
-                <div className={styles.reviewerCardBody}>
-                  <p className={styles.reviewerCardLabel}>L2 Approved by</p>
-                  <p className={styles.reviewerCardName}>{groupReview.reviewed_by_name}</p>
-                  {hasL2 && <ScoreBar score={idea.l2_weighted_score!} />}
-                  {idea.l2_comment && (
-                    <p className={styles.reviewerCardComment}>&ldquo;{idea.l2_comment}&rdquo;</p>
-                  )}
-                </div>
-              </div>
-            )}
-            {!groupReview && hasL2 && (
-              <div className={styles.reviewerCard}>
-                <Star size={14} className={styles.reviewerIconStar} />
-                <div className={styles.reviewerCardBody}>
-                  <p className={styles.reviewerCardLabel}>L2 Score</p>
-                  <ScoreBar score={idea.l2_weighted_score!} />
-                  {idea.l2_comment && (
-                    <p className={styles.reviewerCardComment}>&ldquo;{idea.l2_comment}&rdquo;</p>
-                  )}
-                </div>
+            {idea.annual_estimate != null && (
+              <div className={`${styles.chipBox} ${styles.chipBoxSavings}`}>
+                <span className={styles.chipBoxLabelSavings}>Savings</span>
+                <span className={styles.chipBoxValue}>
+                  ₹ {idea.annual_estimate.toLocaleString("en-IN")} annual
+                </span>
               </div>
             )}
           </div>
-        )}
+        </div>
 
-        {/* ── L2 score breakdown ── */}
-        {hasScores && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Score Breakdown</p>
-            <div className={styles.scoreBreakdown}>
-              {Object.entries(idea.l2_scores!).map(([criterion, score]) => (
-                <div key={criterion} className={styles.scoreBreakdownRow}>
-                  <span className={styles.scoreBreakdownCriterion}>{criterion}</span>
-                  <div className={styles.scoreBreakdownDots}>
-                    {Array.from({ length: 10 }, (_, i) => (
-                      <span
-                        key={i}
-                        className={`${styles.dot} ${i < score ? styles.dotFilled : styles.dotEmpty}`}
-                      />
-                    ))}
-                  </div>
-                  <span className={styles.scoreBreakdownValue}>{score}/10</span>
-                </div>
-              ))}
-            </div>
+        {/* Right: score pinned to top */}
+        {(hasScore || reviewer) && (
+          <div className={styles.cardScore}>
+            {hasScore && <ScoreCircle score={idea.l2_weighted_score!} />}
+            {reviewer && <span className={styles.cardReviewer}>{reviewer}</span>}
           </div>
         )}
-
-        {/* ── Idea content ── */}
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Problem Statement</p>
-          <p className={styles.sectionText}>{idea.problem}</p>
-        </div>
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Proposed Solution</p>
-          <p className={styles.sectionText}>{idea.idea_description}</p>
-        </div>
-        {idea.additional_info && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Additional Information</p>
-            <p className={styles.sectionText}>{idea.additional_info}</p>
-          </div>
-        )}
-        {idea.l2_next_step && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Next Steps</p>
-            <p className={styles.sectionText}>{idea.l2_next_step}</p>
-          </div>
-        )}
-
-        {/* ── Meta tags ── */}
-        <div className={styles.metaTags}>
-          <span className={styles.metaTag}>{idea.pcbl_function}</span>
-          {idea.patent_search_done && <span className={styles.metaTag}>Patent Searched</span>}
-          {idea.patent_link && (
-            <a href={idea.patent_link} target="_blank" rel="noreferrer" className={styles.metaTagLink}>
-              Patent Link ↗
-            </a>
-          )}
-        </div>
 
       </div>
     </div>
@@ -262,13 +148,13 @@ function DetailPanel({
 
 export default function RepositoryPage() {
   const { userProfile } = useAuthStore();
-  const [ideas, setIdeas]           = useState<IdeaResponse[] | null>(null);
-  const [approvals, setApprovals]   = useState<ManagerApprovalResponse[]>([]);
+  const [ideas, setIdeas]               = useState<IdeaResponse[] | null>(null);
+  const [approvals, setApprovals]       = useState<ManagerApprovalResponse[]>([]);
   const [groupReviews, setGroupReviews] = useState<GroupReviewResponse[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [filter, setFilter]     = useState<FilterValue>("all");
-  const [search, setSearch]     = useState("");
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [filter, setFilter]             = useState<FilterValue>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [search, setSearch]             = useState("");
+  const [fetchError, setFetchError]     = useState<string | null>(null);
 
   const canAccess = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
 
@@ -278,11 +164,10 @@ export default function RepositoryPage() {
       getAllIdeas(),
       getAllManagerApprovals().catch(() => [] as ManagerApprovalResponse[]),
       getGroupReviews().catch(() => [] as GroupReviewResponse[]),
-    ]).then(([ideasData, approvalsData, groupReviewsData]) => {
+    ]).then(([ideasData, approvalsData, grData]) => {
       setIdeas(ideasData);
       setApprovals(approvalsData);
-      setGroupReviews(groupReviewsData);
-      if (ideasData.length > 0) setSelectedId(ideasData[0]!.id);
+      setGroupReviews(grData);
     }).catch(() => setFetchError("Failed to load repository data. Please try again."));
   }, [canAccess]);
 
@@ -298,10 +183,16 @@ export default function RepositoryPage() {
     return map;
   }, [groupReviews]);
 
+  const categories = useMemo(
+    () => ideas ? Array.from(new Set(ideas.map((i) => i.category))).sort() : [],
+    [ideas]
+  );
+
   const filtered = useMemo(() => {
     if (!ideas) return null;
     return ideas.filter((idea) => {
       if (!matchesFilter(idea.status, filter)) return false;
+      if (categoryFilter !== "all" && idea.category !== categoryFilter) return false;
       if (search.trim()) {
         const q = search.toLowerCase();
         return (
@@ -309,17 +200,13 @@ export default function RepositoryPage() {
           idea.submitter_name.toLowerCase().includes(q) ||
           (idea.idea_title ?? "").toLowerCase().includes(q) ||
           idea.category.toLowerCase().includes(q) ||
-          (idea.benefit ?? "").toLowerCase().includes(q)
+          (idea.benefit ?? "").toLowerCase().includes(q) ||
+          idea.idea_description.toLowerCase().includes(q)
         );
       }
       return true;
     });
-  }, [ideas, filter, search]);
-
-  const selectedIdea = useMemo(
-    () => ideas?.find((i) => i.id === selectedId) ?? null,
-    [ideas, selectedId]
-  );
+  }, [ideas, filter, categoryFilter, search]);
 
   const totalAnnualValue = useMemo(
     () => (ideas ?? []).reduce((s, i) => s + (i.annual_estimate ?? 0), 0),
@@ -345,111 +232,84 @@ export default function RepositoryPage() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.inner}>
 
-      {/* ── Stats bar ── */}
-      <div className={styles.statsBar}>
-        <div className={styles.statsBarInner}>
-          <div className={styles.statsBarTitle}>
-            <span className={styles.statsBarTitleText}>Idea Repository</span>
+        {/* Page header */}
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>Knowledge Repository</h1>
+          <p className={styles.pageSubtitle}>
+            Searchable archive of ideas and outcomes. Declined ideas display anonymously.
+          </p>
+        </div>
+
+
+        {/* Search + filters */}
+        <div className={styles.filterBar}>
+          <div className={styles.searchWrap}>
+            <Search size={14} className={styles.searchIcon} />
+            <input
+              className={styles.searchInput}
+              placeholder="Search ideas, solutions, outcomes..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search && (
+              <button type="button" className={styles.searchClear} onClick={() => setSearch("")}>
+                <X size={12} />
+              </button>
+            )}
           </div>
-          <div className={styles.statsBarStats}>
-            <div className={styles.statItem}>
-              <p className={styles.statValue}>{ideas?.length ?? "—"}</p>
-              <p className={styles.statLabel}>Total Ideas</p>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statItem}>
-              <p className={styles.statValue}>{approvedCount || (ideas === null ? "—" : 0)}</p>
-              <p className={styles.statLabel}>Approved</p>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statItem}>
-              <p className={`${styles.statValue} ${totalAnnualValue > 0 ? styles.statValueGreen : ""}`}>
-                {ideas === null ? "—" : totalAnnualValue > 0 ? `₹ ${totalAnnualValue.toLocaleString("en-IN")}` : "—"}
-              </p>
-              <p className={styles.statLabel}>Total Annual Value</p>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statItem}>
-              <p className={styles.statValue}>
-                {avgScore != null ? `${Math.round(avgScore * 10)}%` : "—"}
-              </p>
-              <p className={styles.statLabel}>Avg L2 Score</p>
-            </div>
+
+          <div className={styles.selectWrap}>
+            <select
+              className={styles.select}
+              value={filter}
+              onChange={(e) => setFilter(e.target.value as FilterValue)}
+            >
+              {STATUS_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <ChevronDown size={13} className={styles.selectChevron} />
+          </div>
+
+          <div className={styles.selectWrap}>
+            <select
+              className={styles.select}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            <ChevronDown size={13} className={styles.selectChevron} />
           </div>
         </div>
-      </div>
 
-      {/* ── Split layout ── */}
-      <div className={styles.layout}>
+        {/* Card list */}
+        <div className={styles.cardList}>
+          {fetchError && <p className={styles.errorMsg}>{fetchError}</p>}
 
-        {/* Left panel */}
-        <aside className={styles.leftPanel}>
-          <div className={styles.leftHeader}>
-            <div className={styles.searchWrap}>
-              <Search size={13} className={styles.searchIcon} />
-              <input
-                className={styles.searchInput}
-                placeholder="Search ideas…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              {search && (
-                <button className={styles.searchClear} onClick={() => setSearch("")} type="button">
-                  <X size={11} />
-                </button>
-              )}
-            </div>
-            <div className={styles.filterChips}>
-              {STATUS_FILTERS.map((f) => (
-                <button
-                  key={f.value}
-                  type="button"
-                  className={`${styles.filterChip} ${filter === f.value ? styles.filterChipActive : ""}`}
-                  onClick={() => setFilter(f.value)}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-            {filtered !== null && (
-              <p className={styles.resultCount}>{filtered.length} idea{filtered.length !== 1 ? "s" : ""}</p>
-            )}
-          </div>
+          {!fetchError && filtered === null && (
+            <>{[1, 2, 3].map((n) => <div key={n} className={styles.skeletonCard} />)}</>
+          )}
 
-          <div className={styles.leftList}>
-            {fetchError && <p className={styles.errorMsg}>{fetchError}</p>}
-            {!fetchError && filtered === null && (
-              <>{[1, 2, 3, 4, 5].map((n) => <div key={n} className={styles.skeletonRow} />)}</>
-            )}
-            {filtered !== null && filtered.length === 0 && (
-              <p className={styles.emptyMsg}>No ideas match your filters.</p>
-            )}
-            {filtered?.map((idea) => (
-              <IdeaRow
-                key={idea.id}
-                idea={idea}
-                selected={selectedId === idea.id}
-                onClick={() => setSelectedId(idea.id)}
-              />
-            ))}
-          </div>
-        </aside>
-
-        {/* Right panel */}
-        <div className={styles.rightPanel}>
-          {selectedIdea ? (
-            <DetailPanel
-              key={selectedIdea.id}
-              idea={selectedIdea}
-              l1Approval={approvalByIdeaId.get(selectedIdea.id)}
-              groupReview={groupReviewByIdeaId.get(selectedIdea.id)}
-            />
-          ) : (
-            <div className={styles.emptyDetail}>
-              <p className={styles.emptyDetailText}>Select an idea from the list to view its details.</p>
+          {filtered !== null && filtered.length === 0 && (
+            <div className={styles.emptyState}>
+              <p className={styles.emptyStateText}>No ideas match your filters.</p>
             </div>
           )}
+
+          {filtered?.map((idea) => (
+            <IdeaCard
+              key={idea.id}
+              idea={idea}
+              l1Approval={approvalByIdeaId.get(idea.id)}
+              groupReview={groupReviewByIdeaId.get(idea.id)}
+            />
+          ))}
         </div>
 
       </div>

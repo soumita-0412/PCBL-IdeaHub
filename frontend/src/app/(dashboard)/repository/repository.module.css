@@ -1,114 +1,84 @@
 /* ── Page shell ─────────────────────────────────────── */
 .container {
-  display: flex;
-  flex-direction: column;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
-  background: #f4eef8;
+  overflow-y: auto;
+  background: #f4f0f8;
   font-family: "Cambria Math", Cambria, Georgia, serif;
 }
 
-/* ── Stats bar ──────────────────────────────────────── */
-.statsBar {
-  flex-shrink: 0;
-  background: #fff;
-  border-bottom: 1px solid #f0eaf5;
-  padding: 0.625rem 1.25rem;
-}
-
-.statsBarInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-
-.statsBarTitle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.statsBarTitleText {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: #890892;
-  letter-spacing: -0.01em;
-}
-
-.statsBarStats {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.statItem {
+.inner {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 3rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 1.125rem;
+  gap: 1.25rem;
 }
 
-.statValue {
-  font-size: 1rem;
+/* ── Page header ─────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pageTitle {
+  font-size: 1.375rem;
   font-weight: 700;
   color: #111827;
-  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.pageSubtitle {
+  font-size: 0.8125rem;
+  color: #9ca3af;
   margin: 0;
 }
 
-.statValueGreen {
+/* ── Stats strip ─────────────────────────────────────── */
+.statsStrip {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.statPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3125rem 0.875rem;
+  background: #fff;
+  border: 1px solid #ede9f3;
+  border-radius: 99px;
+}
+
+.statPillValue {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.statPillValueGreen {
   color: #16a34a;
 }
 
-.statLabel {
-  font-size: 0.625rem;
-  font-weight: 500;
+.statPillLabel {
+  font-size: 0.6875rem;
   color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 0;
-  white-space: nowrap;
 }
 
-.statDivider {
-  width: 1px;
-  height: 2rem;
-  background: #f0eaf5;
-  flex-shrink: 0;
-}
-
-/* ── Split layout ───────────────────────────────────── */
-.layout {
+/* ── Filter bar ─────────────────────────────────────── */
+.filterBar {
   display: flex;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  align-items: center;
+  gap: 0.625rem;
 }
 
-/* ── Left panel ─────────────────────────────────────── */
-.leftPanel {
-  width: 260px;
-  flex-shrink: 0;
-  background: #ffffff90;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-right: 1px solid #f0eaf5;
-}
-
-.leftHeader {
-  padding: 0.625rem 0.75rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  border-bottom: 1px solid #f0eaf5;
-  flex-shrink: 0;
-}
-
-/* ── Search ─────────────────────────────────────────── */
+/* Search */
 .searchWrap {
+  flex: 1;
   position: relative;
   display: flex;
   align-items: center;
@@ -116,7 +86,7 @@
 
 .searchIcon {
   position: absolute;
-  left: 0.5rem;
+  left: 0.875rem;
   color: #9ca3af;
   pointer-events: none;
   flex-shrink: 0;
@@ -124,12 +94,12 @@
 
 .searchInput {
   width: 100%;
-  height: 2rem;
-  padding: 0 2rem 0 1.75rem;
+  height: 2.5rem;
+  padding: 0 2.5rem 0 2.625rem;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   color: #111827;
   font-family: inherit;
   outline: none;
@@ -143,17 +113,17 @@
 
 .searchInput:focus {
   border-color: #890892;
-  box-shadow: 0 0 0 2px rgba(137, 8, 146, 0.08);
+  box-shadow: 0 0 0 3px rgba(137, 8, 146, 0.07);
 }
 
 .searchClear {
   position: absolute;
-  right: 0.5rem;
+  right: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1rem;
-  height: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
   border: none;
   background: #e5e7eb;
   border-radius: 50%;
@@ -167,568 +137,255 @@
   background: #d1d5db;
 }
 
-/* ── Filter chips ───────────────────────────────────── */
-.filterChips {
+/* Dropdown */
+.selectWrap {
+  position: relative;
   display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.filterChip {
-  padding: 0.2rem 0.625rem;
+.select {
+  height: 2.5rem;
+  padding: 0 2.25rem 0 0.875rem;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 99px;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: #6b7280;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.1s ease, border-color 0.1s ease, color 0.1s ease;
-}
-
-.filterChip:hover {
-  border-color: #c4b5c4;
-  color: #374151;
-}
-
-.filterChipActive {
-  background: #890892;
-  border-color: #890892;
-  color: #fff;
-  font-weight: 600;
-}
-
-.filterChipActive:hover {
-  background: #6f0676;
-  border-color: #6f0676;
-  color: #fff;
-}
-
-.resultCount {
-  font-size: 0.625rem;
-  color: #9ca3af;
-  margin: 0;
-  padding: 0 0.125rem;
-}
-
-/* ── Idea list ──────────────────────────────────────── */
-.leftList {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.375rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-/* ── Idea row ───────────────────────────────────────── */
-.ideaRow {
-  padding: 0.5rem 0.625rem;
   border-radius: 0.5rem;
-  border: 1.5px solid transparent;
+  font-size: 0.875rem;
+  color: #374151;
+  font-family: inherit;
+  outline: none;
   cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.12s ease;
+  white-space: nowrap;
 }
 
-.ideaRow:hover {
-  background: #f5edf8;
-  border-color: #d8b4de;
-}
-
-.ideaRowSelected {
-  background: #fdf4ff;
+.select:focus {
   border-color: #890892;
 }
 
-.ideaRowTop {
+.selectChevron {
+  position: absolute;
+  right: 0.625rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* ── Card list ──────────────────────────────────────── */
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Individual card ────────────────────────────────── */
+.card {
+  background: #fff;
+  border: 1px solid #ede9f3;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: #d4bfe0;
+  box-shadow: 0 2px 16px rgba(137, 8, 146, 0.06);
+}
+
+/* ── Top row: meta + status ─────────────────────────── */
+.cardTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.375rem;
+  gap: 0.75rem;
 }
 
-.ideaRowNumber {
-  font-size: 0.625rem;
+.cardMeta {
+  font-size: 0.6875rem;
+  color: #9ca3af;
+  letter-spacing: 0.01em;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: #04040488;
-  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.ideaRowTitle {
-  font-size: 0.8125rem;
+.statusDot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotBlue  { background: #3b82f6; }
+.dotAmber { background: #f59e0b; }
+.dotGreen { background: #22c55e; }
+.dotRed   { background: #ef4444; }
+
+.textBlue  { color: #3b82f6; }
+.textAmber { color: #f59e0b; }
+.textGreen { color: #16a34a; }
+.textRed   { color: #ef4444; }
+
+/* ── Title ──────────────────────────────────────────── */
+.cardTitle {
+  font-size: 1rem;
   font-weight: 700;
-  color: #04060b;
+  color: #111827;
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.35;
+}
+
+/* ── Description ────────────────────────────────────── */
+.cardDesc {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.55;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
-.ideaRowBottom {
+/* ── Card two-column layout ─────────────────────────── */
+.cardLayout {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.375rem;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
-.ideaRowSub {
-  font-size: 0.6875rem;
-  color: #0000008e;
-}
-
-.ideaRowValue {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #16a34a;
-  white-space: nowrap;
-}
-
-/* ── Status badges ──────────────────────────────────── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.1rem 0.5rem;
-  border-radius: 99px;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.badgeBlue {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-}
-
-.badgeAmber {
-  background: #fffbeb;
-  color: #92400e;
-  border: 1px solid #fde68a;
-}
-
-.badgeGreen {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-
-.badgeRed {
-  background: #fff1f2;
-  color: #be123c;
-  border: 1px solid #fecdd3;
-}
-
-/* ── Right panel ────────────────────────────────────── */
-.rightPanel {
+.cardMain {
   flex: 1;
   min-width: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
 }
 
-.detailPanel {
-  flex: 1;
-  overflow: hidden;
+/* ── Chips row ──────────────────────────────────────── */
+.cardChips {
   display: flex;
-  flex-direction: column;
-}
-
-.detailScroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem 1.375rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-}
-
-/* ── Detail header ──────────────────────────────────── */
-.detailHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: row;
   gap: 0.5rem;
+  margin-top: 0.1rem;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 
-.detailHeaderLeft {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.detailNumber {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #00000082;
-  letter-spacing: 0.04em;
-}
-
-.detailDate {
-  font-size: 0.6875rem;
-  color: #9ca3af;
-}
-
-.detailTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-  line-height: 1.3;
-}
-
-.detailSubtitle {
-  font-size: 0.75rem;
-  color: #9ca3af;
-  margin: -0.25rem 0 0;
-}
-
-.detailSubtitle strong {
-  color: #6b7280;
-  font-weight: 600;
-}
-
-/* ── Hero cards: Benefits + Annual Value ────────────── */
-.heroGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.625rem;
-  margin: 0.25rem 0;
-}
-
-.heroCard {
-  background: #fff;
-  border-radius: 0.625rem;
-  padding: 0.875rem 1rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  border: 1.5px solid #f0eaf5;
-  transition: border-color 0.12s ease;
-}
-
-.heroCard:hover {
-  border-color: #d8b4de;
-}
-
-.heroCardIconWrap {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.heroCardIconWrap[data-color="green"] {
-  background: #f0fdf4;
-  color: #16a34a;
-}
-
-.heroCardIconWrap[data-color="orange"] {
-  background: #fff7ed;
-  color: #ea580c;
-}
-
-.heroCardBody {
-  flex: 1;
-  min-width: 0;
+/* Benefits box (gray) */
+.chipBox {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-
-.heroCardLabel {
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #890892;
-  margin: 0;
-}
-
-.heroCardText {
-  font-size: 0.8125rem;
-  color: #374151;
-  margin: 0;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.heroCardValue {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: #16a34a;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.heroCardValueSub {
-  font-size: 0.6875rem;
-  font-weight: 400;
-  color: #9ca3af;
-}
-
-/* ── Reviewer cards ─────────────────────────────────── */
-.reviewerRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.625rem;
-}
-
-.reviewerCard {
-  background: #fff;
+  gap: 0.2rem;
+  padding: 0.375rem 0.625rem;
+  background: #f5ffee;
   border-radius: 0.5rem;
-  padding: 0.75rem 0.875rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  border: 1px solid #f0eaf5;
+  flex: 0 0 auto;
 }
 
-.reviewerIconUser {
-  color: #890892;
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-}
-
-.reviewerIconStar {
-  color: #d97706;
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-}
-
-.reviewerCardBody {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.reviewerCardLabel {
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #890892;
-  margin: 0;
-}
-
-.reviewerCardName {
-  font-size: 0.8125rem;
+.chipBoxLabel {
+  font-size: 0.55rem;
   font-weight: 600;
-  color: #111827;
-  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #81c451;
 }
 
-.reviewerCardComment {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin: 0;
-  font-style: italic;
+.chipBoxText {
+  font-size: 0.7rem;
+  color: #6c8957;
   line-height: 1.45;
-  word-break: break-word;
 }
 
-/* ── Score bar ──────────────────────────────────────── */
-.scoreBarWrap {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Savings box (pink) */
+.chipBoxSavings {
+  background: #fdf4ff;
+  flex: 0 0 auto;
+  padding: 0.375rem 0.625rem;
 }
 
-.scoreBarTrack {
-  flex: 1;
-  height: 5px;
-  background: #f0eaf5;
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.scoreBarFill {
-  height: 100%;
-  border-radius: 99px;
-  transition: width 0.3s ease;
-}
-
-.scoreBarLabel {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  white-space: nowrap;
-  min-width: 2.5rem;
-  text-align: right;
-}
-
-/* ── Section cards ──────────────────────────────────── */
-.sectionCard {
-  background: #fff;
-  border-radius: 0.5rem;
-  padding: 0.625rem 0.875rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.sectionLabel {
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #890892;
-  margin: 0;
-}
-
-.sectionText {
-  font-size: 0.8125rem;
-  color: #374151;
-  margin: 0;
-  line-height: 1.55;
-  word-break: break-word;
-}
-
-/* ── Score breakdown ────────────────────────────────── */
-.scoreBreakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.scoreBreakdownRow {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-
-.scoreBreakdownCriterion {
-  font-size: 0.8125rem;
-  color: #374151;
-  min-width: 8rem;
-  flex-shrink: 0;
-}
-
-.scoreBreakdownDots {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex: 1;
-}
-
-.dot {
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dotFilled {
-  background: #890892;
-}
-
-.dotEmpty {
-  background: #e5e7eb;
-  border: 1px solid #d1d5db;
-}
-
-.scoreBreakdownValue {
-  font-size: 0.75rem;
+.chipBoxLabelSavings {
+  font-size: 0.55rem;
   font-weight: 600;
-  color: #890892;
-  min-width: 2.25rem;
-  text-align: right;
-  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #bb3dc4;
 }
 
-/* ── Meta tags ──────────────────────────────────────── */
-.metaTags {
+.chipBoxValue {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #bb3dc4;
+  white-space: nowrap;
+}
+
+/* ── Score + reviewer ───────────────────────────────── */
+.cardScore {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  padding-top: 0.125rem;
-}
-
-.metaTag {
-  padding: 0.2rem 0.625rem;
-  background: #f5f3ff;
-  border: 1px solid #e0d7f5;
-  border-radius: 99px;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: #6d28d9;
-}
-
-.metaTagLink {
-  padding: 0.2rem 0.625rem;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  border-radius: 99px;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: #c2410c;
-  text-decoration: none;
-  transition: background 0.1s ease;
-}
-
-.metaTagLink:hover {
-  background: #ffedd5;
-}
-
-/* ── Empty / loading states ─────────────────────────── */
-.emptyDetail {
-  flex: 1;
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  padding-top: 0.1rem;
 }
 
-.emptyDetailText {
-  font-size: 0.8125rem;
+.scoreCircleSvg {
+  display: block;
+}
+
+.cardReviewer {
+  font-size: 0.6875rem;
   color: #9ca3af;
-  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Skeleton loading ───────────────────────────────── */
+.skeletonCard {
+  height: 8.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, #f3e8f8 25%, #ede0f5 50%, #f3e8f8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Empty + error states ───────────────────────────── */
+.emptyState {
+  padding: 3.5rem 0;
   text-align: center;
 }
 
-.emptyMsg {
-  font-size: 0.8125rem;
+.emptyStateText {
+  font-size: 0.875rem;
   color: #9ca3af;
-  text-align: center;
-  padding: 1.5rem 0.5rem;
   margin: 0;
 }
 
 .errorMsg {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: #dc2626;
-  padding: 0.375rem 0.625rem;
+  padding: 0.5rem 0.875rem;
   background: #fef2f2;
   border: 1px solid #fecaca;
-  border-radius: 0.375rem;
-  margin: 0;
-}
-
-.skeletonRow {
-  height: 4.5rem;
   border-radius: 0.5rem;
-  background: #f3e8f8;
-  animation: pulse 1.4s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.45; }
+  margin: 0;
 }
 
 /* ── Access denied ──────────────────────────────────── */
