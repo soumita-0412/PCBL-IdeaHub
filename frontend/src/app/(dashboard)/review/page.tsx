@@ -370,9 +370,9 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
             </p>
             {category && category.matrix.length > 0 && (
               <span className={styles.weightedScoreLabel}>
-                Weighted Score&ensp;
+                Idea Score&ensp;
                 <span className={styles.weightedScoreValue}>
-                  {(weightedScore * 10).toFixed(1)}%
+                  {(weightedScore * 10).toFixed(1)}
                 </span>
               </span>
             )}

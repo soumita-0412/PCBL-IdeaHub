@@ -18,6 +18,27 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
+const BUBBLES = [
+  { size: 28, left: "5%",  delay: "0s",   duration: "8s",  color: "rgba(210, 100, 220, 0.18)" },
+  { size: 36, left: "12%", delay: "1.2s", duration: "10s", color: "rgba(140, 200, 80,  0.18)" },
+  { size: 22, left: "20%", delay: "2.5s", duration: "7s",  color: "rgba(210, 100, 220, 0.14)" },
+  { size: 44, left: "28%", delay: "0.5s", duration: "11s", color: "rgba(140, 200, 80,  0.2)"  },
+  { size: 30, left: "36%", delay: "3.1s", duration: "9s",  color: "rgba(210, 100, 220, 0.16)" },
+  { size: 52, left: "45%", delay: "1.8s", duration: "12s", color: "rgba(140, 200, 80,  0.15)" },
+  { size: 20, left: "53%", delay: "4.2s", duration: "8s",  color: "rgba(210, 100, 220, 0.2)"  },
+  { size: 38, left: "61%", delay: "0.9s", duration: "10s", color: "rgba(140, 200, 80,  0.18)" },
+  { size: 26, left: "68%", delay: "2.7s", duration: "7s",  color: "rgba(210, 100, 220, 0.16)" },
+  { size: 48, left: "75%", delay: "5.0s", duration: "11s", color: "rgba(140, 200, 80,  0.18)" },
+  { size: 18, left: "82%", delay: "1.5s", duration: "9s",  color: "rgba(210, 100, 220, 0.18)" },
+  { size: 34, left: "88%", delay: "3.8s", duration: "10s", color: "rgba(140, 200, 80,  0.2)"  },
+  { size: 56, left: "93%", delay: "0.3s", duration: "13s", color: "rgba(210, 100, 220, 0.12)" },
+  { size: 24, left: "8%",  delay: "6.5s", duration: "8s",  color: "rgba(140, 200, 80,  0.15)" },
+  { size: 40, left: "42%", delay: "7.2s", duration: "9s",  color: "rgba(210, 100, 220, 0.16)" },
+  { size: 46, left: "58%", delay: "4.7s", duration: "11s", color: "rgba(140, 200, 80,  0.18)" },
+  { size: 20, left: "72%", delay: "2.1s", duration: "7s",  color: "rgba(210, 100, 220, 0.2)"  },
+  { size: 60, left: "15%", delay: "8.0s", duration: "12s", color: "rgba(140, 200, 80,  0.14)" },
+];
+
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
@@ -45,27 +66,33 @@ export default function LoginPage() {
   return (
     <div className={styles.page}>
 
+      {/* ── Bubbles background ──────────────────────────────── */}
+      <div className={styles.bubbles} aria-hidden="true">
+        {BUBBLES.map((b, i) => (
+          <span
+            key={i}
+            className={styles.bubble}
+            style={{
+              width: b.size,
+              height: b.size,
+              left: b.left,
+              background: b.color,
+              animationDelay: b.delay,
+              animationDuration: b.duration,
+            }}
+          />
+        ))}
+      </div>
+
       {/* ── Main card ───────────────────────────────────────── */}
       <div className={styles.card}>
 
         {/* Logo + title */}
         <div className={styles.logoArea}>
-          <svg
-            className={styles.logoIcon}
-            viewBox="0 0 56 56"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect width="56" height="56" rx="14" fill="rgba(137,8,146,0.1)" />
-            <path d="M28 11a10 10 0 0 1 6.5 17.5V33H21.5v-4.5A10 10 0 0 1 28 11z" fill="#890892" opacity="0.85" />
-            <rect x="22" y="33" width="12" height="3" rx="1.5" fill="#890892" opacity="0.6" />
-            <rect x="24" y="36" width="8" height="2.5" rx="1.25" fill="#890892" opacity="0.4" />
-            <circle cx="28" cy="24" r="3.5" fill="#81c451" opacity="0.45" />
-            <path d="M28 7V5M36.5 9.5l1.5-1.5M41 19h2M36.5 28.5l1.5 1.5M19.5 9.5L18 8M15 19h-2M19.5 28.5L18 30" stroke="#81c451" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-
-          <h1 className={styles.title}>Idea Portal</h1>
+          <img src="/idealogo.png" alt="Idea Logo" 
+          width={100}
+          height={100}/>
+        <h1 className={styles.title}>Idea Portal</h1>
           <p className={styles.subtitle}>Innovation Hub</p>
         </div>
 
