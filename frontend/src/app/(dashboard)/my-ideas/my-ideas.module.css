@@ -374,9 +374,9 @@
   font-weight: 600;
 }
 
-.statusTextBlue  { color: #3b82f6; }
-.statusTextAmber { color: #d97706; }
-.statusTextGreen { color: #16a34a; }
+.statusTextBlue  { color: #890892; }
+.statusTextAmber { color: #fffd85; }
+.statusTextGreen { color: #81c451; }
 .statusTextRed   { color: #dc2626; }
 
 /* ── Popup title ───────────────────────────────────── */

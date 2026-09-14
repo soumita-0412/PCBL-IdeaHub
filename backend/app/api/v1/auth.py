@@ -123,7 +123,7 @@ async def microsoft_callback(
        per-user role mapping via Azure AD group claims is configured).
     5. Redirects the browser to the frontend callback page with the JWT.
     """
-    frontend_error_url = f"{settings.FRONTEND_URL}/auth/callback"
+    frontend_error_url = f"{settings.FRONTEND_URL}/callback"
 
     # Azure returned an error (e.g. user cancelled)
     if error:
@@ -212,7 +212,7 @@ async def microsoft_callback(
     logger.info("sso.login.success", email=email, user_id=user_id)
 
     redirect = RedirectResponse(
-        url=f"{settings.FRONTEND_URL}/auth/callback?token={access_token}",
+        url=f"{settings.FRONTEND_URL}/callback?token={access_token}",
         status_code=302,
     )
     redirect.delete_cookie("sso_state")
