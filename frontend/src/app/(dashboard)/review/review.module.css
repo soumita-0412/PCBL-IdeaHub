@@ -610,6 +610,108 @@
   box-shadow: 0 0 0 1.5px #890892;
 }
 
+/* ── Decision success overlay ────────────────────────── */
+.successOverlay {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2.5rem 2rem;
+  animation: fadeInUp 0.45s ease both;
+}
+
+.successBgGreen  { background: #f0fdf4; }
+.successBgYellow { background: #fefce8; }
+.successBgRed    { background: #fef2f2; }
+
+.successIconCircle {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popIn 0.4s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.successIconGreen  { background: #dcfce7; }
+.successIconYellow { background: #fef9c3; }
+.successIconRed    { background: #fee2e2; }
+
+.successTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.successTitleGreen  { color: #16a34a; }
+.successTitleYellow { color: #854d0e; }
+.successTitleRed    { color: #dc2626; }
+
+.successSub {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: -0.5rem 0 0;
+  text-align: center;
+  max-width: 22rem;
+  line-height: 1.55;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes drawCheck {
+  from { stroke-dashoffset: 56; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes drawCross1 {
+  from { stroke-dashoffset: 32; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes drawCross2 {
+  from { stroke-dashoffset: 32; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes clockSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.checkPath {
+  stroke-dasharray: 56;
+  stroke-dashoffset: 56;
+  animation: drawCheck 0.5s 0.35s ease forwards;
+}
+
+.crossPath1 {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: drawCross1 0.35s 0.3s ease forwards;
+}
+
+.crossPath2 {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: drawCross2 0.35s 0.45s ease forwards;
+}
+
+.clockMinuteHand {
+  animation: clockSpin 1.6s linear infinite;
+}
+
 /* ── Score dots ──────────────────────────────────────── */
 .dots {
   display: flex;

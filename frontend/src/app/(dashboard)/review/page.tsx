@@ -103,6 +103,77 @@ function ScoreRow({ label, weight, value, onChange }: ScoreRowProps) {
   );
 }
 
+// ── Decision success overlay ──────────────────────────────────────────────────
+
+type SuccessType = "approved" | "pending" | "declined";
+
+interface DecisionSuccessOverlayProps { type: SuccessType; }
+
+function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
+  const config: Record<SuccessType, {
+    bg: string; iconBg: string; titleCls: string;
+    title: string; sub: string; icon: React.ReactNode;
+  }> = {
+    approved: {
+      bg: styles.successBgGreen!,
+      iconBg: styles.successIconGreen!,
+      titleCls: styles.successTitleGreen!,
+      title: "Approved",
+      sub: "The idea has been approved successfully.",
+      icon: (
+        <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
+          <path
+            d="M 8 26 L 20 37 L 40 12"
+            stroke="#16a34a"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={styles.checkPath}
+          />
+        </svg>
+      ),
+    },
+    pending: {
+      bg: styles.successBgYellow!,
+      iconBg: styles.successIconYellow!,
+      titleCls: styles.successTitleYellow!,
+      title: "Moved to Pending",
+      sub: "The idea has been assigned to pending review.",
+      icon: (
+        <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="18" stroke="#ca8a04" strokeWidth="2.5" />
+          <line x1="24" y1="24" x2="24" y2="11" stroke="#ca8a04" strokeWidth="3" strokeLinecap="round" />
+          <g style={{ transformOrigin: "24px 24px" }} className={styles.clockMinuteHand}>
+            <line x1="24" y1="24" x2="35" y2="24" stroke="#ca8a04" strokeWidth="2.5" strokeLinecap="round" />
+          </g>
+        </svg>
+      ),
+    },
+    declined: {
+      bg: styles.successBgRed!,
+      iconBg: styles.successIconRed!,
+      titleCls: styles.successTitleRed!,
+      title: "Declined",
+      sub: "The idea has been declined.",
+      icon: (
+        <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
+          <path d="M 14 14 L 34 34" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" className={styles.crossPath1} />
+          <path d="M 34 14 L 14 34" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" className={styles.crossPath2} />
+        </svg>
+      ),
+    },
+  };
+
+  const c = config[type];
+  return (
+    <div className={`${styles.successOverlay!} ${c.bg}`}>
+      <div className={`${styles.successIconCircle!} ${c.iconBg}`}>{c.icon}</div>
+      <p className={`${styles.successTitle!} ${c.titleCls}`}>{c.title}</p>
+      <p className={styles.successSub!}>{c.sub}</p>
+    </div>
+  );
+}
+
 // ── L1 Manager detail panel ───────────────────────────────────────────────────
 
 interface L1DetailPanelProps {
@@ -116,12 +187,14 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [successType, setSuccessType] = useState<SuccessType | null>(null);
 
   useEffect(() => {
     setComment(idea.reviewer_comment ?? "");
     setDecision(null);
     setError(null);
     setSuccess(false);
+    setSuccessType(null);
   }, [idea.id]);
 
   const handleSubmit = useCallback(async () => {
@@ -134,8 +207,9 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
         status: newStatus,
         ...(comment ? { reviewer_comment: comment } : {}),
       });
-      onReviewed(updated);
+      setSuccessType(decision === "approve" ? "approved" : "declined");
       setSuccess(true);
+      setTimeout(() => onReviewed(updated), 2200);
     } catch (err) {
       setError(apiErrorMessage(err, "Action failed. Please try again."));
     } finally {
@@ -146,6 +220,14 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
   const date = new Date(idea.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
   });
+
+  if (success && successType) {
+    return (
+      <div className={styles.detailPanel}>
+        <DecisionSuccessOverlay type={successType} />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.detailPanel}>
@@ -228,7 +310,6 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
         </div>
 
         {error && <p className={styles.errorMsg}>{error}</p>}
-        {success && <p className={styles.successMsg}>Decision submitted successfully.</p>}
 
         <button
           type="button"
@@ -266,6 +347,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [successType, setSuccessType] = useState<SuccessType | null>(null);
 
   useEffect(() => {
     setScores(initialScores);
@@ -275,6 +357,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
     setDecision(null);
     setError(null);
     setSuccess(false);
+    setSuccessType(null);
   }, [approval.id, initialScores]);
 
   const weightedScore = useMemo(() => {
@@ -301,8 +384,10 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
         ...(nextStep ? { l2_next_step: nextStep } : {}),
         ...(expectedTimeline ? { l2_expected_timeline: expectedTimeline } : {}),
       });
+      const sType: SuccessType = decision === "approve" ? "approved" : decision === "hold" ? "pending" : "declined";
+      setSuccessType(sType);
       setSuccess(true);
-      onSubmitted(approval.id);
+      setTimeout(() => onSubmitted(approval.id), 2200);
     } catch (err) {
       setError(apiErrorMessage(err, "Action failed. Please try again."));
     } finally {
@@ -313,6 +398,14 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
   const date = new Date(approval.created_at).toLocaleDateString("en-IN", {
     day: "numeric", month: "short", year: "numeric",
   });
+
+  if (success && successType) {
+    return (
+      <div className={styles.detailPanel}>
+        <DecisionSuccessOverlay type={successType} />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.detailPanel}>
@@ -471,13 +564,12 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
         </div>
 
         {error && <p className={styles.errorMsg}>{error}</p>}
-        {success && <p className={styles.successMsg}>Group review submitted and saved successfully.</p>}
 
         <button
           type="button"
           className={styles.submitBtn}
           onClick={handleSubmit}
-          disabled={!decision || submitting || success}
+          disabled={!decision || submitting}
         >
           {submitting ? "Submitting…" : "Submit Group Review"}
         </button>
