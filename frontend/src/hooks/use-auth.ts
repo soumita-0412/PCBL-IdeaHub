@@ -1,8 +1,8 @@
 /**
  * useAuth — credential-based auth hook (Phase 1).
  *
- * Phase 2: swap the login/logout implementations to MSAL calls;
- * the hook's public interface stays the same so no consumers change.
+ * Phase 2 SSO: login/logout stay unchanged. SSO flow runs entirely via
+ * browser navigation through the backend OAuth callback — no hook changes needed.
  */
 "use client";
 
@@ -24,7 +24,7 @@ export interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
-  const { isAuthenticated, userProfile, clearAuth } = useAuthStore();
+  const { isAuthenticated, userProfile } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const login = async (username: string, password: string): Promise<void> => {

@@ -1,11 +1,13 @@
 """
-HS256 JWT service for credential-based authentication.
-
-Replaces Azure AD RS256 validation during Phase 1 (pickle auth).
-The abstraction layer means swapping to Entra ID in a later
-phase only requires updating this module.
+HS256 JWT service for credential-based authentication (Phase 1).
+Also provides a helper to extract claims from a Microsoft ID token
+received via the backend OAuth callback (the token came directly
+from Azure's token endpoint over TLS, so signature re-verification
+is not required here).
 """
 
+import base64
+import json
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -46,3 +48,27 @@ def decode_access_token(token: str) -> dict[str, Any]:
     except JWTError as exc:
         logger.warning("jwt.invalid", error=str(exc))
         raise UnauthorizedException("Invalid or expired token") from exc
+
+
+def decode_microsoft_id_token(id_token: str) -> dict[str, Any]:
+    """
+    Extract claims from a Microsoft ID token that was obtained via the
+    backend Authorization Code exchange (server-to-Azure over TLS).
+
+    Signature verification is skipped because:
+    - The token came directly from Azure's /token endpoint, not from the browser.
+    - We are the only party that received it.
+    Raises UnauthorizedException if the token is malformed.
+    """
+    parts = id_token.split(".")
+    if len(parts) < 2:
+        raise UnauthorizedException("Malformed Microsoft ID token")
+    try:
+        # Base64url → standard base64 with padding
+        segment = parts[1].replace("-", "+").replace("_", "/")
+        segment += "=" * (4 - len(segment) % 4)
+        claims: dict[str, Any] = json.loads(base64.b64decode(segment))
+        return claims
+    except Exception as exc:
+        logger.warning("sso.id_token_decode_failed", error=str(exc))
+        raise UnauthorizedException("Could not decode Microsoft ID token") from exc

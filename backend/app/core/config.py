@@ -56,8 +56,15 @@ class Settings(BaseSettings):
     # ── Azure AD (Phase 2+ SSO — optional in Phase 1) ───────
     AZURE_TENANT_ID: str = ""
     AZURE_CLIENT_ID: str = ""
+    AZURE_CLIENT_SECRET: str = ""
+    # Full URL registered as a Web redirect URI in the Azure AD app registration
+    AZURE_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/microsoft/callback"
     JWT_AUDIENCE: str = ""
     JWT_LEEWAY: int = 30
+
+    # ── Frontend ─────────────────────────────────────────────
+    # Origin of the Next.js app — backend redirects here after SSO
+    FRONTEND_URL: str = "http://localhost:3000"
 
     # ── Graph API ───────────────────────────────────────────
     GRAPH_CLIENT_ID: str = ""

@@ -8,6 +8,7 @@ class LoginRequest(BaseModel):
     password: str = Field(..., min_length=1)
 
 
+
 class CurrentUser(BaseModel):
     """User identity extracted from a validated JWT — safe to expose in responses."""
 

@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 
 import { useAuth } from "@/hooks/use-auth";
+import { env } from "@/constants/env";
 import { cn } from "@/lib/utils";
 import styles from "./login.module.css";
 
@@ -19,6 +20,8 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const CAROUSEL_IMAGES = ["/idea1.png", "/idea2.png", "/idea3.png"];
+
+const SSO_AUTHORIZE_URL = `${env.NEXT_PUBLIC_API_URL}/api/v1/auth/sso/authorize`;
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,6 +53,11 @@ export default function LoginPage() {
     } catch {
       setServerError("Invalid username or password. Please try again.");
     }
+  };
+
+  const onSsoLogin = () => {
+    // Full browser navigation — backend handles the entire OAuth dance
+    window.location.href = SSO_AUTHORIZE_URL;
   };
 
   return (
@@ -151,11 +159,11 @@ export default function LoginPage() {
             <div className={styles.dividerLine} />
           </div>
 
-          {/* Microsoft SSO */}
+          {/* Microsoft SSO — navigates to backend; OAuth dance happens server-side */}
           <button
             type="button"
-            disabled
-            title="Microsoft SSO coming soon"
+            onClick={onSsoLogin}
+            disabled={isSubmitting}
             className={styles.msBtn}
           >
             <svg width="16" height="16" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -165,7 +173,6 @@ export default function LoginPage() {
               <path fill="#ffb900" d="M11 11h9v9h-9z" />
             </svg>
             Sign in with Microsoft
-            <span className={styles.msBadge}>Coming soon</span>
           </button>
 
         </div>
