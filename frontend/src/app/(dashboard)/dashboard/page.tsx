@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle } from "lucide-react";
 import {
   getDashboardStats,
@@ -9,6 +9,7 @@ import {
   type PaginatedIdeas,
 } from "@/services/dashboardService";
 import { getIdeaById } from "@/services/ideaService";
+import { getCategories, type CategoryResponse } from "@/services/categoryService";
 import type { IdeaResponse } from "@/types/idea";
 import styles from "./dashboard.module.css";
 
@@ -48,12 +49,14 @@ export default function DashboardPage() {
   const [page, setPage] = useState(1);
   const [ideasLoading, setIdeasLoading] = useState(true);
 
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [selectedIdea, setSelectedIdea] = useState<IdeaResponse | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     getDashboardStats().then(setStats).catch(() => {});
+    getCategories().then(setCategories).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -86,6 +89,12 @@ export default function DashboardPage() {
     if (modalOpen) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [modalOpen, closeModal]);
+
+  const weightMap = useMemo<Record<string, number>>(() => {
+    if (!selectedIdea) return {};
+    const matrix = categories.find((c) => c.name === selectedIdea.category)?.matrix ?? [];
+    return Object.fromEntries(matrix.map((m) => [m.label, m.weight]));
+  }, [selectedIdea, categories]);
 
   const monthly = stats?.monthly_submissions ?? [];
   const maxCount = Math.max(...monthly.map((m) => m.count), 1);
@@ -271,7 +280,7 @@ export default function DashboardPage() {
                 <span className={styles.l2Score}>
                   {idea.l2_score != null ? (
                     <span className={styles.scoreCircle}>
-                      {Math.round(idea.l2_score)}
+                      {Math.round(idea.l2_score * 10)}
                     </span>
                   ) : (
                     <span className={styles.scoreDash}>—</span>
@@ -399,14 +408,19 @@ export default function DashboardPage() {
                     <div className={styles.scoreMatrix}>
                       {Object.entries(selectedIdea.l2_scores).map(([criterion, score]) => (
                         <div key={criterion} className={styles.scoreRow}>
-                          <span className={styles.scoreCriterion}>{criterion}</span>
+                          <div className={styles.scoreCriterionWrap}>
+                            <span className={styles.scoreCriterion}>{criterion}</span>
+                            {weightMap[criterion] != null && (
+                              <span className={styles.scoreWeight}>weight {weightMap[criterion]}%</span>
+                            )}
+                          </div>
                           <div className={styles.scoreBarWrap}>
                             <div
                               className={styles.scoreBarFill}
-                              style={{ width: `${Math.min(100, score)}%` }}
+                              style={{ width: `${Math.min(100, score * 10)}%` }}
                             />
                           </div>
-                          <span className={styles.scoreVal}>{score}</span>
+                          <span className={styles.scoreVal}>{score * 10}<span className={styles.scoreOutOf}>/100</span></span>
                         </div>
                       ))}
                     </div>
@@ -416,14 +430,14 @@ export default function DashboardPage() {
                         <span className={styles.totalScoreLabel}>Total Score</span>
                         <div className={styles.totalScoreBadge}>
                           <span className={styles.totalScoreNum}>
-                            {Math.round(selectedIdea.l2_weighted_score)}
+                            {Math.round(selectedIdea.l2_weighted_score * 10)}
                           </span>
                           <span className={styles.totalScoreOf}>/100</span>
                         </div>
                         <div className={styles.totalScoreBar}>
                           <div
                             className={styles.totalScoreBarFill}
-                            style={{ width: `${Math.min(100, selectedIdea.l2_weighted_score)}%` }}
+                            style={{ width: `${Math.min(100, selectedIdea.l2_weighted_score * 10)}%` }}
                           />
                         </div>
                       </div>

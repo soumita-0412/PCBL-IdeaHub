@@ -585,9 +585,16 @@
 
 .scoreRow {
   display: grid;
-  grid-template-columns: 160px 1fr 36px;
+  grid-template-columns: 170px 1fr 52px;
   align-items: center;
   gap: 0.75rem;
+}
+
+.scoreCriterionWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
 }
 
 .scoreCriterion {
@@ -597,6 +604,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.scoreWeight {
+  font-size: 0.625rem;
+  color: #9ca3af;
+  font-weight: 500;
+  letter-spacing: 0.03em;
 }
 
 .scoreBarWrap {
@@ -619,6 +633,13 @@
   color: #890892;
   text-align: right;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.scoreOutOf {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #9ca3af;
 }
 
 /* ── Total score ───────────────────────────────────── */
