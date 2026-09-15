@@ -18,11 +18,13 @@ import {
   Settings,
   Users,
   Building2,
+  Bell,
 } from "lucide-react";
 
 import { useAuthStore } from "@/stores/auth.store";
 import { useAuth } from "@/hooks/use-auth";
 import { Roles, ROLE_LABELS, hasMinRole, type Role } from "@/constants/roles";
+import { useReviewCounts } from "@/hooks/use-review-counts";
 import styles from "./sidebar.module.css";
 
 interface NavItem {
@@ -44,6 +46,15 @@ const REVIEW_SUB_ITEMS = [
   { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> },
   { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> },
 ];
+
+function BellBadge({ count, size = 14 }: { count: number; size?: number }) {
+  return (
+    <span className={styles.bellBadgeWrap}>
+      <Bell size={size} />
+      <span className={styles.bellBadgeCount}>{count > 99 ? "99+" : count}</span>
+    </span>
+  );
+}
 
 function UserCard({ name, role, collapsed }: { name: string; role: string; collapsed: boolean }) {
   const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
@@ -105,6 +116,7 @@ export function Sidebar() {
   const reviewLocked = !hasMinRole(userRole, Roles.L1_REVIEWER);
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
+  const reviewCounts = useReviewCounts();
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""}`}>
@@ -162,11 +174,14 @@ export function Sidebar() {
           /* Collapsed: single icon linking to /review */
           <Link
             href={reviewLocked ? "#" : "/review"}
-            title="Review"
+            title={`Review${reviewCounts.total > 0 ? ` (${reviewCounts.total} pending)` : ""}`}
             className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
             tabIndex={reviewLocked ? -1 : undefined}
           >
             <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
+            {!reviewLocked && reviewCounts.total > 0 && (
+              <BellBadge count={reviewCounts.total} size={13} />
+            )}
           </Link>
         ) : (
           <>
@@ -183,9 +198,14 @@ export function Sidebar() {
               {reviewLocked ? (
                 <span className={styles.navLock}><Lock size={12} /></span>
               ) : (
-                <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
-                  <ChevronDown size={13} />
-                </span>
+                <>
+                  {reviewCounts.total > 0 && (
+                    <BellBadge count={reviewCounts.total} size={13} />
+                  )}
+                  <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
+                    <ChevronDown size={13} />
+                  </span>
+                </>
               )}
             </button>
 
@@ -196,6 +216,9 @@ export function Sidebar() {
                   const isManagementMode = searchParams.get("mode") === "management";
                   const isSubActive = isOnReview &&
                     (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);
+                  const subCount = sub.href.includes("mode=management")
+                    ? reviewCounts.management
+                    : reviewCounts.manager;
 
                   return (
                     <Link
@@ -204,7 +227,10 @@ export function Sidebar() {
                       className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""}`}
                     >
                       <span className={styles.subNavIcon}>{sub.icon}</span>
-                      {sub.label}
+                      <span className={styles.subNavLabel}>{sub.label}</span>
+                      {subCount > 0 && (
+                        <BellBadge count={subCount} size={12} />
+                      )}
                     </Link>
                   );
                 })}
