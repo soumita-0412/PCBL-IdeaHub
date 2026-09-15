@@ -11,6 +11,7 @@ import type { IdeaResponse, IdeaStatus } from "@/types/idea";
 import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import { useAuthStore } from "@/stores/auth.store";
 import { hasMinRole, Roles } from "@/constants/roles";
+import { REVIEW_COUNTS_CHANGED } from "@/hooks/use-review-counts";
 import styles from "./review.module.css";
 
 type ReviewMode = "manager" | "management";
@@ -638,6 +639,8 @@ export default function ReviewDashboardPage() {
         })
         .catch(() => {/* silent */});
     }
+    // Notify sidebar badge to refresh immediately
+    window.dispatchEvent(new CustomEvent(REVIEW_COUNTS_CHANGED));
   }, [selectedApproval]);
 
   // Handle L2 review submission: hold keeps the row (yellow), approve/decline removes it
@@ -662,6 +665,8 @@ export default function ReviewDashboardPage() {
         setSelectedApproval(next && next.length > 0 ? next[0]! : null);
         return next;
       });
+      // Notify sidebar badge to refresh immediately (approve/decline changes the count)
+      window.dispatchEvent(new CustomEvent(REVIEW_COUNTS_CHANGED));
     }
   }, []);
 
