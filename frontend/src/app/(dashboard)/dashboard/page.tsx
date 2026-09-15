@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useCallback, useState } from "react";
+import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle } from "lucide-react";
 import {
   getDashboardStats,
   getRecentIdeas,
   type DashboardStats,
   type PaginatedIdeas,
 } from "@/services/dashboardService";
+import { getIdeaById } from "@/services/ideaService";
+import type { IdeaResponse } from "@/types/idea";
 import styles from "./dashboard.module.css";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -32,11 +34,23 @@ const STATUS_CLS: Record<string, string> = {
   implemented: "badgePurple",
 };
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [ideas, setIdeas] = useState<PaginatedIdeas | null>(null);
   const [page, setPage] = useState(1);
   const [ideasLoading, setIdeasLoading] = useState(true);
+
+  const [selectedIdea, setSelectedIdea] = useState<IdeaResponse | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     getDashboardStats().then(setStats).catch(() => {});
@@ -50,6 +64,29 @@ export default function DashboardPage() {
       .finally(() => setIdeasLoading(false));
   }, [page]);
 
+  const openIdeaModal = useCallback(async (id: string) => {
+    setModalOpen(true);
+    setSelectedIdea(null);
+    setModalLoading(true);
+    try {
+      const idea = await getIdeaById(id);
+      setSelectedIdea(idea);
+    } finally {
+      setModalLoading(false);
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+    setSelectedIdea(null);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
+    if (modalOpen) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modalOpen, closeModal]);
+
   const monthly = stats?.monthly_submissions ?? [];
   const maxCount = Math.max(...monthly.map((m) => m.count), 1);
 
@@ -57,6 +94,7 @@ export default function DashboardPage() {
   const maxSubmitted = Math.max(...funnel.map((f) => f.submitted), 1);
 
   return (
+    <>
     <main className={styles.container}>
       <div className={styles.inner}>
 
@@ -195,7 +233,14 @@ export default function DashboardPage() {
             <div className={styles.tLoading}>Loading…</div>
           ) : (
             ideas?.items.map((idea) => (
-              <div key={idea.id} className={styles.tRow}>
+              <div
+                key={idea.id}
+                className={styles.tRow}
+                onClick={() => openIdeaModal(idea.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === "Enter") openIdeaModal(idea.id); }}
+              >
                 <span className={styles.ideaId}>{idea.submission_number}</span>
                 <span className={styles.ideaTitle} title={idea.idea_title ?? ""}>
                   {idea.idea_title
@@ -263,5 +308,153 @@ export default function DashboardPage() {
         </div>
       </div>
     </main>
+
+    {/* ── Idea Detail Modal ── */}
+    {modalOpen && (
+      <div className={styles.modalOverlay} onClick={closeModal} role="dialog" aria-modal="true">
+        <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+
+          {modalLoading && (
+            <div className={styles.modalLoadingState}>
+              <div className={styles.spinner} />
+              <p>Loading idea details…</p>
+            </div>
+          )}
+
+          {!modalLoading && selectedIdea && (
+            <>
+              {/* Modal Header */}
+              <div className={styles.modalHeader}>
+                <div className={styles.modalHeaderLeft}>
+                  <span className={styles.modalSubmissionNo}>{selectedIdea.submission_number}</span>
+                  <h2 className={styles.modalTitle}>
+                    {selectedIdea.idea_title ?? "Untitled Idea"}
+                  </h2>
+                  <span
+                    className={`${styles.badge} ${
+                      styles[STATUS_CLS[selectedIdea.status] ?? "badgeBlue"]
+                    }`}
+                  >
+                    {STATUS_LABELS[selectedIdea.status] ?? selectedIdea.status}
+                  </span>
+                </div>
+                <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Meta row */}
+              <div className={styles.modalMeta}>
+                <span className={styles.modalMetaItem}>
+                  <User size={12} />
+                  {selectedIdea.submitter_name}
+                </span>
+                <span className={styles.modalMetaDot} />
+                <span className={styles.modalMetaItem}>
+                  <Tag size={12} />
+                  {selectedIdea.category}
+                </span>
+                <span className={styles.modalMetaDot} />
+                <span className={styles.modalMetaItem}>
+                  <Calendar size={12} />
+                  {formatDate(selectedIdea.created_at)}
+                </span>
+              </div>
+
+              <div className={styles.modalBody}>
+
+                {/* Idea details */}
+                <div className={styles.modalSection}>
+                  <p className={styles.modalSectionTitle}>PROBLEM STATEMENT</p>
+                  <p className={styles.modalText}>{selectedIdea.problem}</p>
+                </div>
+
+                <div className={styles.modalSection}>
+                  <p className={styles.modalSectionTitle}>PROPOSED SOLUTION</p>
+                  <p className={styles.modalText}>{selectedIdea.idea_description}</p>
+                </div>
+
+                {selectedIdea.benefit && (
+                  <div className={styles.modalSection}>
+                    <p className={styles.modalSectionTitle}>EXPECTED BENEFIT</p>
+                    <p className={styles.modalText}>{selectedIdea.benefit}</p>
+                  </div>
+                )}
+
+                {/* Manager comment */}
+                {selectedIdea.reviewer_comment && (
+                  <div className={styles.modalSection}>
+                    <p className={styles.modalSectionTitle}>MANAGER&apos;S COMMENT (L1)</p>
+                    <div className={styles.commentBox}>
+                      <AlertCircle size={14} className={styles.commentIcon} />
+                      <p className={styles.commentText}>{selectedIdea.reviewer_comment}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* L2 Scoring */}
+                {selectedIdea.l2_scores && Object.keys(selectedIdea.l2_scores).length > 0 && (
+                  <div className={styles.modalSection}>
+                    <p className={styles.modalSectionTitle}>MANAGEMENT SCORING MATRIX (L2)</p>
+                    <div className={styles.scoreMatrix}>
+                      {Object.entries(selectedIdea.l2_scores).map(([criterion, score]) => (
+                        <div key={criterion} className={styles.scoreRow}>
+                          <span className={styles.scoreCriterion}>{criterion}</span>
+                          <div className={styles.scoreBarWrap}>
+                            <div
+                              className={styles.scoreBarFill}
+                              style={{ width: `${Math.min(100, score)}%` }}
+                            />
+                          </div>
+                          <span className={styles.scoreVal}>{score}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {selectedIdea.l2_weighted_score != null && (
+                      <div className={styles.totalScoreRow}>
+                        <span className={styles.totalScoreLabel}>Total Score</span>
+                        <div className={styles.totalScoreBadge}>
+                          <span className={styles.totalScoreNum}>
+                            {Math.round(selectedIdea.l2_weighted_score)}
+                          </span>
+                          <span className={styles.totalScoreOf}>/100</span>
+                        </div>
+                        <div className={styles.totalScoreBar}>
+                          <div
+                            className={styles.totalScoreBarFill}
+                            style={{ width: `${Math.min(100, selectedIdea.l2_weighted_score)}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Recommendations */}
+                {selectedIdea.l2_comment && (
+                  <div className={styles.modalSection}>
+                    <p className={styles.modalSectionTitle}>RECOMMENDATIONS</p>
+                    <p className={styles.modalText}>{selectedIdea.l2_comment}</p>
+                  </div>
+                )}
+
+                {/* Next step */}
+                {selectedIdea.l2_next_step && (
+                  <div className={styles.modalSection}>
+                    <p className={styles.modalSectionTitle}>NEXT STEPS</p>
+                    <div className={styles.nextStepBox}>
+                      <p className={styles.modalText}>{selectedIdea.l2_next_step}</p>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    )}
+  </>
   );
 }
