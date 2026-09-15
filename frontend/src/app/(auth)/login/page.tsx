@@ -49,7 +49,7 @@ export default function LoginPage() {
     setServerError(null);
     try {
       await login(data.username, data.password);
-      router.replace("/dashboard");
+      router.replace("/submit");
     } catch {
       setServerError("Invalid username or password. Please try again.");
     }

@@ -8,11 +8,8 @@ Used for: fetching user profiles, org hierarchy, group memberships.
 from typing import Any
 
 import httpx
-import structlog
 
 from app.core.config import settings
-
-logger = structlog.get_logger(__name__)
 
 _TOKEN_ENDPOINT = (
     f"https://login.microsoftonline.com/{settings.GRAPH_TENANT_ID}/oauth2/v2.0/token"

@@ -39,7 +39,7 @@ export default function AuthCallbackPage() {
         useAuthStore.getState().setAuth(token, profile);
 
         // Replace the callback URL so the token is not kept in browser history
-        router.replace("/dashboard");
+        router.replace("/submit");
       } catch {
         useAuthStore.getState().clearAuth();
         setErrorMsg("Sign-in failed. Please try again.");

@@ -76,6 +76,16 @@
   border-color: #81c451;
 }
 
+.ideaRowOnHold {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.ideaRowOnHold:hover {
+  background: #fef9c3;
+  border-color: #facc15;
+}
+
 .ideaRowNumber {
   font-size: 0.625rem;
   font-weight: 600;

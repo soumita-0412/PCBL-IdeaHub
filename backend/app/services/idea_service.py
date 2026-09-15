@@ -127,7 +127,8 @@ async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: Curre
 
     manager_approval = await _approval_repo.get_by_id(payload.manager_approval_id)
     if manager_approval:
-        manager_approval.l2_reviewed = True
+        if payload.status != IdeaStatus.UNDER_REVIEW_L2:
+            manager_approval.l2_reviewed = True
         await manager_approval.save_with_actor(actor.user_id)
 
     group_review = GroupReview(

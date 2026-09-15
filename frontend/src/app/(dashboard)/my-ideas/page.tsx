@@ -24,8 +24,7 @@ function getL1(s: IdeaStatus): { label: string; cls: string; progress: number } 
   switch (s) {
     case "submitted":       return { label: "Pending",  cls: styles.dotAmber!,  progress: 0 };
     case "under_review_l1": return { label: "Pending",  cls: styles.dotAmber!,  progress: 50 };
-    case "rejected_l1":
-    case "rejected_l2":     return { label: "Rejected", cls: styles.dotRed!,    progress: 100 };
+    case "rejected_l1":     return { label: "Declined", cls: styles.dotRed!,    progress: 100 };
     default:                return { label: "Approved", cls: styles.dotGreen!,  progress: 100 };
   }
 }
@@ -34,11 +33,11 @@ function getL2(s: IdeaStatus): { label: string; cls: string; progress: number } 
   switch (s) {
     case "submitted":
     case "under_review_l1":
-    case "rejected_l1":     return { label: "Locked",   cls: styles.dotLocked!, progress: 0 };
-    case "approved_l1":
-    case "under_review_l2": return { label: "Pending",  cls: styles.dotAmber!,  progress: 50 };
-    case "rejected_l2":     return { label: "Rejected", cls: styles.dotRed!,    progress: 100 };
-    default:                return { label: "Approved", cls: styles.dotGreen!,  progress: 100 };
+    case "rejected_l1":     return { label: "Locked",  cls: styles.dotLocked!, progress: 0 };
+    case "approved_l1":     return { label: "Pending", cls: styles.dotAmber!,  progress: 0 };
+    case "under_review_l2": return { label: "On Hold", cls: styles.dotAmber!,  progress: 50 };
+    case "rejected_l2":     return { label: "Declined", cls: styles.dotRed!,   progress: 100 };
+    default:                return { label: "Approved", cls: styles.dotGreen!, progress: 100 };
   }
 }
 
@@ -196,8 +195,8 @@ export default function MyIdeasPage() {
               const l2 = getL2(selected.status);
               const st = popupStatusStyle(selected.status);
               const date = new Date(selected.created_at).toISOString().slice(0, 10);
-              const l1BarCls = l1.label === "Rejected" ? styles.barRed : styles.barGreen;
-              const l2BarCls = l2.label === "Rejected" ? styles.barRed : l2.label === "Locked" ? styles.barLocked : styles.barPurple;
+              const l1BarCls = l1.label === "Declined" ? styles.barRed : styles.barGreen;
+              const l2BarCls = l2.label === "Declined" ? styles.barRed : l2.label === "Locked" ? styles.barLocked : l2.label === "On Hold" ? styles.barAmber : styles.barPurple;
 
               return (
                 <div className={styles.popupContent}>
@@ -225,7 +224,7 @@ export default function MyIdeasPage() {
                           <span className={styles.reviewLevelName}>Level 1 — Manager</span>
                           <span className={`${styles.reviewBadge} ${
                             l1.label === "Approved" ? styles.reviewBadgeGreen :
-                            l1.label === "Rejected" ? styles.reviewBadgeRed :
+                            l1.label === "Declined" ? styles.reviewBadgeRed :
                             styles.reviewBadgeAmber
                           }`}>{l1.label}</span>
                         </div>
@@ -241,8 +240,9 @@ export default function MyIdeasPage() {
                           <span className={styles.reviewLevelName}>Level 2 — Group</span>
                           <span className={`${styles.reviewBadge} ${
                             l2.label === "Approved" ? styles.reviewBadgeGreen :
-                            l2.label === "Rejected" ? styles.reviewBadgeRed :
+                            l2.label === "Declined" ? styles.reviewBadgeRed :
                             l2.label === "Locked"   ? styles.reviewBadgeLocked :
+                            l2.label === "On Hold"  ? styles.reviewBadgeAmber :
                             styles.reviewBadgeAmber
                           }`}>{l2.label}</span>
                         </div>

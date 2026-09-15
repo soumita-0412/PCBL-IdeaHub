@@ -42,13 +42,14 @@ interface IdeaRowProps {
   title: string;
   sub: string;
   selected: boolean;
+  isOnHold?: boolean;
   onClick: () => void;
 }
 
-function IdeaRow({ submissionNumber, title, sub, selected, onClick }: IdeaRowProps) {
+function IdeaRow({ submissionNumber, title, sub, selected, isOnHold, onClick }: IdeaRowProps) {
   return (
     <div
-      className={`${styles.ideaRow} ${selected ? styles.ideaRowSelected : ""}`}
+      className={`${styles.ideaRow} ${selected ? styles.ideaRowSelected : ""} ${isOnHold ? styles.ideaRowOnHold : ""}`}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -329,7 +330,7 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
 interface L2DetailPanelProps {
   approval: ManagerApprovalResponse;
   category: CategoryResponse | undefined;
-  onSubmitted: (id: string) => void;
+  onSubmitted: (id: string, decision: NonNullable<L2Decision>) => void;
 }
 
 function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) {
@@ -387,7 +388,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
       const sType: SuccessType = decision === "approve" ? "approved" : decision === "hold" ? "pending" : "declined";
       setSuccessType(sType);
       setSuccess(true);
-      setTimeout(() => onSubmitted(approval.id), 2200);
+      setTimeout(() => onSubmitted(approval.id, decision), 2200);
     } catch (err) {
       setError(apiErrorMessage(err, "Action failed. Please try again."));
     } finally {
@@ -594,6 +595,8 @@ export default function ReviewDashboardPage() {
   // Management mode state
   const [approvals, setApprovals] = useState<ManagerApprovalResponse[] | null>(null);
   const [selectedApproval, setSelectedApproval] = useState<ManagerApprovalResponse | null>(null);
+  const [ideaStatusMap, setIdeaStatusMap] = useState<Map<string, string>>(new Map());
+  const [remountKey, setRemountKey] = useState(0);
 
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -612,6 +615,7 @@ export default function ReviewDashboardPage() {
         setIdeas(pending);
         setCategories(catsData);
         setApprovals(approvalsData);
+        setIdeaStatusMap(new Map(ideasData.map((i) => [i.id, i.status])));
         if (pending.length > 0) setSelectedIdea(pending[0]!);
         if (approvalsData.length > 0) setSelectedApproval(approvalsData[0]!);
       })
@@ -636,13 +640,29 @@ export default function ReviewDashboardPage() {
     }
   }, [selectedApproval]);
 
-  // Remove the approval from the list after L2 review is submitted
-  const handleApprovalSubmitted = useCallback((approvalId: string) => {
-    setApprovals((prev) => {
-      const next = prev?.filter((a) => a.id !== approvalId) ?? prev;
-      setSelectedApproval(next && next.length > 0 ? next[0]! : null);
-      return next;
-    });
+  // Handle L2 review submission: hold keeps the row (yellow), approve/decline removes it
+  const handleApprovalSubmitted = useCallback((approvalId: string, decision: NonNullable<L2Decision>) => {
+    if (decision === "hold") {
+      // Mark the idea as on-hold in the status map and remount the panel for a fresh start
+      setApprovals((prev) => {
+        const approval = prev?.find((a) => a.id === approvalId);
+        if (approval) {
+          setIdeaStatusMap((m) => {
+            const next = new Map(m);
+            next.set(approval.idea_id, "under_review_l2");
+            return next;
+          });
+        }
+        return prev;
+      });
+      setRemountKey((k) => k + 1);
+    } else {
+      setApprovals((prev) => {
+        const next = prev?.filter((a) => a.id !== approvalId) ?? prev;
+        setSelectedApproval(next && next.length > 0 ? next[0]! : null);
+        return next;
+      });
+    }
   }, []);
 
   const selectedCategory = useMemo(
@@ -712,6 +732,7 @@ export default function ReviewDashboardPage() {
                 title={approval.category}
                 sub={approval.employee_name}
                 selected={selectedApproval?.id === approval.id}
+                isOnHold={ideaStatusMap.get(approval.idea_id) === "under_review_l2"}
                 onClick={() => setSelectedApproval(approval)}
               />
             ))}
@@ -735,7 +756,7 @@ export default function ReviewDashboardPage() {
           ) : (
             selectedApproval ? (
               <L2DetailPanel
-                key={`l2-${selectedApproval.id}`}
+                key={`l2-${selectedApproval.id}-${remountKey}`}
                 approval={selectedApproval}
                 category={selectedCategory}
                 onSubmitted={handleApprovalSubmitted}
