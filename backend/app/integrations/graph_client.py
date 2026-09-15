@@ -60,15 +60,23 @@ class GraphClient:
         filter_expr = (
             f"startswith(displayName,'{safe}') or startswith(mail,'{safe}')"
         )
-        result = await self.get(
+        token = await self._get_token()
+        response = await self._client.get(
             "/users",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "ConsistencyLevel": "eventual",
+            },
             params={
                 "$filter": filter_expr,
                 "$select": "id,displayName,mail",
                 "$top": top,
                 "$orderby": "displayName",
+                "$count": "true",
             },
         )
+        response.raise_for_status()
+        result: dict[str, Any] = response.json()
         users = []
         for u in result.get("value", []):
             if u.get("mail"):
