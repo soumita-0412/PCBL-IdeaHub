@@ -57,6 +57,33 @@ class GraphClient:
         result: dict[str, Any] = response.json()
         return result
 
+    async def search_users(self, query: str, top: int = 10) -> list[dict]:
+        """Search Azure AD users by display name or email prefix."""
+        safe = query.replace("'", "''")
+        filter_expr = (
+            f"startswith(displayName,'{safe}') or startswith(mail,'{safe}')"
+        )
+        result = await self.get(
+            "/users",
+            params={
+                "$filter": filter_expr,
+                "$select": "id,displayName,mail",
+                "$top": top,
+                "$orderby": "displayName",
+            },
+        )
+        users = []
+        for u in result.get("value", []):
+            if u.get("mail"):
+                users.append(
+                    {
+                        "user_id": u["id"],
+                        "name": u.get("displayName") or u["mail"],
+                        "email": u["mail"],
+                    }
+                )
+        return users
+
     async def close(self) -> None:
         await self._client.aclose()
 

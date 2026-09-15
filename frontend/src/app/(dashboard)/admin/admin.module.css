@@ -485,3 +485,27 @@
   border-color: #9ca3af;
   color: #374151;
 }
+
+/* ── Committee badge (collapsed row) ────────────────────────────────────── */
+.committeeBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(137, 8, 146, 0.06);
+  color: #890892;
+  border: 1px solid rgba(137, 8, 146, 0.15);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Committee section (pickers grouped together) ───────────────────────── */
+.committeeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem 1.125rem;
+}

@@ -13,6 +13,7 @@ from app.api.v1.dashboard import router as dashboard_router
 from app.api.v1.ideas import router as ideas_router
 from app.api.v1.group_reviews import router as group_reviews_router
 from app.api.v1.manager_approvals import router as manager_approvals_router
+from app.api.v1.users import router as users_router
 
 api_router = APIRouter()
 
@@ -22,3 +23,4 @@ api_router.include_router(categories_router)
 api_router.include_router(manager_approvals_router)
 api_router.include_router(group_reviews_router)
 api_router.include_router(dashboard_router)
+api_router.include_router(users_router)

@@ -5,12 +5,18 @@ Default categories are seeded once on first startup if the collection is empty.
 """
 
 from app.core.exceptions import ConflictException, NotFoundException, ValidationException
-from app.models.category import Category, MatrixOption
+from app.models.category import Category, CommitteePerson, MatrixOption
 from app.models.category_criteria import CriteriaItem
 from app.repositories.category_criteria_repository import CategoryCriteriaRepository
 from app.repositories.category_repository import CategoryRepository
 from app.schemas.auth import CurrentUser
-from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate, MatrixOptionOut
+from app.schemas.category import (
+    CategoryCreate,
+    CategoryResponse,
+    CategoryUpdate,
+    CommitteePersonOut,
+    MatrixOptionOut,
+)
 
 _DEFAULT_NAMES = [
     "Cost Optimization",
@@ -49,6 +55,13 @@ async def create_category(payload: CategoryCreate, actor: CurrentUser) -> Catego
         name=payload.name,
         department=payload.department,
         matrix=[MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix],
+        committee_lead=(
+            CommitteePerson(**payload.committee_lead.model_dump())
+            if payload.committee_lead else None
+        ),
+        committee_members=[
+            CommitteePerson(**m.model_dump()) for m in payload.committee_members
+        ],
     )
     await cat.save_with_actor(actor.user_id)
     await _sync_criteria(cat)
@@ -71,6 +84,16 @@ async def update_category(
     if payload.matrix is not None:
         _validate_matrix(payload.matrix)
         cat.matrix = [MatrixOption(label=o.label, weight=o.weight) for o in payload.matrix]
+    # Use model_fields_set to distinguish "not provided" from "explicitly null"
+    if "committee_lead" in payload.model_fields_set:
+        cat.committee_lead = (
+            CommitteePerson(**payload.committee_lead.model_dump())
+            if payload.committee_lead else None
+        )
+    if payload.committee_members is not None:
+        cat.committee_members = [
+            CommitteePerson(**m.model_dump()) for m in payload.committee_members
+        ]
     await cat.save_with_actor(actor.user_id)
     await _sync_criteria(cat)
     return _to_response(cat)
@@ -83,12 +106,19 @@ async def delete_category(category_id: str) -> None:
 
 
 async def _sync_criteria(cat: Category) -> None:
-    """Keep category_criteria in sync with the category's matrix."""
-    if cat.matrix:
+    """Keep category_criteria in sync with the category's matrix and committee."""
+    has_data = (
+        bool(cat.matrix)
+        or cat.committee_lead is not None
+        or bool(cat.committee_members)
+    )
+    if has_data:
         await _criteria_repo.upsert(
             category_id=str(cat.id),
             category_name=cat.name,
             criteria=[CriteriaItem(label=o.label, weight=o.weight) for o in cat.matrix],
+            committee_lead=cat.committee_lead,
+            committee_members=cat.committee_members,
         )
     else:
         await _criteria_repo.delete_by_category_id(str(cat.id))
@@ -109,6 +139,13 @@ def _to_response(cat: Category) -> CategoryResponse:
         name=cat.name,
         department=cat.department,
         matrix=[MatrixOptionOut(label=o.label, weight=o.weight) for o in cat.matrix],
+        committee_lead=(
+            CommitteePersonOut(**cat.committee_lead.model_dump())
+            if cat.committee_lead else None
+        ),
+        committee_members=[
+            CommitteePersonOut(**m.model_dump()) for m in cat.committee_members
+        ],
         created_at=cat.created_at,
         updated_at=cat.updated_at,
     )

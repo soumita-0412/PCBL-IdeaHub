@@ -1,9 +1,8 @@
 """
 CategoryCriteria MongoDB document model.
 
-Stores the scoring criteria and their weights for a specific category.
-Maintained automatically by the category service — one document per category
-that has a non-empty scoring matrix.
+Stores the scoring criteria, their weights, and committee assignment for a
+specific category. Maintained automatically by the category service.
 """
 
 from typing import Annotated
@@ -12,6 +11,7 @@ from beanie import Indexed
 from pydantic import BaseModel, Field
 
 from app.models.base import BaseDocument
+from app.models.category import CommitteePerson
 
 
 class CriteriaItem(BaseModel):
@@ -23,6 +23,8 @@ class CategoryCriteria(BaseDocument):
     category_id: Annotated[str, Indexed(unique=True)]
     category_name: str
     criteria: list[CriteriaItem]
+    committee_lead: CommitteePerson | None = None
+    committee_members: list[CommitteePerson] = []
 
     class Settings:
         name = "category_criteria"

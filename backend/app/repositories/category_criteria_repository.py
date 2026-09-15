@@ -2,6 +2,7 @@
 Repository for CategoryCriteria documents.
 """
 
+from app.models.category import CommitteePerson
 from app.models.category_criteria import CategoryCriteria, CriteriaItem
 from app.repositories.base import BaseRepository
 
@@ -23,17 +24,23 @@ class CategoryCriteriaRepository(BaseRepository[CategoryCriteria]):
         category_id: str,
         category_name: str,
         criteria: list[CriteriaItem],
+        committee_lead: CommitteePerson | None = None,
+        committee_members: list[CommitteePerson] | None = None,
     ) -> CategoryCriteria:
         existing = await self.find_by_category_id(category_id)
         if existing:
             existing.category_name = category_name
             existing.criteria = criteria
+            existing.committee_lead = committee_lead
+            existing.committee_members = committee_members or []
             await existing.save()
             return existing
         doc = CategoryCriteria(
             category_id=category_id,
             category_name=category_name,
             criteria=criteria,
+            committee_lead=committee_lead,
+            committee_members=committee_members or [],
         )
         await doc.insert()
         return doc
