@@ -55,6 +55,7 @@ class Idea(BaseDocument):
     l2_scores: Optional[dict[str, int]] = None
     l2_comment: Optional[str] = None
     l2_weighted_score: Optional[float] = None
+    l2_next_step: Optional[str] = None
 
     class Settings:
         name = "ideas"

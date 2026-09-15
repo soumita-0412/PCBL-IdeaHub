@@ -50,6 +50,7 @@ class IdeaResponse(BaseModel):
     l2_scores: Optional[dict[str, int]]
     l2_comment: Optional[str]
     l2_weighted_score: Optional[float]
+    l2_next_step: Optional[str]
     created_at: datetime
     updated_at: datetime
 

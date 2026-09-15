@@ -291,6 +291,8 @@
   position: relative;
   width: 92vw;
   max-width: 960px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: #f0ebf8;
   border-radius: 1.25rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
@@ -541,4 +543,13 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ── Reviewer comment cards ────────────────────────── */
+.commentCardGreen {
+  border-left: 3px solid #22c55e;
+}
+
+.commentCardRed {
+  border-left: 3px solid #ef4444;
 }

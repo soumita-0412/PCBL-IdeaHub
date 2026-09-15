@@ -256,6 +256,42 @@ export default function MyIdeasPage() {
                     </div>
                   </div>
 
+                  {/* L1 Manager Comment */}
+                  {selected.reviewer_comment && (
+                    <div className={`${styles.sectionCardFull} ${
+                      selected.status === "rejected_l1"
+                        ? styles.commentCardRed
+                        : styles.commentCardGreen
+                    }`}>
+                      <p className={styles.sectionLabel}>L1 Manager: Feedback</p>
+                      <p className={styles.sectionText}>{selected.reviewer_comment}</p>
+                    </div>
+                  )}
+
+                  {/* L2 Recommendation */}
+                  {selected.l2_comment && (
+                    <div className={`${styles.sectionCardFull} ${
+                      selected.status === "rejected_l2"
+                        ? styles.commentCardRed
+                        : styles.commentCardGreen
+                    }`}>
+                      <p className={styles.sectionLabel}>L2 Manager: Recommendation</p>
+                      <p className={styles.sectionText}>{selected.l2_comment}</p>
+                    </div>
+                  )}
+
+                  {/* L2 Next Steps */}
+                  {selected.l2_next_step && (
+                    <div className={`${styles.sectionCardFull} ${
+                      selected.status === "rejected_l2"
+                        ? styles.commentCardRed
+                        : styles.commentCardGreen
+                    }`}>
+                      <p className={styles.sectionLabel}>L2 Manager: Next Steps</p>
+                      <p className={styles.sectionText}>{selected.l2_next_step}</p>
+                    </div>
+                  )}
+
                   {/* Description — half width */}
                   <div className={styles.sectionCard}>
                     <p className={styles.sectionLabel}>Description</p>

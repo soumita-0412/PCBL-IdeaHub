@@ -123,6 +123,7 @@ async def l2_review_idea(idea_id: str, payload: IdeaL2ReviewUpdate, actor: Curre
     idea.l2_scores = payload.l2_scores
     idea.l2_weighted_score = payload.l2_weighted_score
     idea.l2_comment = payload.l2_comment
+    idea.l2_next_step = payload.l2_next_step
     await idea.save_with_actor(actor.user_id)
 
     manager_approval = await _approval_repo.get_by_id(payload.manager_approval_id)
@@ -189,6 +190,7 @@ def _to_response(idea: Idea) -> IdeaResponse:
         l2_scores=idea.l2_scores,
         l2_comment=idea.l2_comment,
         l2_weighted_score=idea.l2_weighted_score,
+        l2_next_step=idea.l2_next_step,
         created_at=idea.created_at,
         updated_at=idea.updated_at,
     )
