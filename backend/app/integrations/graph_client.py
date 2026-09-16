@@ -5,6 +5,7 @@ Uses client credentials flow (app-level token, not delegated).
 Used for: fetching user profiles, org hierarchy, group memberships.
 """
 
+import time
 from typing import Any
 
 import httpx
@@ -14,6 +15,8 @@ from app.core.config import settings
 _TOKEN_ENDPOINT = (
     f"https://login.microsoftonline.com/{settings.GRAPH_TENANT_ID}/oauth2/v2.0/token"
 )
+
+_TOKEN_REFRESH_BUFFER = 60  # seconds before expiry to refresh
 
 
 class GraphClient:
@@ -25,9 +28,10 @@ class GraphClient:
             timeout=15,
         )
         self._access_token: str | None = None
+        self._token_expires_at: float = 0.0
 
     async def _get_token(self) -> str:
-        if self._access_token:
+        if self._access_token and time.time() < self._token_expires_at - _TOKEN_REFRESH_BUFFER:
             return self._access_token
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -40,7 +44,9 @@ class GraphClient:
                 },
             )
             response.raise_for_status()
-            self._access_token = response.json()["access_token"]
+            token_data = response.json()
+            self._access_token = token_data["access_token"]
+            self._token_expires_at = time.time() + token_data.get("expires_in", 3600)
         return self._access_token  # type: ignore[return-value]
 
     async def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
