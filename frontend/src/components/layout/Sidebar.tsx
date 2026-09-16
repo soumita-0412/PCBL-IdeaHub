@@ -34,11 +34,14 @@ interface NavItem {
   minRole?: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
+const NAV_ITEMS_TOP: NavItem[] = [
   { label: "Submit Idea",      href: "/submit",     icon: <Plus size={16} /> },
   { label: "My Ideas",         href: "/my-ideas",   icon: <FileText size={16} /> },
-  { label: "Dashboard",        href: "/dashboard",  icon: <BarChart2 size={16} /> },
   { label: "Repository",       href: "/repository", icon: <Archive size={16} />,   minRole: Roles.L1_REVIEWER },
+];
+
+const NAV_ITEMS_BOTTOM: NavItem[] = [
+  { label: "Dashboard",        href: "/dashboard",  icon: <BarChart2 size={16} /> },
   { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,  minRole: Roles.ADMIN },
 ];
 
@@ -147,8 +150,8 @@ export function Sidebar() {
       {!collapsed && <span className={styles.navSection}>Navigation</span>}
       <nav className={styles.nav}>
 
-        {/* Regular nav items */}
-        {NAV_ITEMS.map((item) => {
+        {/* Submit Idea, My Ideas, Repository */}
+        {NAV_ITEMS_TOP.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
 
@@ -238,6 +241,28 @@ export function Sidebar() {
             )}
           </>
         )}
+
+        {/* Dashboard, Admin Dashboard */}
+        {NAV_ITEMS_BOTTOM.map((item) => {
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
+
+          return (
+            <Link
+              key={item.href}
+              href={isLocked ? "#" : item.href}
+              title={collapsed ? item.label : undefined}
+              className={`${styles.navItem} ${isActive ? styles.navItemActive : ""} ${isLocked ? styles.navItemLocked : ""} ${collapsed ? styles.navItemCollapsed : ""}`}
+              tabIndex={isLocked ? -1 : undefined}
+            >
+              <span className={styles.navIcon}>{item.icon}</span>
+              {!collapsed && <span className={styles.navLabel}>{item.label}</span>}
+              {!collapsed && isLocked && (
+                <span className={styles.navLock}><Lock size={12} /></span>
+              )}
+            </Link>
+          );
+        })}
 
       </nav>
 
