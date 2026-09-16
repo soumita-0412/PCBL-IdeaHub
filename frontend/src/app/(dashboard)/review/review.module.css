@@ -117,15 +117,15 @@
 
 .ideaRowTitle {
   font-size: 0.8125rem;
-  font-weight: 700;
-  color: #3d2535;
+  font-weight: 600;
+  color: #6B4C5B;
   margin: 0;
   line-height: 1.25;
 }
 
 .ideaRowSub {
   font-size: 0.6875rem;
-  color: #8f6a7a;
+  color: #8C7280;
   margin: 0;
 }
 
@@ -205,15 +205,15 @@
 
 .detailTitle {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: #3d2535;
+  font-weight: 600;
+  color: #6B4C5B;
   margin: 0;
   line-height: 1.25;
 }
 
 .detailSubtitle {
   font-size: 0.75rem;
-  color: #A97388;
+  color: #8C7280;
   margin: -0.375rem 0 0;
 }
 
