@@ -50,10 +50,10 @@ function ScoreCircle({ score }: { score: number }) {
   const r = 22;
   const circ = 2 * Math.PI * r;
   const filled = (pct / 100) * circ;
-  const color = pct >= 70 ? "#22c55e" : pct >= 40 ? "#f59e0b" : "#ef4444";
+  const color = pct >= 70 ? "#5F7857" : pct >= 40 ? "#C9A24A" : "#B5654A";
   return (
     <svg width="56" height="56" viewBox="0 0 56 56" className={styles.scoreCircleSvg}>
-      <circle cx="28" cy="28" r={r} fill="none" stroke="#f0eaf5" strokeWidth="4" />
+      <circle cx="28" cy="28" r={r} fill="none" stroke="rgba(217,184,196,0.3)" strokeWidth="4" />
       <circle
         cx="28" cy="28" r={r}
         fill="none"
