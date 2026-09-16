@@ -5,13 +5,13 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: #6B4C5B;
+  background: linear-gradient(175deg, #4e3345 0%, #6B4C5B 38%, #8a5e70 72%, #A97388 100%);
   border-right: none;
   border-radius: 0.875rem;
   margin: 0.625rem 0 0.625rem 0.625rem;
   overflow: hidden;
   transition: width 0.22s ease;
-  box-shadow: 0 4px 24px rgba(107, 76, 91, 0.18);
+  box-shadow: 0 4px 28px rgba(107, 76, 91, 0.28), 0 1px 6px rgba(169, 115, 136, 0.18);
 }
 
 .sidebarCollapsed {
@@ -222,14 +222,12 @@
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   transition: background 0.12s ease, color 0.12s ease;
-  white-space: nowrap;
+  white-space: normal;
   overflow: visible;
 }
 
 .subNavLabel {
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .subNavItem:hover {
@@ -266,7 +264,8 @@
   gap: 0.625rem;
   padding: 0.75rem 0.875rem;
   border-radius: 0.75rem;
-  background: linear-gradient(120deg, #6B4C5B 0%, #A97388 100%);
+  background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+  border: 1px solid rgba(217, 184, 196, 0.22);
   cursor: pointer;
   transition: opacity 0.12s ease;
 }
@@ -353,12 +352,27 @@
 }
 
 /* ── Bell notification badge ───────────────────────── */
+@keyframes bellRing {
+  0%   { transform: rotate(0deg); }
+  10%  { transform: rotate(18deg); }
+  20%  { transform: rotate(-16deg); }
+  30%  { transform: rotate(12deg); }
+  40%  { transform: rotate(-10deg); }
+  50%  { transform: rotate(6deg); }
+  60%  { transform: rotate(-4deg); }
+  70%  { transform: rotate(2deg); }
+  80%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .bellBadgeWrap {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   flex-shrink: 0;
   color: #D9B8C4;
+  transform-origin: top center;
+  animation: bellRing 2.4s ease-in-out infinite;
 }
 
 .bellBadgeCount {
