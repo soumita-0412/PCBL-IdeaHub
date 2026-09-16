@@ -47,12 +47,12 @@ function matchesFilter(status: IdeaStatus, f: FilterValue): boolean {
 
 function ScoreCircle({ score }: { score: number }) {
   const pct = Math.min(100, Math.round(score * 10));
-  const r = 22;
+  const r = 18;
   const circ = 2 * Math.PI * r;
   const filled = (pct / 100) * circ;
   const color = pct >= 70 ? "#5F7857" : pct >= 40 ? "#C9A24A" : "#B5654A";
   return (
-    <svg width="56" height="56" viewBox="0 0 56 56" className={styles.scoreCircleSvg}>
+    <svg width="46" height="46" viewBox="0 0 56 56" className={styles.scoreCircleSvg}>
       <circle cx="28" cy="28" r={r} fill="none" stroke="rgba(217,184,196,0.3)" strokeWidth="4" />
       <circle
         cx="28" cy="28" r={r}
