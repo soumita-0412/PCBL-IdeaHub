@@ -182,7 +182,7 @@
 }
 
 .footerSep {
-  color: hsl(296, 16%, 35%);
+  color: #8C7280;
   font-size: 0.75rem;
   margin: 0 0.25rem;
 }
@@ -236,7 +236,7 @@
 .emptyTitle {
   font-size: 1.2rem;
   font-weight: 700;
-  color: hsl(294, 35%, 28%);
+  color: #6B4C5B;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -244,18 +244,19 @@
 .emptyBtn {
   margin-top: 0.25rem;
   padding: 0.625rem 1.25rem;
-  background: hsl(289, 65%, 97%);
+  background: #F9EDF1;
   border: 1px solid #A97388;
   color: #A97388;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 700;
   text-decoration: none;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .emptyBtn:hover {
   background: #A97388;
+  color: #fff;
 }
 
 /* ── Loading skeleton ──────────────────────────────── */
@@ -268,13 +269,19 @@
 .skeletonRow {
   height: 7rem;
   border-radius: 0.75rem;
-  background: hsl(222 44% 11%);
-  animation: pulse 1.4s ease-in-out infinite;
+  background: linear-gradient(90deg, #EDE4EA 25%, #F3E1E8 50%, #EDE4EA 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.45; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ── Error ─────────────────────────────────────────── */

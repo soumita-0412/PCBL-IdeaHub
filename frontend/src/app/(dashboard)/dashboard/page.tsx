@@ -156,7 +156,7 @@ export default function DashboardPage() {
                       <span className={styles.barCount}>{m.count}</span>
                       <div
                         className={styles.bar}
-                        style={{ height: `${Math.max(4, (m.count / maxCount) * 120)}px` }}
+                        style={{ height: `${Math.max(3, (m.count / maxCount) * 82)}%` }}
                       />
                       <span className={styles.barLabel}>{m.month}</span>
                     </div>
