@@ -178,22 +178,21 @@ export default function DashboardPage() {
                           className={styles.fBar}
                           style={{
                             width: `${(f.submitted / maxSubmitted) * 100}%`,
-                            background: "#e5e7eb",
+                            background: "#D9B8C4",
                           }}
                         />
                         <div
                           className={styles.fBar}
                           style={{
                             width: `${(f.l1_approved / maxSubmitted) * 100}%`,
-                            background: "#c27ec6",
-                            opacity: 0.75,
+                            background: "#C9A24A",
                           }}
                         />
                         <div
                           className={styles.fBar}
                           style={{
                             width: `${(f.l2_approved / maxSubmitted) * 100}%`,
-                            background: "#abd18f",
+                            background: "#5F7857",
                           }}
                         />
                       </div>
@@ -205,15 +204,15 @@ export default function DashboardPage() {
             </div>
             <div className={styles.funnelLegend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#e5e7eb" }} />
+                <span className={styles.legendDot} style={{ background: "#D9B8C4" }} />
                 Submitted
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#890892" }} />
+                <span className={styles.legendDot} style={{ background: "#C9A24A" }} />
                 L1 Approved
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#81c451" }} />
+                <span className={styles.legendDot} style={{ background: "#5F7857" }} />
                 L2 Approved
               </span>
             </div>
