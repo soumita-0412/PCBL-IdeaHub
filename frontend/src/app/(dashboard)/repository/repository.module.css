@@ -3,7 +3,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  background: #f4f0f8;
+  background: transparent;
   font-family: "Cambria Math", Cambria, Georgia, serif;
 }
 
@@ -50,7 +50,7 @@
   gap: 0.375rem;
   padding: 0.3125rem 0.875rem;
   background: #fff;
-  border: 1px solid #ede9f3;
+  border: 1px solid #EDE4EA;
   border-radius: 99px;
 }
 
@@ -112,8 +112,8 @@
 }
 
 .searchInput:focus {
-  border-color: #890892;
-  box-shadow: 0 0 0 3px rgba(137, 8, 146, 0.07);
+  border-color: #A97388;
+  box-shadow: 0 0 0 3px rgba(169, 115, 136, 0.07);
 }
 
 .searchClear {
@@ -163,7 +163,7 @@
 }
 
 .select:focus {
-  border-color: #890892;
+  border-color: #A97388;
 }
 
 .selectChevron {
@@ -183,7 +183,7 @@
 /* ── Individual card ────────────────────────────────── */
 .card {
   background: #fff;
-  border: 1px solid #ede9f3;
+  border: 1px solid #EDE4EA;
   border-radius: 0.75rem;
   padding: 0.75rem 1.125rem;
   display: flex;
@@ -194,7 +194,7 @@
 
 .card:hover {
   border-color: #d4bfe0;
-  box-shadow: 0 2px 16px rgba(137, 8, 146, 0.06);
+  box-shadow: 0 2px 16px rgba(169, 115, 136, 0.06);
 }
 
 /* ── Top row: meta + status ─────────────────────────── */
@@ -312,7 +312,7 @@
 
 /* Savings box (pink) */
 .chipBoxSavings {
-  background: #fdf4ff;
+  background: #F9EDF1;
   flex: 0 0 auto;
   padding: 0.375rem 0.625rem;
 }
@@ -357,7 +357,7 @@
 .skeletonCard {
   height: 8.5rem;
   border-radius: 0.75rem;
-  background: linear-gradient(90deg, #f3e8f8 25%, #ede0f5 50%, #f3e8f8 75%);
+  background: linear-gradient(90deg, #F3E1E8 25%, #EDE4EA 50%, #F3E1E8 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }

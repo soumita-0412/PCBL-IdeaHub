@@ -3,7 +3,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #f4eef8;
+  background: #F9EDF1;
   font-family: "Cambria Math", Cambria, Georgia, serif;
 }
 
@@ -41,7 +41,7 @@
 .leftHeaderSub {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #890892;
+  color: #A97388;
   margin: 0;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .dotGreen  { background: #81c451; }
-.dotAmber  { background: #890892; }
+.dotAmber  { background: #A97388; }
 .dotRed    { background: #ef4444; }
 
 .detailStatusText {
@@ -204,7 +204,7 @@
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #890892;
+  color: #A97388;
   margin: 0;
 }
 
@@ -217,7 +217,7 @@
 }
 
 .link {
-  color: #890892;
+  color: #A97388;
   text-decoration: underline;
 }
 
@@ -233,7 +233,7 @@
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #890892;
+  color: #A97388;
   margin: 0;
 }
 
@@ -254,8 +254,8 @@
 }
 
 .commentBox:focus {
-  border-color: #890892;
-  box-shadow: 0 0 0 2px rgba(137, 8, 146, 0.08);
+  border-color: #A97388;
+  box-shadow: 0 0 0 2px rgba(169, 115, 136, 0.08);
 }
 
 .commentBox::placeholder {
@@ -283,8 +283,8 @@
 }
 
 .dateInput:focus {
-  border-color: #890892;
-  box-shadow: 0 0 0 2px rgba(137, 8, 146, 0.08);
+  border-color: #A97388;
+  box-shadow: 0 0 0 2px rgba(169, 115, 136, 0.08);
 }
 
 .dateInput:disabled {
@@ -357,7 +357,7 @@
 .submitBtn {
   width: 100%;
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, #890892, #a855c8);
+  background: linear-gradient(135deg, #6B4C5B, #A97388);
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -425,7 +425,7 @@
 .skeletonRow {
   height: 3.5rem;
   border-radius: 0.5rem;
-  background: #f3e8f8;
+  background: #F3E1E8;
   animation: pulse 1.4s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -446,7 +446,7 @@
 
 /* ── Manager approved-by inline text ────────────────── */
 .managerApprovedBy {
-  color: #890892;
+  color: #A97388;
   font-weight: 600;
 }
 
@@ -514,7 +514,7 @@
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #890892;
+  color: #A97388;
   margin: 0;
 }
 
@@ -527,7 +527,7 @@
 .weightedScoreValue {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #890892;
+  color: #A97388;
 }
 
 .matrixEmpty {
@@ -572,7 +572,7 @@
 
 .scoreValue {
   font-weight: 700;
-  color: #890892;
+  color: #A97388;
 }
 
 .scoreRowControls {
@@ -599,10 +599,10 @@
   width: 0.875rem;
   height: 0.875rem;
   border-radius: 50%;
-  background: #890892;
+  background: #A97388;
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 0 0 1.5px #890892;
+  box-shadow: 0 0 0 1.5px #A97388;
   transition: transform 0.1s ease;
 }
 
@@ -614,10 +614,10 @@
   width: 0.875rem;
   height: 0.875rem;
   border-radius: 50%;
-  background: #890892;
+  background: #A97388;
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 0 0 1.5px #890892;
+  box-shadow: 0 0 0 1.5px #A97388;
 }
 
 /* ── Decision success overlay ────────────────────────── */
@@ -738,7 +738,7 @@
 }
 
 .scoreDotFilled {
-  background: #890892;
+  background: #A97388;
 }
 
 .scoreDotEmpty {

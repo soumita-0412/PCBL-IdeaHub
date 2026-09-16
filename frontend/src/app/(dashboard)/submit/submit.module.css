@@ -20,8 +20,8 @@
   align-items: flex-start;
   gap: 0.875rem;
   padding: 0.875rem 1.125rem;
-  background: #fbe7fcc4;
-  border: 1px solid #890892;
+  background: #F9EDF1c4;
+  border: 1px solid #A97388;
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
 }
@@ -37,13 +37,13 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  border: 1.5px solid #81c451;
+  border: 1.5px solid #A97388;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.6rem;
   font-weight: 700;
-  color: #890892;
+  color: #6B4C5B;
   line-height: 1;
 }
 
@@ -62,11 +62,11 @@
 }
 
 .infoHighlight {
-  color: #890892;
+  color: #A97388;
 }
 
 .infoAccent {
-  color: #890892;
+  color: #A97388;
 }
 
 /* ── Steps indicator ───────────────────────────────── */
@@ -95,13 +95,13 @@
 }
 
 .stepBubbleActive {
-  background: #890892;
+  background: #A97388;
   color: #fff;
 }
 
 .stepBubbleInactive {
   background: transparent;
-  border: 1.5px solid #890892;
+  border: 1.5px solid #A97388;
   color: hsl(294, 16%, 55%);
 }
 
@@ -121,7 +121,7 @@
 .stepLine {
   flex: 1;
   height: 1px;
-  background: #890892;
+  background: linear-gradient(to right, #A97388, rgba(217, 184, 196, 0.2));
   margin: 0 0.625rem;
   min-width: 2.5rem;
 }
@@ -136,13 +136,13 @@
 .formTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #000;
+  color: #6B4C5B;
   margin: 0;
 }
 
 .formSubtitle {
   font-size: 0.8125rem;
-  color: hsl(298, 16%, 55%);
+  color: #8C7280;
   margin: 0.3rem 0 0;
   line-height: 1.45;
 }
@@ -170,7 +170,7 @@
 .categoryCard {
   padding: 0.75rem 1rem;
   background: #fef7ff;
-  border: 1px solid #890892;
+  border: 1px solid #A97388;
   border-radius: 0.625rem;
   font-size: 0.875rem;
   color: #000;
@@ -182,48 +182,54 @@
 }
 
 .categoryCard:hover {
-  border-color: #81c451;
-  background: #f3ffea;
-  color: #3d5d27;
+  border-color: #A97388;
+  background: #ecd6de;
+  color: #5f4250;
 }
 
 .categoryCardSelected {
-  border-color: #81c451;
-  background: #f3ffea;
-  color: #3d5d27;
+  border-color: #A97388;
+  background: #ecd6de;
+  color: #5f4250;
 }
 
 /* ── Continue button ───────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
 .continueBtn {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: #890892;
+  background: linear-gradient(90deg, #A97388, #D9B8C4, #A97388);
+  background-size: 200% 100%;
+  animation: shimmer 7s linear infinite;
   color: #fff;
   border: none;
   border-radius: 0.625rem;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: opacity 0.3s ease;
   font-family: inherit;
   letter-spacing: 0.01em;
 }
 
 .continueBtn:hover:not(:disabled) {
-  background: #f9effa;
-  border: 1px solid #890892;
-  color: #000;
+  opacity: 0.88;
 }
 
 .continueBtn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+  animation: none;
 }
 
 /* ── Completed step bubble ─────────────────────────── */
 .stepBubbleDone {
-  background: #81c451;
-  color: hsl(0 0% 100%);
+  background: #A97388;
+  color: #cbb2bd;
   font-size: 0.6rem;
 }
 
@@ -263,7 +269,7 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #fef9ff;
-  border: 1px solid #890892;
+  border: 1px solid #A97388;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   color: #000;
@@ -280,8 +286,8 @@
 
 .textarea:focus {
   outline: none;
-  background-color: #f6ffef;
-  border-color: #81c451;
+  background-color: #ecd6de;
+  border-color: #A97388;
 }
 
 .charCount {
@@ -296,7 +302,7 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #f9effa;
-  border: 1px solid #890892;
+  border: 1px solid #A97388;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   color: #000;
@@ -311,8 +317,8 @@
 
 .textInput:focus {
   outline: none;
-  background-color: #f3ffea;
-  border-color: #81c451;
+  background-color: #ecd6de;
+  border-color: #A97388;
 }
 
 /* Remove number input spinner arrows */
@@ -324,7 +330,7 @@
 
 .inputNote {
   font-size: 0.6875rem;
-  color: hsl(215 16% 42%);
+  color: #D9B8C4;
   margin: 0.2rem 0 0;
   line-height: 1.4;
 }
@@ -355,7 +361,7 @@
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
-  border: 1px solid #890892;
+  border: 1px solid #A97388;
   background:#f9effa;
   flex-shrink: 0;
   transition: border-color 0.15s ease, background 0.15s ease;
@@ -371,13 +377,13 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #81c451;
+  background: #A97388;
   transition: transform 0.15s ease;
 }
 
 .radioCustomChecked {
-  border-color: #81c451;
-  background: #f3ffea;
+  border-color: #A97388;
+  background: #D9B8C4;
 }
 
 .radioCustomChecked::after {
@@ -422,7 +428,7 @@
   padding: 0.875rem 1.25rem;
   background: transparent;
   color: #000;
-  border: 1px solid #890892;
+  border: 1px solid #A97388;
   border-radius: 0.625rem;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -433,9 +439,9 @@
 }
 
 .backBtn:hover {
-  border-color: #81c451;
-  color: #3d5d27;
-  background-color: #f3ffea;
+  border-color: #6B4C5B;
+  color: #A97388;
+  background-color: #cbb2bd;
 }
 
 .navRow .continueBtn {
@@ -468,7 +474,7 @@
 .reviewLabel {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #890892;
+  color: #A97388;
   padding-top: 2px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -482,7 +488,7 @@
 }
 
 .reviewValueHighlight {
-  color: #890892;
+  color: #A97388;
   font-weight: 500;
 }
 
@@ -507,7 +513,7 @@
 
 .reviewNoticeText {
   font-size: 0.8125rem;
-  color: hsl(220 10% 35%);
+  color: #6B4C5B;
   margin: 0;
   line-height: 1.55;
 }
@@ -530,8 +536,8 @@
   align-items: center;
   gap: 1rem;
   padding: 2.5rem 2rem;
-  background: linear-gradient(to right,#daf7c8 #fde5ff);
-  border: 1px solid #890892;
+  background: linear-gradient(to right,#cbb2bd, #fdeef4,#cbb2bd);
+  border: 1px solid #A97388;
   border-radius: 1rem;
   text-align: center;
 }
@@ -540,7 +546,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: #81c451;
+  background: #8FA888;
   color: #fff;
   display: flex;
   align-items: center;
@@ -584,7 +590,7 @@
 .successNumber {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #890892;
+  color: #A97388;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }
