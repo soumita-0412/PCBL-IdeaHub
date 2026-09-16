@@ -126,7 +126,7 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
         <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
           <path
             d="M 8 26 L 20 37 L 40 12"
-            stroke="#16a34a"
+            stroke="#5F7857"
             strokeWidth="4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -143,10 +143,10 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
       sub: "The idea has been assigned to pending review.",
       icon: (
         <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="18" stroke="#ca8a04" strokeWidth="2.5" />
-          <line x1="24" y1="24" x2="24" y2="11" stroke="#ca8a04" strokeWidth="3" strokeLinecap="round" />
+          <circle cx="24" cy="24" r="18" stroke="#C9A24A" strokeWidth="2.5" />
+          <line x1="24" y1="24" x2="24" y2="11" stroke="#C9A24A" strokeWidth="3" strokeLinecap="round" />
           <g style={{ transformOrigin: "24px 24px" }} className={styles.clockMinuteHand}>
-            <line x1="24" y1="24" x2="35" y2="24" stroke="#ca8a04" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="24" y1="24" x2="35" y2="24" stroke="#C9A24A" strokeWidth="2.5" strokeLinecap="round" />
           </g>
         </svg>
       ),
@@ -159,8 +159,8 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
       sub: "The idea has been declined.",
       icon: (
         <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
-          <path d="M 14 14 L 34 34" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" className={styles.crossPath1} />
-          <path d="M 34 14 L 14 34" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" className={styles.crossPath2} />
+          <path d="M 14 14 L 34 34" stroke="#B5654A" strokeWidth="4" strokeLinecap="round" className={styles.crossPath1} />
+          <path d="M 34 14 L 14 34" stroke="#B5654A" strokeWidth="4" strokeLinecap="round" className={styles.crossPath2} />
         </svg>
       ),
     },
