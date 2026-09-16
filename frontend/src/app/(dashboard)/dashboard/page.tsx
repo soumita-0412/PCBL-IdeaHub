@@ -53,6 +53,7 @@ export default function DashboardPage() {
   const [selectedIdea, setSelectedIdea] = useState<IdeaResponse | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [funnelTip, setFunnelTip] = useState<{ idx: number; x: number; y: number } | null>(null);
 
   useEffect(() => {
     getDashboardStats().then(setStats).catch(() => {});
@@ -171,7 +172,15 @@ export default function DashboardPage() {
               {funnel.length === 0
                 ? <p className={styles.chartEmpty}>No data yet</p>
                 : funnel.map((f, i) => (
-                    <div key={i} className={styles.funnelRow}>
+                    <div
+                      key={i}
+                      className={styles.funnelRow}
+                      onMouseEnter={(e) => {
+                        const r = e.currentTarget.getBoundingClientRect();
+                        setFunnelTip({ idx: i, x: r.left, y: r.top - 6 });
+                      }}
+                      onMouseLeave={() => setFunnelTip(null)}
+                    >
                       <span className={styles.funnelCat}>{f.category}</span>
                       <div className={styles.funnelTrack}>
                         <div
@@ -316,6 +325,36 @@ export default function DashboardPage() {
         </div>
       </div>
     </main>
+
+    {/* ── Funnel tooltip ── */}
+    {funnelTip !== null && (() => {
+      const f = funnel[funnelTip.idx];
+      if (!f) return null;
+      const pct = (n: number) => f.submitted > 0 ? ` (${Math.round((n / f.submitted) * 100)}%)` : "";
+      return (
+        <div className={styles.funnelTooltip} style={{ left: funnelTip.x, top: funnelTip.y }}>
+          <p className={styles.tooltipTitle}>{f.category}</p>
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipDot} style={{ background: "#D9B8C4" }} />
+            <span className={styles.tooltipLabel}>Submitted</span>
+            <span className={styles.tooltipValue}>{f.submitted}</span>
+            <span className={styles.tooltipPct}>100%</span>
+          </div>
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipDot} style={{ background: "#C9A24A" }} />
+            <span className={styles.tooltipLabel}>L1 Approved</span>
+            <span className={styles.tooltipValue}>{f.l1_approved}</span>
+            <span className={styles.tooltipPct}>{pct(f.l1_approved)}</span>
+          </div>
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipDot} style={{ background: "#5F7857" }} />
+            <span className={styles.tooltipLabel}>L2 Approved</span>
+            <span className={styles.tooltipValue}>{f.l2_approved}</span>
+            <span className={styles.tooltipPct}>{pct(f.l2_approved)}</span>
+          </div>
+        </div>
+      );
+    })()}
 
     {/* ── Idea Detail Modal ── */}
     {modalOpen && (

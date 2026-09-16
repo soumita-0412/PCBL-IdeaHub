@@ -189,6 +189,65 @@
   align-items: center;
   gap: 0.625rem;
   flex-shrink: 0;
+  cursor: default;
+}
+
+/* ── Funnel hover tooltip ──────────────────────────── */
+.funnelTooltip {
+  position: fixed;
+  z-index: 200;
+  background: #ffffffe7;
+  border: 1px solid #EDE4EA;
+  border-radius: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  box-shadow: 0 6px 24px rgba(107, 76, 91, 0.14), 0 1px 4px rgba(107, 76, 91, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  pointer-events: none;
+  white-space: nowrap;
+  min-width: 168px;
+  transform: translateY(-100%);
+}
+
+.tooltipTitle {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #6B4C5B;
+  margin: 0 0 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #EDE4EA;
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-size: 0.6875rem;
+}
+
+.tooltipDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tooltipLabel {
+  color: #8C7280;
+  flex: 1;
+}
+
+.tooltipValue {
+  font-weight: 700;
+  color: #3d2535;
+}
+
+.tooltipPct {
+  color: #a88a96;
+  font-size: 0.625rem;
+  min-width: 2.5rem;
+  text-align: right;
 }
 
 .funnelCat {
