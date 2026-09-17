@@ -19,7 +19,7 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-const CAROUSEL_IMAGES = ["/idea1.png", "/idea2.png", "/idea3.png"];
+const CAROUSEL_IMAGES = ["/idea1.1.png", "/idea2.1.png", "/idea3.1.png"];
 
 const SSO_AUTHORIZE_URL = `${env.NEXT_PUBLIC_API_URL}/api/v1/auth/sso/authorize`;
 
@@ -72,9 +72,9 @@ export default function LoginPage() {
       <div className={styles.leftPanel}>
         <div className={styles.formContainer}>
 
-          <div className={styles.logoArea}>
+          {/* <div className={styles.logoArea}>
             <img src="/idealogo.png" alt="Idea Logo" width={72} height={72} />
-          </div>
+          </div> */}
 
           <h1 className={styles.welcome}>Welcome</h1>
           <p className={styles.subtitle}>Sign in to Idea Portal</p>

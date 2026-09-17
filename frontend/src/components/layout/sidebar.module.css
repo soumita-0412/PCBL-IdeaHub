@@ -1,3 +1,18 @@
+@keyframes moveBlob1 {
+  0%   { transform: translate(0px,   0px); }
+  25%  { transform: translate(-50px,  -60px); }
+  50%  { transform: translate(35px,  -90px); }
+  75%  { transform: translate(-25px, -40px); }
+  100% { transform: translate(0px,   0px); }
+}
+
+@keyframes moveBlob2 {
+  0%   { transform: translate(0px,  0px); }
+  30%  { transform: translate(-60px, -100px); }
+  60%  { transform: translate(20px,  -220px); }
+  100% { transform: translate(0px,  0px); }
+}
+
 .sidebar {
   position: relative;
   display: flex;
@@ -12,6 +27,39 @@
   overflow: hidden;
   transition: width 0.22s ease;
   box-shadow: 0 4px 28px rgba(107, 76, 91, 0.28), 0 1px 6px rgba(169, 115, 136, 0.18);
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  bottom: 130px;
+  left: 20px;
+  border-radius: 50%;
+  background: rgba(217, 184, 196, 0.38);
+  z-index: 0;
+  pointer-events: none;
+  animation: moveBlob1 12s ease-in-out infinite;
+}
+
+.sidebar::after {
+  content: '';
+  position: absolute;
+  width: 65px;
+  height: 65px;
+  bottom: 60px;
+  right: 15px;
+  border-radius: 50%;
+  background: rgba(169, 115, 136, 0.45);
+  z-index: 0;
+  pointer-events: none;
+  animation: moveBlob2 15s ease-in-out infinite;
+}
+
+.sidebar > *:not(.toggleBtn) {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebarCollapsed {
