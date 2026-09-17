@@ -450,26 +450,87 @@
   transform: rotate(-6deg);
 }
 
-/* ── Responsive: stack vertically on narrow screens ─────────── */
+/* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Keep fixed + full-screen; center the form panel in the viewport */
   .page {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     overflow-y: auto;
   }
 
+  /* Reset the desktop decorative offset — without this the form is pushed
+     100 px right and 40 px up, visually off-screen on phones */
   .leftPanel {
     flex: none;
     width: 100%;
-    padding: 2rem 1.5rem;
+    max-width: 440px;
+    padding: 2rem 1.75rem;
+    transform: none;
+    justify-content: center;
+    align-items: center;
   }
 
-  .rightPanel {
-    flex: none;
+  .formContainer {
     width: 100%;
-    padding: 1rem 1.5rem 2rem;
+    max-width: 100%;
   }
 
-  .carouselImage {
-    height: 180px;
+  /* Hide the carousel — keeps the page one-screen compact on mobile */
+  .rightPanel {
+    display: none;
+  }
+
+  .welcome {
+    font-size: 1.875rem;
+  }
+
+  .subtitle {
+    margin-bottom: 1.25rem;
+  }
+
+  .divider {
+    margin: 1rem 0 0.875rem;
+  }
+
+  /* Scale down blobs so they don't overlap form content */
+  .blobTopLeft {
+    width: 170px;
+    height: 155px;
+    top: -55px;
+    left: -60px;
+  }
+
+  .blobBottomLeft {
+    width: 155px;
+    height: 140px;
+    bottom: -50px;
+    left: -50px;
+  }
+
+  .blobBottomRight {
+    width: 145px;
+    height: 135px;
+    bottom: -42px;
+    right: -55px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leftPanel {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .welcome {
+    font-size: 1.625rem;
+  }
+
+  .form {
+    gap: 0.875rem;
+  }
+
+  .divider {
+    margin: 0.875rem 0 0.75rem;
   }
 }
