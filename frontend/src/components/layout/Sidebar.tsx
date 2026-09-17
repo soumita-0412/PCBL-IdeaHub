@@ -163,10 +163,14 @@ export function Sidebar() {
               className={`${styles.navItem} ${isActive ? styles.navItemActive : ""} ${isLocked ? styles.navItemLocked : ""} ${collapsed ? styles.navItemCollapsed : ""}`}
               tabIndex={isLocked ? -1 : undefined}
             >
-              <span className={styles.navIcon}>{item.icon}</span>
-              {!collapsed && <span className={styles.navLabel}>{item.label}</span>}
-              {!collapsed && isLocked && (
-                <span className={styles.navLock}><Lock size={12} /></span>
+              {collapsed ? (
+                <span className={styles.navIconWrap}>{item.icon}</span>
+              ) : (
+                <>
+                  <span className={styles.navIcon}>{item.icon}</span>
+                  <span className={styles.navLabel}>{item.label}</span>
+                  {isLocked && <span className={styles.navLock}><Lock size={12} /></span>}
+                </>
               )}
             </Link>
           );
@@ -181,10 +185,14 @@ export function Sidebar() {
             className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
             tabIndex={reviewLocked ? -1 : undefined}
           >
-            <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
-            {!reviewLocked && reviewCounts.total > 0 && (
-              <BellBadge count={reviewCounts.total} size={13} />
-            )}
+            <span className={styles.navIconWrap}>
+              <ClipboardCheck size={16} />
+              {!reviewLocked && reviewCounts.total > 0 && (
+                <span className={styles.navIconBadge}>
+                  {reviewCounts.total > 99 ? "99+" : reviewCounts.total}
+                </span>
+              )}
+            </span>
           </Link>
         ) : (
           <>
@@ -255,10 +263,14 @@ export function Sidebar() {
               className={`${styles.navItem} ${isActive ? styles.navItemActive : ""} ${isLocked ? styles.navItemLocked : ""} ${collapsed ? styles.navItemCollapsed : ""}`}
               tabIndex={isLocked ? -1 : undefined}
             >
-              <span className={styles.navIcon}>{item.icon}</span>
-              {!collapsed && <span className={styles.navLabel}>{item.label}</span>}
-              {!collapsed && isLocked && (
-                <span className={styles.navLock}><Lock size={12} /></span>
+              {collapsed ? (
+                <span className={styles.navIconWrap}>{item.icon}</span>
+              ) : (
+                <>
+                  <span className={styles.navIcon}>{item.icon}</span>
+                  <span className={styles.navLabel}>{item.label}</span>
+                  {isLocked && <span className={styles.navLock}><Lock size={12} /></span>}
+                </>
               )}
             </Link>
           );

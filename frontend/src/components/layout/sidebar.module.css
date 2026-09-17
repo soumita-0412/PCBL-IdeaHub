@@ -181,8 +181,36 @@
 
 .navItemCollapsed {
   justify-content: center;
-  padding: 0.5625rem 0;
+  padding: 0.5rem;
   gap: 0;
+}
+
+/* icon wrapper that allows an absolute badge overlay */
+.navIconWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* small count bubble overlaid on icon in collapsed mode */
+.navIconBadge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  min-width: 0.95rem;
+  height: 0.95rem;
+  padding: 0 0.2rem;
+  border-radius: 99px;
+  background: #A97388;
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 700;
+  line-height: 0.95rem;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .navItem:hover {
