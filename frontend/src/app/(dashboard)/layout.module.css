@@ -22,3 +22,87 @@
   min-width: 0;
   overflow: hidden;
 }
+
+/* ── Mobile backdrop (hidden on desktop) ───────────── */
+.backdrop {
+  display: none;
+}
+
+/* ── Mobile header (hidden on desktop) ─────────────── */
+.mobileHeader {
+  display: none;
+}
+
+.mobileMenuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.12s ease;
+}
+
+.mobileMenuBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.mobileBrandWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.mobileBrandIcon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D9B8C4, #A97388);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobileBrandName {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Mobile breakpoint ─────────────────────────────── */
+@media (max-width: 768px) {
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(61, 37, 53, 0.5);
+    z-index: 199;
+    backdrop-filter: blur(2px);
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    background: linear-gradient(135deg, #4e3345, #8a5e70);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .content {
+    overflow-y: auto;
+    width: 100%;
+  }
+}

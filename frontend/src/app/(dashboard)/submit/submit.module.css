@@ -534,6 +534,52 @@
   margin: 0;
 }
 
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .inner {
+    gap: 1rem;
+  }
+
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+
+  .functionGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .reviewRow {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .reviewLabel {
+    padding-bottom: 0;
+  }
+
+  .steps {
+    gap: 0;
+  }
+
+  .stepLabel {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .categoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .functionGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Success card ──────────────────────────────────── */
 .successCard {
   display: flex;

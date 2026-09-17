@@ -467,3 +467,31 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ── Mobile breakpoint ─────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -280px;
+    height: 100% !important;
+    width: 280px !important;
+    z-index: 200;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    transition: left 0.25s ease !important;
+  }
+
+  .sidebarCollapsed {
+    width: 280px !important;
+    left: -280px !important;
+  }
+
+  .sidebarMobileOpen {
+    left: 0 !important;
+  }
+
+  .toggleBtn {
+    display: none;
+  }
+}

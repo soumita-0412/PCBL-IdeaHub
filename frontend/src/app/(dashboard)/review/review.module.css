@@ -801,3 +801,52 @@
 .clockMinuteHand {
   animation: clockSpin 1.6s linear infinite;
 }
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container {
+    overflow-y: auto;
+  }
+
+  .layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .leftPanel {
+    width: 100%;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #D9B8C4;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  .rightPanel {
+    flex: unset;
+    min-height: 0;
+    overflow: visible;
+    height: auto;
+  }
+
+  .detailPanel {
+    overflow: visible;
+    height: auto;
+  }
+
+  .detailScroll {
+    overflow-y: visible;
+    padding: 1rem;
+  }
+
+  .decisionRow3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .decisionRow {
+    grid-template-columns: 1fr;
+  }
+}

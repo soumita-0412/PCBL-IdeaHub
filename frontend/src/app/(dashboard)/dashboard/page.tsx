@@ -258,6 +258,7 @@ export default function DashboardPage() {
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === "Enter") openIdeaModal(idea.id); }}
               >
+                {/* Desktop grid cells */}
                 <span className={styles.ideaId}>{idea.submission_number}</span>
                 <span className={styles.ideaTitle} title={idea.idea_title ?? ""}>
                   {idea.idea_title
@@ -277,23 +278,47 @@ export default function DashboardPage() {
                   )}
                 </span>
                 <span>
-                  <span
-                    className={`${styles.badge} ${
-                      styles[STATUS_CLS[idea.status] ?? "badgeBlue"]
-                    }`}
-                  >
+                  <span className={`${styles.badge} ${styles[STATUS_CLS[idea.status] ?? "badgeBlue"]}`}>
                     {STATUS_LABELS[idea.status] ?? idea.status}
                   </span>
                 </span>
                 <span className={styles.l2Score}>
                   {idea.l2_score != null ? (
-                    <span className={styles.scoreCircle}>
-                      {Math.round(idea.l2_score * 10)}
-                    </span>
+                    <span className={styles.scoreCircle}>{Math.round(idea.l2_score * 10)}</span>
                   ) : (
                     <span className={styles.scoreDash}>—</span>
                   )}
                 </span>
+
+                {/* Mobile card view */}
+                <div className={styles.mobileCard}>
+                  <div className={styles.mobileCardTop}>
+                    <span className={styles.ideaId}>{idea.submission_number}</span>
+                    <span className={`${styles.badge} ${styles[STATUS_CLS[idea.status] ?? "badgeBlue"]}`}>
+                      {STATUS_LABELS[idea.status] ?? idea.status}
+                    </span>
+                  </div>
+                  <p className={styles.mobileCardTitle}>
+                    {idea.idea_title ?? "—"}
+                  </p>
+                  <div className={styles.mobileCardMeta}>
+                    <span className={styles.mobileCardCat}>{idea.category}</span>
+                    <span className={styles.mobileCardSep} />
+                    {idea.l1_decision === "approved" ? (
+                      <span className={`${styles.badge} ${styles.badgeGreen}`}>L1 ✓</span>
+                    ) : idea.l1_decision === "rejected" ? (
+                      <span className={`${styles.badge} ${styles.badgeRed}`}>L1 ✗</span>
+                    ) : (
+                      <span className={`${styles.badge} ${styles.badgeAmber}`}>L1 Pending</span>
+                    )}
+                    {idea.l2_score != null && (
+                      <>
+                        <span className={styles.mobileCardSep} />
+                        <span className={styles.scoreCircle}>{Math.round(idea.l2_score * 10)}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             ))
           )}

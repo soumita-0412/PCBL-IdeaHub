@@ -34,6 +34,11 @@ interface NavItem {
   minRole?: string;
 }
 
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
 const NAV_ITEMS_TOP: NavItem[] = [
   { label: "Submit Idea",      href: "/submit",     icon: <Plus size={16} /> },
   { label: "My Ideas",         href: "/my-ideas",   icon: <FileText size={16} /> },
@@ -90,7 +95,7 @@ function UserCard({ name, role, collapsed }: { name: string; role: string; colla
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { userProfile } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
@@ -108,6 +113,11 @@ export function Sidebar() {
     }
   }, [pathname]);
 
+  // Close mobile sidebar on navigation
+  useEffect(() => {
+    onMobileClose?.();
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const toggle = () => {
     setCollapsed((c) => {
       localStorage.setItem("sidebar-collapsed", String(!c));
@@ -122,7 +132,7 @@ export function Sidebar() {
   const reviewCounts = useReviewCounts();
 
   return (
-    <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""}`}>
+    <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""} ${mobileOpen ? styles.sidebarMobileOpen : ""}`}>
 
       {/* Toggle button */}
       <button
