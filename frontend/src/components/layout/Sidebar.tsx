@@ -150,7 +150,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
         </div>
         {!collapsed && (
           <div>
-            <p className={styles.brandName}>IdeaPortal</p>
+            <p className={styles.brandName}>IdeaHub</p>
             <p className={styles.brandSub}>Innovation Hub</p>
           </div>
         )}

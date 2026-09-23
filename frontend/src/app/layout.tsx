@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "IdeaPortal",
+    default: "IdeaHub",
     template: "%s | IdeaPortal",
   },
   description: "Enterprise Idea Submission & Management Platform",

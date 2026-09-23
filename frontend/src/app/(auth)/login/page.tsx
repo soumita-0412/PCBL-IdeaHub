@@ -77,7 +77,7 @@ export default function LoginPage() {
           </div> */}
 
           <h1 className={styles.welcome}>Welcome</h1>
-          <p className={styles.subtitle}>Sign in to Idea Portal</p>
+          <p className={styles.subtitle}>Sign in to Idea Hub</p>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className={styles.form}>
 

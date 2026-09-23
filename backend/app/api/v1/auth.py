@@ -18,8 +18,9 @@ from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.exceptions import UnauthorizedException
-from app.core.user_store import user_store
 from app.core.jwt_service import create_access_token, decode_microsoft_id_token
+from app.core.role_resolver import resolve_role
+from app.core.user_store import user_store
 from app.dependencies.auth import get_current_user
 from app.schemas.auth import CurrentUser, LoginRequest, TokenResponse
 from app.schemas.common import SuccessResponse
@@ -195,13 +196,15 @@ async def microsoft_callback(
     name: str = claims.get("name") or email
     user_id: str = claims.get("oid") or claims.get("sub") or email
 
-    # Grant full access until Azure AD group-to-role mapping is configured
+    # Resolve role: admin_roles.json → Graph directReports → EMPLOYEE
+    role = await resolve_role(email, user_id)
+
     access_token = create_access_token({
         "sub": user_id,
         "username": email,
         "name": name,
         "email": email,
-        "role": "ROLE_SUPER_ADMIN",
+        "role": role,
         "department": claims.get("department", ""),
         "function": "",
         "location": "",
