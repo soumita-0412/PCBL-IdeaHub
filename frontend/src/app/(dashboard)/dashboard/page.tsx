@@ -110,7 +110,7 @@ export default function DashboardPage() {
 
         {/* ── Page header ── */}
         <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>Innovation Dashboard</h1>
+          <h1 className={styles.pageTitle}>Idea Submission Dashboard</h1>
           <p className={styles.pageSubtitle}>
             YTD performance across all idea categories
           </p>

@@ -46,7 +46,7 @@ const NAV_ITEMS_TOP: NavItem[] = [
 ];
 
 const NAV_ITEMS_BOTTOM: NavItem[] = [
-  { label: "Dashboard",        href: "/dashboard",  icon: <BarChart2 size={16} /> },
+  { label: "Idea Submission Dashboard",        href: "/dashboard",  icon: <BarChart2 size={16} /> },
   { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,  minRole: Roles.ADMIN },
 ];
 
