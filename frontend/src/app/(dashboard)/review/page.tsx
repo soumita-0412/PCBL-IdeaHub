@@ -19,7 +19,7 @@ type L2Decision = "approve" | "hold" | "decline" | null;
 
 function apiErrorMessage(err: unknown, fallback: string): string {
   if (axios.isAxiosError(err)) {
-    const msg = err.response?.data?.error?.message as string | undefined;
+    const msg = (err.response?.data as { error?: { message?: string } } | undefined)?.error?.message;
     if (msg) return msg;
   }
   return fallback;
@@ -168,10 +168,10 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
 
   const c = config[type];
   return (
-    <div className={`${styles.successOverlay!} ${c.bg}`}>
-      <div className={`${styles.successIconCircle!} ${c.iconBg}`}>{c.icon}</div>
-      <p className={`${styles.successTitle!} ${c.titleCls}`}>{c.title}</p>
-      <p className={styles.successSub!}>{c.sub}</p>
+    <div className={`${styles.successOverlay} ${c.bg}`}>
+      <div className={`${styles.successIconCircle} ${c.iconBg}`}>{c.icon}</div>
+      <p className={`${styles.successTitle} ${c.titleCls}`}>{c.title}</p>
+      <p className={styles.successSub}>{c.sub}</p>
     </div>
   );
 }
@@ -270,7 +270,7 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
             <p className={styles.sectionText}>{idea.additional_info}</p>
           </div>
         )}
-        {idea.annual_estimate != null && (
+        {idea.annual_estimate !== null && (
           <div className={styles.sectionCard}>
             <p className={styles.sectionLabel}>Estimated Savings</p>
             <p className={styles.sectionText}>₹ {idea.annual_estimate.toLocaleString("en-IN")} annual</p>
@@ -316,7 +316,7 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
         <button
           type="button"
           className={styles.submitBtn}
-          onClick={handleSubmit}
+          onClick={() => void handleSubmit()}
           disabled={!decision || submitting}
         >
           {submitting ? "Submitting…" : "Submit Manager Decision"}
@@ -450,7 +450,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
             <p className={styles.sectionText}>{approval.additional_info}</p>
           </div>
         )}
-        {approval.annual_estimate != null && (
+        {approval.annual_estimate !== null && (
           <div className={styles.sectionCard}>
             <p className={styles.sectionLabel}>Estimated Savings</p>
             <p className={styles.sectionText}>₹ {approval.annual_estimate.toLocaleString("en-IN")} annual</p>
@@ -570,7 +570,7 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
         <button
           type="button"
           className={styles.submitBtn}
-          onClick={handleSubmit}
+          onClick={() => void handleSubmit()}
           disabled={!decision || submitting}
         >
           {submitting ? "Submitting…" : "Submit Group Review"}

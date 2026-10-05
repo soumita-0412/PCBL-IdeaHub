@@ -92,7 +92,7 @@ function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
     day: "numeric", month: "short", year: "numeric",
   });
   const reviewer = groupReview?.reviewed_by_name ?? l1Approval?.reviewed_by_name ?? null;
-  const hasScore = idea.l2_weighted_score != null;
+  const hasScore = idea.l2_weighted_score !== null;
 
   return (
     <div className={styles.card}>
@@ -120,7 +120,7 @@ function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
                 <span className={styles.chipBoxText}>{idea.benefit}</span>
               </div>
             )}
-            {idea.annual_estimate != null && (
+            {idea.annual_estimate !== null && (
               <div className={`${styles.chipBox} ${styles.chipBoxSavings}`}>
                 <span className={styles.chipBoxLabelSavings}>Savings</span>
                 <span className={styles.chipBoxValue}>
@@ -208,16 +208,16 @@ export default function RepositoryPage() {
     });
   }, [ideas, filter, categoryFilter, search]);
 
-  const totalAnnualValue = useMemo(
+  const _totalAnnualValue = useMemo(
     () => (ideas ?? []).reduce((s, i) => s + (i.annual_estimate ?? 0), 0),
     [ideas]
   );
-  const approvedCount = useMemo(
+  const _approvedCount = useMemo(
     () => (ideas ?? []).filter((i) => ["approved_l1", "approved_l2", "implemented"].includes(i.status)).length,
     [ideas]
   );
-  const avgScore = useMemo(() => {
-    const scored = (ideas ?? []).filter((i) => i.l2_weighted_score != null);
+  const _avgScore = useMemo(() => {
+    const scored = (ideas ?? []).filter((i) => i.l2_weighted_score !== null);
     if (!scored.length) return null;
     return scored.reduce((s, i) => s + i.l2_weighted_score!, 0) / scored.length;
   }, [ideas]);

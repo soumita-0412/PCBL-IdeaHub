@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 export function Header({ title }: HeaderProps) {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [isDark, setIsDark] = useState(true);
 
   const handleThemeToggle = () => {
@@ -38,7 +38,7 @@ export function Header({ title }: HeaderProps) {
         <Button
           variant="ghost"
           size="sm"
-          onClick={logout}
+          onClick={() => void logout()}
           className="gap-1.5 text-muted-foreground hover:text-foreground"
         >
           <LogOut className="h-3.5 w-3.5" />

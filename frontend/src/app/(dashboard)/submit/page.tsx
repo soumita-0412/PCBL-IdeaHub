@@ -536,7 +536,7 @@ export default function SubmitIdeaPage() {
                 type="button"
                 className={styles.continueBtn}
                 disabled={submitting}
-                onClick={handleSubmit}
+                onClick={() => void handleSubmit()}
               >
                 {submitting ? "Submitting…" : "Submit Idea →"}
               </button>

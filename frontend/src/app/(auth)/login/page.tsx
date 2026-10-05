@@ -79,7 +79,7 @@ export default function LoginPage() {
           <h1 className={styles.welcome}>Welcome</h1>
           <p className={styles.subtitle}>Sign in to Idea Hub</p>
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className={styles.form}>
+          <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate className={styles.form}>
 
             {serverError && (
               <div role="alert" className={styles.serverError}>

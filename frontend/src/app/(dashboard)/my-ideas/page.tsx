@@ -139,10 +139,10 @@ export default function MyIdeasPage() {
                 <div
                   key={idea.id}
                   className={styles.card}
-                  onClick={() => openModal(idea.id)}
+                  onClick={() => void openModal(idea.id)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && openModal(idea.id)}
+                  onKeyDown={(e) => { if (e.key === "Enter") void openModal(idea.id); }}
                 >
                   <div className={styles.cardTop}>
                     <span className={styles.cardMeta}>
@@ -326,7 +326,7 @@ export default function MyIdeasPage() {
                   </div>
 
                   {/* Annual Estimate */}
-                  {selected.annual_estimate != null && (
+                  {selected.annual_estimate !== null && (
                     <div className={styles.sectionCard}>
                       <p className={styles.sectionLabel}>Estimated Savings</p>
                       <p className={styles.sectionText}>

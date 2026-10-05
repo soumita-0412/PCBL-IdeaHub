@@ -1,3 +1,11 @@
+/** Query parameters for paginated list endpoints. */
+export interface ListParams {
+  page?: number;
+  page_size?: number;
+  search?: string;
+  [key: string]: unknown;
+}
+
 /** Generic paginated API response envelope. */
 export interface PaginatedResponse<T> {
   data: T[];

@@ -16,7 +16,7 @@ import styles from "./admin.module.css";
 
 function apiErrorMessage(err: unknown, fallback: string): string {
   if (axios.isAxiosError(err)) {
-    const msg = err.response?.data?.error?.message as string | undefined;
+    const msg = (err.response?.data as { error?: { message?: string } } | undefined)?.error?.message;
     if (msg) return msg;
   }
   return fallback;
@@ -261,7 +261,7 @@ function EditCategoryRow({
           </button>
           <button
             className={styles.deleteBtn}
-            onClick={remove}
+            onClick={() => void remove()}
             title="Delete"
             type="button"
             disabled={deleting}
@@ -325,7 +325,7 @@ function EditCategoryRow({
       <div className={styles.editFooter}>
         <button
           className={styles.saveBtn}
-          onClick={save}
+          onClick={() => void save()}
           disabled={!canSave}
           type="button"
         >
@@ -373,7 +373,7 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    fetchCategories();
+    void fetchCategories();
   }, []);
 
   const total = matrix.reduce((s, o) => s + (o.weight || 0), 0);
@@ -494,7 +494,7 @@ export default function AdminDashboardPage() {
 
             <button
               className={styles.submitBtn}
-              onClick={handleAdd}
+              onClick={() => void handleAdd()}
               disabled={!canSubmit}
               type="button"
             >
@@ -511,7 +511,7 @@ export default function AdminDashboardPage() {
             ) : fetchError ? (
               <div>
                 <p className={styles.warning}>{fetchError}</p>
-                <button className={styles.addRowBtn} onClick={fetchCategories} type="button">
+                <button className={styles.addRowBtn} onClick={() => void fetchCategories()} type="button">
                   Retry
                 </button>
               </div>

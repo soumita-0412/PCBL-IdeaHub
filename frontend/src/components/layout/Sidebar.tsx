@@ -73,7 +73,7 @@ function UserCard({ name, role, collapsed }: { name: string; role: string; colla
     return (
       <button
         className={styles.footerCardCollapsed}
-        onClick={logout}
+        onClick={() => void logout()}
         title={`${name} — Sign out`}
       >
         <div className={styles.userAvatar}>{initials}</div>
@@ -88,7 +88,7 @@ function UserCard({ name, role, collapsed }: { name: string; role: string; colla
         <p className={styles.userName}>{name}</p>
         <p className={styles.userRole}>{label}</p>
       </div>
-      <button className={styles.settingsBtn} onClick={logout} title="Sign out">
+      <button className={styles.settingsBtn} onClick={() => void logout()} title="Sign out">
         <LogOut size={15} />
       </button>
     </div>
