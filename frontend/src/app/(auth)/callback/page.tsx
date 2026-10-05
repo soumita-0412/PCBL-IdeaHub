@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, AlertCircle } from "lucide-react";
 
 import { authService } from "@/services/authService";
 import { useAuthStore } from "@/stores/auth.store";
 
-export default function AuthCallbackPage() {
+const spinnerStyle: React.CSSProperties = {
+  display: "flex", alignItems: "center", justifyContent: "center",
+  height: "100vh", gap: 10,
+};
+
+function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -28,17 +33,14 @@ export default function AuthCallbackPage() {
 
     void (async () => {
       try {
-        // Temporarily store the token so the /me request can attach it
         useAuthStore.getState().setAuth(token, {
           userId: "", username: "", name: "", email: "",
           department: "", function: "", location: "", manager: "", role: "",
         });
 
-        // Fetch the full profile and overwrite the placeholder
         const profile = await authService.getMe();
         useAuthStore.getState().setAuth(token, profile);
 
-        // Replace the callback URL so the token is not kept in browser history
         router.replace("/submit");
       } catch {
         useAuthStore.getState().clearAuth();
@@ -64,12 +66,22 @@ export default function AuthCallbackPage() {
   }
 
   return (
-    <div style={{
-      display: "flex", alignItems: "center", justifyContent: "center",
-      height: "100vh", gap: 10,
-    }}>
+    <div style={spinnerStyle}>
       <Loader2 style={{ width: 20, height: 20, animation: "spin 1s linear infinite" }} />
       <span>Completing sign-in…</span>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div style={spinnerStyle}>
+        <Loader2 style={{ width: 20, height: 20, animation: "spin 1s linear infinite" }} />
+        <span>Completing sign-in…</span>
+      </div>
+    }>
+      <CallbackContent />
+    </Suspense>
   );
 }
