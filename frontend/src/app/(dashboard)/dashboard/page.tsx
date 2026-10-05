@@ -253,10 +253,10 @@ export default function DashboardPage() {
               <div
                 key={idea.id}
                 className={styles.tRow}
-                onClick={() => openIdeaModal(idea.id)}
+                onClick={() => void openIdeaModal(idea.id)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => { if (e.key === "Enter") openIdeaModal(idea.id); }}
+                onKeyDown={(e) => { if (e.key === "Enter") void openIdeaModal(idea.id); }}
               >
                 {/* Desktop grid cells */}
                 <span className={styles.ideaId}>{idea.submission_number}</span>
@@ -283,7 +283,7 @@ export default function DashboardPage() {
                   </span>
                 </span>
                 <span className={styles.l2Score}>
-                  {idea.l2_score != null ? (
+                  {idea.l2_score !== null ? (
                     <span className={styles.scoreCircle}>{Math.round(idea.l2_score * 10)}</span>
                   ) : (
                     <span className={styles.scoreDash}>—</span>
@@ -311,7 +311,7 @@ export default function DashboardPage() {
                     ) : (
                       <span className={`${styles.badge} ${styles.badgeAmber}`}>L1 Pending</span>
                     )}
-                    {idea.l2_score != null && (
+                    {idea.l2_score !== null && (
                       <>
                         <span className={styles.mobileCardSep} />
                         <span className={styles.scoreCircle}>{Math.round(idea.l2_score * 10)}</span>
@@ -473,7 +473,7 @@ export default function DashboardPage() {
                         <div key={criterion} className={styles.scoreRow}>
                           <div className={styles.scoreCriterionWrap}>
                             <span className={styles.scoreCriterion}>{criterion}</span>
-                            {weightMap[criterion] != null && (
+                            {weightMap[criterion] !== null && (
                               <span className={styles.scoreWeight}>weight {weightMap[criterion]}%</span>
                             )}
                           </div>
@@ -488,7 +488,7 @@ export default function DashboardPage() {
                       ))}
                     </div>
 
-                    {selectedIdea.l2_weighted_score != null && (
+                    {selectedIdea.l2_weighted_score !== null && (
                       <div className={styles.totalScoreRow}>
                         <span className={styles.totalScoreLabel}>Total Score</span>
                         <div className={styles.totalScoreBadge}>

@@ -26,7 +26,7 @@ export default function AuthCallbackPage() {
       return;
     }
 
-    (async () => {
+    void (async () => {
       try {
         // Temporarily store the token so the /me request can attach it
         useAuthStore.getState().setAuth(token, {
@@ -45,7 +45,7 @@ export default function AuthCallbackPage() {
         setErrorMsg("Sign-in failed. Please try again.");
       }
     })();
-  }, [searchParams, router]);
+  }, [searchParams, router]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (errorMsg) {
     return (

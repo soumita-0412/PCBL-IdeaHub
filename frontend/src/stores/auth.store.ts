@@ -33,7 +33,7 @@ function decodeJwtPayload(token: string): Record<string, unknown> {
   // JWT uses base64url; convert to standard base64 before calling atob
   const base64 = segment.replace(/-/g, "+").replace(/_/g, "/");
   const padded = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, "=");
-  return JSON.parse(atob(padded));
+  return JSON.parse(atob(padded)) as Record<string, unknown>;
 }
 
 /** Returns true if the token is missing, malformed, or its exp claim is in the past. */
