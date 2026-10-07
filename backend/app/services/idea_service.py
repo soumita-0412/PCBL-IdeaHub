@@ -15,7 +15,7 @@ from app.repositories.idea_repository import IdeaRepository
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
 from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
-from app.services.notification_service import notify_manager_of_new_idea
+from app.services.notification_service import notify_committee_lead_of_approval, notify_manager_of_new_idea
 
 _repo = IdeaRepository()
 _approval_repo = ManagerApprovalRepository()
@@ -123,6 +123,21 @@ async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUse
         reviewed_by_email=actor.email,
     )
     await approval.save_with_actor(actor.user_id)
+
+    if payload.status == IdeaStatus.APPROVED_L1:
+        asyncio.ensure_future(
+            notify_committee_lead_of_approval(
+                category=idea.category,
+                submitter_name=idea.submitter_name,
+                submitter_email=idea.submitter_email,
+                submission_number=idea.submission_number,
+                idea_title=idea.idea_title,
+                problem=idea.problem,
+                idea_description=idea.idea_description,
+                manager_name=actor.name,
+                reviewer_comment=payload.reviewer_comment or "",
+            )
+        )
 
     return _to_response(idea)
 
