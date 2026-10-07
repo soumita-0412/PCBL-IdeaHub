@@ -49,7 +49,7 @@ def _idea_submitted_html(
 
         <!-- Header -->
         <tr>
-          <td style="background:#FBF8F9;padding:24px 32px;border-top:4px solid #A97388;">
+          <td style="background:#FBF8F9;padding:24px 32px;border-top:4px solid #A97388;border-bottom:1px solid #A97388;">
             <span style="color:#76505F;font-size:20px;font-weight:700;
                          letter-spacing:.5px;">&#128161; IdeaHub</span>
           </td>
