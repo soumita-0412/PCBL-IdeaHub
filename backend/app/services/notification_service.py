@@ -236,7 +236,7 @@ def _manager_approved_html(
             <tr><td align="center">
               <a href="{review_url}"
                  style="display:inline-block;padding:12px 32px;
-                        background:#F2EAED;color:#A97388;
+                        border:1px solid #7c5363;color:#A97388;
                         font-size:15px;font-weight:600;
                         text-decoration:none;border-radius:6px;
                         letter-spacing:.3px;">
