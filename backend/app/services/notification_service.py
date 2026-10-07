@@ -49,7 +49,7 @@ def _idea_submitted_html(
 
         <!-- Header -->
         <tr>
-          <td style="background:#1a1a2e;padding:24px 32px;">
+          <td style="background:#8a5e70;padding:24px 32px;">
             <span style="color:#D9B8C4;font-size:20px;font-weight:700;
                          letter-spacing:.5px;">&#128161; IdeaHub</span>
           </td>
@@ -99,7 +99,7 @@ def _idea_submitted_html(
             <tr><td align="center">
               <a href="{review_url}"
                  style="display:inline-block;padding:12px 32px;
-                        background:#1a1a2e;color:#D9B8C4;
+                        background:#d2b0bd;color:#895468;
                         font-size:15px;font-weight:600;
                         text-decoration:none;border-radius:6px;
                         letter-spacing:.3px;">
@@ -117,8 +117,8 @@ def _idea_submitted_html(
         <!-- Footer -->
         <tr>
           <td style="background:#f9fafb;padding:16px 32px;
-                     border-top:1px solid #e5e7eb;
-                     font-size:12px;color:#9ca3af;text-align:center;">
+                     border-top:1px solid #764558;
+                     font-size:12px;color:#874961;text-align:center;">
             This is an automated message from IdeaHub. Please do not reply.
           </td>
         </tr>
