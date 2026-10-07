@@ -2,7 +2,11 @@
 Microsoft Graph API client for server-to-server calls.
 
 Uses client credentials flow (app-level token, not delegated).
-Used for: fetching user profiles, org hierarchy, group memberships.
+Used for: fetching user profiles, org hierarchy, group memberships, sending mail.
+
+Required Graph app permissions:
+  User.Read.All          — directReports, manager look-up, user search
+  Mail.Send              — sendMail on behalf of GRAPH_MAIL_SENDER mailbox
 """
 
 import time
@@ -94,6 +98,51 @@ class GraphClient:
                     }
                 )
         return users
+
+    async def get_user_manager(self, user_id_or_email: str) -> dict[str, str] | None:
+        """Return the manager's display name and mail, or None if not found."""
+        try:
+            data = await self.get(
+                f"/users/{user_id_or_email}/manager",
+                params={"$select": "displayName,mail"},
+            )
+            mail = data.get("mail") or data.get("userPrincipalName", "")
+            name = data.get("displayName", mail)
+            return {"email": mail, "name": name} if mail else None
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code == 404:
+                return None
+            raise
+
+    async def send_mail(
+        self,
+        sender: str,
+        to_email: str,
+        to_name: str,
+        subject: str,
+        html_body: str,
+    ) -> None:
+        """Send an email from `sender` mailbox via Graph Mail.Send."""
+        token = await self._get_token()
+        payload = {
+            "message": {
+                "subject": subject,
+                "body": {"contentType": "HTML", "content": html_body},
+                "toRecipients": [
+                    {"emailAddress": {"address": to_email, "name": to_name}}
+                ],
+            },
+            "saveToSentItems": False,
+        }
+        response = await self._client.post(
+            f"/users/{sender}/sendMail",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+        )
+        response.raise_for_status()
 
     async def close(self) -> None:
         await self._client.aclose()
