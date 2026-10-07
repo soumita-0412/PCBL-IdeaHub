@@ -49,8 +49,8 @@ def _idea_submitted_html(
 
         <!-- Header -->
         <tr>
-          <td style="background:#BA8FA0;padding:24px 32px;">
-            <span style="color:#76505F;font-size:20px;font-weight:700;
+          <td style="background:#ffdeeb;padding:24px 32px;">
+            <span style="color:#633b4b;font-size:20px;font-weight:700;
                          letter-spacing:.5px;">&#128161; IdeaHub</span>
           </td>
         </tr>
@@ -99,7 +99,7 @@ def _idea_submitted_html(
             <tr><td align="center">
               <a href="{review_url}"
                  style="display:inline-block;padding:12px 32px;
-                        background:#F2EAED;color:#A97388;
+                        border:1px solid #7c5363;;color:#A97388;
                         font-size:15px;font-weight:600;
                         text-decoration:none;border-radius:6px;
                         letter-spacing:.3px;">
