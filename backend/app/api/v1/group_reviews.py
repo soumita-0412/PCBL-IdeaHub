@@ -7,7 +7,7 @@ GET /api/v1/group-reviews/{id}   — fetch a single record
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.dependencies.permissions import require_l1_reviewer
+from app.dependencies.permissions import require_committee_or_l1_reviewer
 from app.models.group_review import GroupReview
 from app.repositories.group_review_repository import GroupReviewRepository
 from app.schemas.auth import CurrentUser
@@ -50,7 +50,7 @@ def _to_response(doc: GroupReview) -> GroupReviewResponse:
     response_model=SuccessResponse[list[GroupReviewResponse]],
 )
 async def list_group_reviews(
-    current_user: CurrentUser = Depends(require_l1_reviewer),
+    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[list[GroupReviewResponse]]:
     docs = await _repo.find_all()
     return SuccessResponse(data=[_to_response(d) for d in docs])
@@ -62,7 +62,7 @@ async def list_group_reviews(
 )
 async def get_group_review(
     review_id: str,
-    current_user: CurrentUser = Depends(require_l1_reviewer),
+    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[GroupReviewResponse]:
     doc = await _repo.get_by_id(review_id)
     if doc is None:

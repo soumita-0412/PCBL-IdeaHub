@@ -9,7 +9,7 @@ GET  /api/v1/ideas/{id}   — fetch a single idea by its MongoDB id
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.dependencies.auth import get_current_user
-from app.dependencies.permissions import require_employee, require_functional_reviewer, require_l1_reviewer
+from app.dependencies.permissions import require_committee_or_l1_reviewer, require_employee, require_l1_reviewer
 from app.schemas.auth import CurrentUser
 from app.schemas.common import SuccessResponse
 from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaListItem, IdeaResponse, IdeaReviewUpdate, IdeaStats
@@ -51,7 +51,7 @@ async def review_idea(
 async def l2_review_idea(
     idea_id: str,
     body: IdeaL2ReviewUpdate,
-    current_user: CurrentUser = Depends(require_functional_reviewer),
+    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[IdeaResponse]:
     idea = await idea_service.l2_review_idea(idea_id, body, current_user)
     if idea is None:

@@ -25,6 +25,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useAuth } from "@/hooks/use-auth";
 import { Roles, ROLE_LABELS, hasMinRole, type Role } from "@/constants/roles";
 import { useReviewCounts } from "@/hooks/use-review-counts";
+import { useCommitteeStatus } from "@/hooks/use-committee-status";
 import styles from "./sidebar.module.css";
 
 interface NavItem {
@@ -50,10 +51,6 @@ const NAV_ITEMS_BOTTOM: NavItem[] = [
   { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,  minRole: Roles.ADMIN },
 ];
 
-const REVIEW_SUB_ITEMS = [
-  { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> },
-  { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> },
-];
 
 function BellBadge({ count, size = 14 }: { count: number; size?: number }) {
   return (
@@ -126,10 +123,21 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   };
 
   const userRole = userProfile?.role ?? "";
-  const reviewLocked = !hasMinRole(userRole, Roles.L1_REVIEWER);
+  const isManager = hasMinRole(userRole, Roles.L1_REVIEWER);
+  const committeeStatus = useCommitteeStatus();
+  const isCommittee = committeeStatus.is_committee;
+  const reviewLocked = !isManager && !isCommittee;
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
-  const reviewCounts = useReviewCounts();
+  const reviewCounts = useReviewCounts({ isManager, isCommittee });
+
+  // Which sub-items this user can see
+  const visibleReviewSubItems = [
+    ...(isManager    ? [{ label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> }] : []),
+    ...(isCommittee  ? [{ label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> }] : []),
+  ];
+  // Default collapsed href — first accessible mode
+  const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""} ${mobileOpen ? styles.sidebarMobileOpen : ""}`}>
@@ -188,9 +196,9 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
         {/* Review — expandable item */}
         {collapsed ? (
-          /* Collapsed: single icon linking to /review */
+          /* Collapsed: single icon linking to the first accessible review mode */
           <Link
-            href={reviewLocked ? "#" : "/review"}
+            href={reviewLocked ? "#" : reviewCollapsedHref}
             title={`Review${reviewCounts.total > 0 ? ` (${reviewCounts.total} pending)` : ""}`}
             className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
             tabIndex={reviewLocked ? -1 : undefined}
@@ -230,10 +238,10 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
               )}
             </button>
 
-            {/* Sub-items */}
+            {/* Sub-items — only the modes this user can access */}
             {reviewExpanded && !reviewLocked && (
               <div className={styles.subNav}>
-                {REVIEW_SUB_ITEMS.map((sub) => {
+                {visibleReviewSubItems.map((sub) => {
                   const isManagementMode = searchParams.get("mode") === "management";
                   const isSubActive = isOnReview &&
                     (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);

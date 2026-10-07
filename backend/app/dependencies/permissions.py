@@ -53,3 +53,31 @@ async def require_super_admin(
     if current_user.role != Roles.SUPER_ADMIN:
         raise ForbiddenException("Super admin access required")
     return current_user
+
+
+async def require_committee_or_l1_reviewer(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> CurrentUser:
+    """Pass if the user has ROLE_L1_REVIEWER+ OR is a committee lead/member in any category."""
+    try:
+        user_index = ROLE_HIERARCHY.index(current_user.role)
+        l1_index = ROLE_HIERARCHY.index(Roles.L1_REVIEWER)
+        if user_index >= l1_index:
+            return current_user
+    except ValueError:
+        pass
+
+    # Fall through to DB committee check for ROLE_EMPLOYEE-level users
+    from app.models.category_committee import CategoryCommittee  # avoid circular import at module load
+
+    email_lower = current_user.email.lower()
+    committees = await CategoryCommittee.find().to_list()
+    is_committee = any(
+        (c.committee_lead and c.committee_lead.email.lower() == email_lower)
+        or any(m.email.lower() == email_lower for m in c.committee_members)
+        for c in committees
+    )
+    if is_committee:
+        return current_user
+
+    raise ForbiddenException("Insufficient permissions for this action")
