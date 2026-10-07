@@ -5,6 +5,8 @@ Submitter identity is always taken from the authenticated JWT (CurrentUser),
 never from the request body, so users cannot submit as someone else.
 """
 
+import asyncio
+
 from app.models.group_review import GroupReview
 from app.models.idea import Idea, IdeaStatus
 from app.models.manager_approval import ManagerApproval
@@ -13,6 +15,7 @@ from app.repositories.idea_repository import IdeaRepository
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
 from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaResponse, IdeaListItem, IdeaReviewUpdate, IdeaStats
+from app.services.notification_service import notify_manager_of_new_idea
 
 _repo = IdeaRepository()
 _approval_repo = ManagerApprovalRepository()
@@ -40,6 +43,22 @@ async def submit_idea(payload: IdeaCreate, actor: CurrentUser) -> IdeaResponse:
         additional_info=payload.additional_info,
     )
     await idea.save_with_actor(actor.user_id)
+
+    # Fire-and-forget: notify the submitter's manager via Graph Mail.Send.
+    # Runs in the background so it never delays the HTTP response.
+    asyncio.ensure_future(
+        notify_manager_of_new_idea(
+            submitter_id=actor.user_id,
+            submitter_name=actor.name,
+            submitter_email=actor.email,
+            manager_email=actor.manager,
+            submission_number=submission_number,
+            category=payload.category,
+            idea_title=payload.idea_title,
+            problem=payload.problem,
+            idea_description=payload.idea_description,
+        )
+    )
 
     return _to_response(idea)
 

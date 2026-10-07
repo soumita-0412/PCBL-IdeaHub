@@ -71,6 +71,10 @@ class Settings(BaseSettings):
     GRAPH_CLIENT_SECRET: str = ""
     GRAPH_TENANT_ID: str = ""
     GRAPH_BASE_URL: AnyHttpUrl = "https://graph.microsoft.com/v1.0"  # type: ignore[assignment]
+    # Mailbox used as the From address for Mail.Send notifications.
+    # Must be a licensed Exchange mailbox in the same tenant.
+    # Requires Mail.Send application permission on the Graph app registration.
+    GRAPH_MAIL_SENDER: str = ""
 
     # ── Logging ─────────────────────────────────────────────
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
