@@ -200,14 +200,17 @@ async def microsoft_callback(
     # Resolve role: admin_roles.json → Graph directReports → EMPLOYEE
     role = await resolve_role(email, user_id)
 
-    # Fetch manager email from Graph (best-effort; silently empty on any failure)
+    # Fetch manager email from Graph (best-effort; empty on any failure)
     manager_email = ""
     try:
         manager_info = await graph_client.get_user_manager(user_id)
         if manager_info:
             manager_email = manager_info["email"]
-    except Exception:
-        pass
+            logger.info("sso.manager.resolved", email=email, manager=manager_email)
+        else:
+            logger.debug("sso.manager.not_found", email=email)
+    except Exception as exc:
+        logger.warning("sso.manager.lookup_failed", email=email, error=str(exc))
 
     access_token = create_access_token({
         "sub": user_id,
