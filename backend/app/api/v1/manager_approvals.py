@@ -9,7 +9,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.dependencies.permissions import require_l1_reviewer
+from app.dependencies.permissions import require_committee_or_l1_reviewer
 from app.models.manager_approval import ManagerApproval
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
@@ -50,7 +50,7 @@ def _to_response(doc: ManagerApproval) -> ManagerApprovalResponse:
 )
 async def list_approvals(
     decision: Optional[str] = Query(default=None, description="Filter by decision: approved | rejected"),
-    current_user: CurrentUser = Depends(require_l1_reviewer),
+    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
     docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
     return SuccessResponse(data=[_to_response(d) for d in docs])
@@ -62,7 +62,7 @@ async def list_approvals(
 )
 async def get_approval(
     approval_id: str,
-    current_user: CurrentUser = Depends(require_l1_reviewer),
+    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[ManagerApprovalResponse]:
     doc = await _repo.get_by_id(approval_id)
     if doc is None:

@@ -12,6 +12,7 @@ import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import { useAuthStore } from "@/stores/auth.store";
 import { hasMinRole, Roles } from "@/constants/roles";
 import { REVIEW_COUNTS_CHANGED } from "@/hooks/use-review-counts";
+import { useCommitteeStatus } from "@/hooks/use-committee-status";
 import styles from "./review.module.css";
 
 type ReviewMode = "manager" | "management";
@@ -587,6 +588,22 @@ export default function ReviewDashboardPage() {
   const { userProfile } = useAuthStore();
   const searchParams = useSearchParams();
   const urlMode = searchParams.get("mode") === "management" ? "management" : "manager";
+
+  const userRole = userProfile?.role ?? "";
+  const isManager = hasMinRole(userRole, Roles.L1_REVIEWER);
+  const committeeStatus = useCommitteeStatus();
+  // Super admin gets full access to both modes without needing a committee assignment
+  const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
+  const canReview = isManager || canAccessManagement;
+
+  // Clamp URL mode to what the user can actually access (defer until committee status is known)
+  const effectiveMode = useMemo<ReviewMode>(() => {
+    if (!committeeStatus.isReady) return urlMode;
+    if (urlMode === "management" && !canAccessManagement) return "manager";
+    if (urlMode === "manager" && !isManager) return "management";
+    return urlMode;
+  }, [urlMode, isManager, canAccessManagement, committeeStatus.isReady]);
+
   const [mode, setMode] = useState<ReviewMode>(urlMode);
 
   // Manager mode state
@@ -602,26 +619,39 @@ export default function ReviewDashboardPage() {
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Sync mode when URL param changes (sidebar navigation)
+  // Sync mode to the clamped effective value
   useEffect(() => {
-    setMode(urlMode);
-  }, [urlMode]);
+    setMode(effectiveMode);
+  }, [effectiveMode]);
 
-  const canReview = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
-
+  // Load only the data the user is permitted to access, once committee status is known
   useEffect(() => {
-    Promise.all([getAllIdeas(), getCategories(), getApprovedManagerApprovals()])
+    if (!committeeStatus.isReady) return;
+
+    // Mark inapplicable data as empty right away so no skeleton is shown for them
+    if (!isManager) setIdeas([]);
+    if (!canAccessManagement) setApprovals([]);
+
+    Promise.all([
+      isManager ? getAllIdeas() : Promise.resolve([] as IdeaResponse[]),
+      getCategories(),
+      canAccessManagement ? getApprovedManagerApprovals() : Promise.resolve([] as ManagerApprovalResponse[]),
+    ])
       .then(([ideasData, catsData, approvalsData]) => {
-        const pending = ideasData.filter((i) => i.status === "submitted");
-        setIdeas(pending);
+        if (isManager) {
+          const pending = ideasData.filter((i) => i.status === "submitted");
+          setIdeas(pending);
+          setIdeaStatusMap(new Map(ideasData.map((i) => [i.id, i.status])));
+          if (pending.length > 0) setSelectedIdea(pending[0]!);
+        }
         setCategories(catsData);
-        setApprovals(approvalsData);
-        setIdeaStatusMap(new Map(ideasData.map((i) => [i.id, i.status])));
-        if (pending.length > 0) setSelectedIdea(pending[0]!);
-        if (approvalsData.length > 0) setSelectedApproval(approvalsData[0]!);
+        if (canAccessManagement) {
+          setApprovals(approvalsData);
+          if (approvalsData.length > 0) setSelectedApproval(approvalsData[0]!);
+        }
       })
       .catch(() => setFetchError("Failed to load data. Please try again."));
-  }, []);
+  }, [isManager, canAccessManagement, committeeStatus.isReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleIdeaReviewed = useCallback((updated: IdeaResponse) => {
     // Remove the reviewed idea from the list and auto-select the next one
@@ -630,8 +660,8 @@ export default function ReviewDashboardPage() {
       setSelectedIdea(next && next.length > 0 ? next[0]! : null);
       return next;
     });
-    // If approved, refresh the L2 approvals list so it appears in Management mode immediately
-    if (updated.status === "approved_l1") {
+    // Refresh the L2 approvals list if this user can also do management review
+    if (updated.status === "approved_l1" && canAccessManagement) {
       getApprovedManagerApprovals()
         .then((data) => {
           setApprovals(data);
@@ -677,9 +707,9 @@ export default function ReviewDashboardPage() {
 
   // Auto-select first item when mode changes
   useEffect(() => {
-    if (urlMode === "manager" && ideas && ideas.length > 0) setSelectedIdea(ideas[0]!);
-    if (urlMode === "management" && approvals && approvals.length > 0) setSelectedApproval(approvals[0]!);
-  }, [urlMode]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (effectiveMode === "manager" && ideas && ideas.length > 0) setSelectedIdea(ideas[0]!);
+    if (effectiveMode === "management" && approvals && approvals.length > 0) setSelectedApproval(approvals[0]!);
+  }, [effectiveMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!canReview) {
     return (

@@ -25,6 +25,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useAuth } from "@/hooks/use-auth";
 import { Roles, ROLE_LABELS, hasMinRole, type Role } from "@/constants/roles";
 import { useReviewCounts } from "@/hooks/use-review-counts";
+import { useCommitteeStatus } from "@/hooks/use-committee-status";
 import styles from "./sidebar.module.css";
 
 interface NavItem {
@@ -50,10 +51,6 @@ const NAV_ITEMS_BOTTOM: NavItem[] = [
   { label: "Admin Dashboard",  href: "/admin",      icon: <Settings size={16} />,  minRole: Roles.ADMIN },
 ];
 
-const REVIEW_SUB_ITEMS = [
-  { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> },
-  { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> },
-];
 
 function BellBadge({ count, size = 14 }: { count: number; size?: number }) {
   return (
@@ -126,10 +123,22 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   };
 
   const userRole = userProfile?.role ?? "";
-  const reviewLocked = !hasMinRole(userRole, Roles.L1_REVIEWER);
+  const isManager = hasMinRole(userRole, Roles.L1_REVIEWER);
+  const committeeStatus = useCommitteeStatus();
+  // Super admin bypasses committee DB check and gets full access to both modes
+  const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
+  const reviewLocked = !isManager && !canAccessManagement;
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
-  const reviewCounts = useReviewCounts();
+  const reviewCounts = useReviewCounts({ isManager, isCommittee: canAccessManagement });
+
+  // Both sub-items always visible; each carries its own lock state (like Repository / Admin Dashboard)
+  const reviewSubItems = [
+    { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} />,     isLocked: !isManager,           count: reviewCounts.manager },
+    { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} />, isLocked: !canAccessManagement, count: reviewCounts.management },
+  ];
+  // Collapsed icon links to the first accessible mode
+  const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""} ${mobileOpen ? styles.sidebarMobileOpen : ""}`}>
@@ -188,9 +197,9 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
         {/* Review — expandable item */}
         {collapsed ? (
-          /* Collapsed: single icon linking to /review */
+          /* Collapsed: single icon linking to the first accessible review mode */
           <Link
-            href={reviewLocked ? "#" : "/review"}
+            href={reviewLocked ? "#" : reviewCollapsedHref}
             title={`Review${reviewCounts.total > 0 ? ` (${reviewCounts.total} pending)` : ""}`}
             className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
             tabIndex={reviewLocked ? -1 : undefined}
@@ -230,28 +239,27 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
               )}
             </button>
 
-            {/* Sub-items */}
+            {/* Sub-items — always visible; locked ones match the nav-item lock pattern */}
             {reviewExpanded && !reviewLocked && (
               <div className={styles.subNav}>
-                {REVIEW_SUB_ITEMS.map((sub) => {
+                {reviewSubItems.map((sub) => {
                   const isManagementMode = searchParams.get("mode") === "management";
-                  const isSubActive = isOnReview &&
+                  const isSubActive = !sub.isLocked && isOnReview &&
                     (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);
-                  const subCount = sub.href.includes("mode=management")
-                    ? reviewCounts.management
-                    : reviewCounts.manager;
 
                   return (
                     <Link
                       key={sub.href}
-                      href={sub.href}
-                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""}`}
+                      href={sub.isLocked ? "#" : sub.href}
+                      tabIndex={sub.isLocked ? -1 : undefined}
+                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""} ${sub.isLocked ? styles.subNavItemLocked : ""}`}
                     >
                       <span className={styles.subNavIcon}>{sub.icon}</span>
                       <span className={styles.subNavLabel}>{sub.label}</span>
-                      {subCount > 0 && (
-                        <BellBadge count={subCount} size={12} />
-                      )}
+                      {sub.isLocked
+                        ? <span className={styles.subNavIcon}><Lock size={11} /></span>
+                        : sub.count > 0 && <BellBadge count={sub.count} size={12} />
+                      }
                     </Link>
                   );
                 })}

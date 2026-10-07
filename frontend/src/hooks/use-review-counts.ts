@@ -2,8 +2,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getAllIdeas } from "@/services/ideaService";
 import { getApprovedManagerApprovals } from "@/services/managerApprovalService";
-import { useAuthStore } from "@/stores/auth.store";
-import { hasMinRole, Roles } from "@/constants/roles";
 
 export const REVIEW_COUNTS_CHANGED = "review-counts-changed";
 
@@ -13,29 +11,34 @@ export interface ReviewCounts {
   total: number;
 }
 
-export function useReviewCounts(): ReviewCounts {
-  const { userProfile } = useAuthStore();
+export function useReviewCounts({
+  isManager,
+  isCommittee,
+}: {
+  isManager: boolean;
+  isCommittee: boolean;
+}): ReviewCounts {
   const [counts, setCounts] = useState<ReviewCounts>({ manager: 0, management: 0, total: 0 });
 
   const fetchCounts = useCallback(() => {
-    if (!hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER)) return;
+    if (!isManager && !isCommittee) return;
 
-    Promise.all([getAllIdeas(), getApprovedManagerApprovals()])
+    const managerFetch = isManager ? getAllIdeas() : Promise.resolve([]);
+    const committeeFetch = isCommittee ? getApprovedManagerApprovals() : Promise.resolve([]);
+
+    Promise.all([managerFetch, committeeFetch])
       .then(([ideas, approvals]) => {
-        const managerCount = ideas.filter((i) => i.status === "submitted").length;
-        const managementCount = approvals.length;
+        const managerCount = isManager ? ideas.filter((i) => i.status === "submitted").length : 0;
+        const managementCount = isCommittee ? approvals.length : 0;
         setCounts({ manager: managerCount, management: managementCount, total: managerCount + managementCount });
       })
       .catch(() => {/* silent */});
-  }, [userProfile?.role]);
+  }, [isManager, isCommittee]);
 
   useEffect(() => {
     fetchCounts();
 
-    // Poll every 30 s so the badge stays fresh without a page reload
     const interval = setInterval(fetchCounts, 30_000);
-
-    // Immediately refresh when a review action fires this event
     window.addEventListener(REVIEW_COUNTS_CHANGED, fetchCounts);
 
     return () => {
