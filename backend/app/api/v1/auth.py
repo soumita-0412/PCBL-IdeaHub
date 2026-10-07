@@ -22,6 +22,7 @@ from app.core.jwt_service import create_access_token, decode_microsoft_id_token
 from app.core.role_resolver import resolve_role
 from app.core.user_store import user_store
 from app.dependencies.auth import get_current_user
+from app.integrations.graph_client import graph_client
 from app.schemas.auth import CurrentUser, LoginRequest, TokenResponse
 from app.schemas.common import SuccessResponse
 
@@ -199,6 +200,15 @@ async def microsoft_callback(
     # Resolve role: admin_roles.json → Graph directReports → EMPLOYEE
     role = await resolve_role(email, user_id)
 
+    # Fetch manager email from Graph (best-effort; silently empty on any failure)
+    manager_email = ""
+    try:
+        manager_info = await graph_client.get_user_manager(user_id)
+        if manager_info:
+            manager_email = manager_info["email"]
+    except Exception:
+        pass
+
     access_token = create_access_token({
         "sub": user_id,
         "username": email,
@@ -208,7 +218,7 @@ async def microsoft_callback(
         "department": claims.get("department", ""),
         "function": "",
         "location": "",
-        "manager": "",
+        "manager": manager_email,
         "auth_source": "sso",
     })
 
