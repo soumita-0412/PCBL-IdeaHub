@@ -7,6 +7,7 @@ Default categories are seeded once on first startup if the collection is empty.
 from app.core.exceptions import ConflictException, NotFoundException, ValidationException
 from app.models.category import Category, CommitteePerson, MatrixOption
 from app.models.category_criteria import CriteriaItem
+from app.repositories.category_committee_repository import CategoryCommitteeRepository
 from app.repositories.category_criteria_repository import CategoryCriteriaRepository
 from app.repositories.category_repository import CategoryRepository
 from app.schemas.auth import CurrentUser
@@ -33,6 +34,7 @@ _DEFAULT_NAMES = [
 
 _repo = CategoryRepository()
 _criteria_repo = CategoryCriteriaRepository()
+_committee_repo = CategoryCommitteeRepository()
 
 
 async def seed_defaults() -> None:
@@ -65,6 +67,7 @@ async def create_category(payload: CategoryCreate, actor: CurrentUser) -> Catego
     )
     await cat.save_with_actor(actor.user_id)
     await _sync_criteria(cat)
+    await _sync_committee(cat)
     return _to_response(cat)
 
 
@@ -96,13 +99,26 @@ async def update_category(
         ]
     await cat.save_with_actor(actor.user_id)
     await _sync_criteria(cat)
+    await _sync_committee(cat)
     return _to_response(cat)
 
 
 async def delete_category(category_id: str) -> None:
-    if not await _repo.delete(category_id):
+    cat = await _repo.get_by_id(category_id)
+    if cat is None:
         raise NotFoundException(f"Category '{category_id}' not found")
+    await _repo.delete(category_id)
     await _criteria_repo.delete_by_category_id(category_id)
+    await _committee_repo.delete_by_category_name(cat.name)
+
+
+async def _sync_committee(cat: Category) -> None:
+    """Keep category_committee in sync with the category's committee data."""
+    await _committee_repo.upsert(
+        category_name=cat.name,
+        committee_lead=cat.committee_lead,
+        committee_members=cat.committee_members,
+    )
 
 
 async def _sync_criteria(cat: Category) -> None:

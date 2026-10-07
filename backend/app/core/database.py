@@ -12,6 +12,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from app.core.config import settings
 from app.models.category import Category
+from app.models.category_committee import CategoryCommittee
 from app.models.category_criteria import CategoryCriteria
 from app.models.group_review import GroupReview
 from app.models.idea import Idea
@@ -45,6 +46,7 @@ async def init_db() -> None:
         document_models=[
             Idea,
             Category,
+            CategoryCommittee,
             CategoryCriteria,
             ManagerApproval,
             GroupReview,
