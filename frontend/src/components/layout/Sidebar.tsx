@@ -125,18 +125,19 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const userRole = userProfile?.role ?? "";
   const isManager = hasMinRole(userRole, Roles.L1_REVIEWER);
   const committeeStatus = useCommitteeStatus();
-  const isCommittee = committeeStatus.is_committee;
-  const reviewLocked = !isManager && !isCommittee;
+  // Super admin bypasses committee DB check and gets full access to both modes
+  const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
+  const reviewLocked = !isManager && !canAccessManagement;
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
-  const reviewCounts = useReviewCounts({ isManager, isCommittee });
+  const reviewCounts = useReviewCounts({ isManager, isCommittee: canAccessManagement });
 
-  // Which sub-items this user can see
-  const visibleReviewSubItems = [
-    ...(isManager    ? [{ label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} /> }] : []),
-    ...(isCommittee  ? [{ label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} /> }] : []),
+  // Both sub-items always visible; each carries its own lock state (like Repository / Admin Dashboard)
+  const reviewSubItems = [
+    { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} />,     isLocked: !isManager,           count: reviewCounts.manager },
+    { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} />, isLocked: !canAccessManagement, count: reviewCounts.management },
   ];
-  // Default collapsed href — first accessible mode
+  // Collapsed icon links to the first accessible mode
   const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
 
   return (
@@ -238,28 +239,27 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
               )}
             </button>
 
-            {/* Sub-items — only the modes this user can access */}
+            {/* Sub-items — always visible; locked ones match the nav-item lock pattern */}
             {reviewExpanded && !reviewLocked && (
               <div className={styles.subNav}>
-                {visibleReviewSubItems.map((sub) => {
+                {reviewSubItems.map((sub) => {
                   const isManagementMode = searchParams.get("mode") === "management";
-                  const isSubActive = isOnReview &&
+                  const isSubActive = !sub.isLocked && isOnReview &&
                     (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);
-                  const subCount = sub.href.includes("mode=management")
-                    ? reviewCounts.management
-                    : reviewCounts.manager;
 
                   return (
                     <Link
                       key={sub.href}
-                      href={sub.href}
-                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""}`}
+                      href={sub.isLocked ? "#" : sub.href}
+                      tabIndex={sub.isLocked ? -1 : undefined}
+                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""} ${sub.isLocked ? styles.subNavItemLocked : ""}`}
                     >
                       <span className={styles.subNavIcon}>{sub.icon}</span>
                       <span className={styles.subNavLabel}>{sub.label}</span>
-                      {subCount > 0 && (
-                        <BellBadge count={subCount} size={12} />
-                      )}
+                      {sub.isLocked
+                        ? <span className={styles.subNavIcon}><Lock size={11} /></span>
+                        : sub.count > 0 && <BellBadge count={sub.count} size={12} />
+                      }
                     </Link>
                   );
                 })}

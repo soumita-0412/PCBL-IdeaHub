@@ -325,6 +325,17 @@
   color: inherit;
 }
 
+.subNavItemLocked {
+  color: rgba(255, 255, 255, 0.3);
+  cursor: default;
+  pointer-events: none;
+}
+
+.subNavItemLocked:hover {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+}
+
 /* ── Footer ────────────────────────────────────────── */
 .footer {
   padding: 0.75rem;
