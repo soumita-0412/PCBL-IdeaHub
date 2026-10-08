@@ -55,17 +55,26 @@ async def list_approvals(
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
     docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
 
-    # L1 reviewer and above (incl. super admin) see all
+    from app.models.category_committee import CategoryCommittee
+    committees = await CategoryCommittee.find().to_list()
+
+    # Always restrict to categories that have a committee configured —
+    # ideas in unconfigured categories have no one to review them
+    categories_with_committee = {
+        c.category_name for c in committees
+        if c.committee_lead or c.committee_members
+    }
+    docs = [d for d in docs if d.category in categories_with_committee]
+
+    # L1 reviewer and above (incl. super admin) see all committee-configured categories
     try:
         if ROLE_HIERARCHY.index(current_user.role) >= ROLE_HIERARCHY.index(Roles.L1_REVIEWER):
             return SuccessResponse(data=[_to_response(d) for d in docs])
     except ValueError:
         pass
 
-    # Committee-only user: restrict to their assigned categories
-    from app.models.category_committee import CategoryCommittee
+    # Committee-only user: restrict further to their own assigned categories
     email_lower = current_user.email.lower()
-    committees = await CategoryCommittee.find().to_list()
     allowed = {
         c.category_name for c in committees
         if (c.committee_lead and c.committee_lead.email.lower() == email_lower)
