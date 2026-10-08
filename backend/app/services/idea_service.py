@@ -7,6 +7,8 @@ never from the request body, so users cannot submit as someone else.
 
 import asyncio
 
+from app.core.constants import Roles
+from app.integrations.graph_client import graph_client
 from app.models.group_review import GroupReview
 from app.models.idea import Idea, IdeaStatus
 from app.models.manager_approval import ManagerApproval
@@ -90,9 +92,13 @@ async def get_my_stats(actor: CurrentUser) -> IdeaStats:
     )
 
 
-async def get_all_ideas() -> list[IdeaResponse]:
+async def get_all_ideas(actor: CurrentUser) -> list[IdeaResponse]:
     ideas = await _repo.find_all()
-    return [_to_response(i) for i in ideas]
+    if actor.role == Roles.SUPER_ADMIN:
+        return [_to_response(i) for i in ideas]
+    # L1 reviewer: filter to their direct reports only
+    direct_emails = await graph_client.get_direct_reports(actor.user_id)
+    return [_to_response(i) for i in ideas if i.submitter_email.lower() in direct_emails]
 
 
 async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUser) -> IdeaResponse | None:

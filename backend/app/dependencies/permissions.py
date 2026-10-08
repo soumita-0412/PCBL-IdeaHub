@@ -55,6 +55,27 @@ async def require_super_admin(
     return current_user
 
 
+async def require_committee_lead(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> CurrentUser:
+    """Pass only if the user is a committee lead in at least one category.
+    Super admin is explicitly blocked — admins have read-only access to reviews."""
+    if current_user.role == Roles.SUPER_ADMIN:
+        raise ForbiddenException("Super admins have read-only access to the review dashboard")
+
+    from app.models.category_committee import CategoryCommittee
+
+    email_lower = current_user.email.lower()
+    committees = await CategoryCommittee.find().to_list()
+    is_lead = any(
+        c.committee_lead and c.committee_lead.email.lower() == email_lower
+        for c in committees
+    )
+    if is_lead:
+        return current_user
+    raise ForbiddenException("Committee lead access required")
+
+
 async def require_committee_or_l1_reviewer(
     current_user: CurrentUser = Depends(get_current_user),
 ) -> CurrentUser:

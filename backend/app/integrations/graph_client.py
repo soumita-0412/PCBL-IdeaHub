@@ -99,6 +99,22 @@ class GraphClient:
                 )
         return users
 
+    async def get_direct_reports(self, user_id: str) -> list[str]:
+        """Return lowercase email addresses of the user's direct reports in Azure AD."""
+        try:
+            data = await self.get(
+                f"/users/{user_id}/directReports",
+                params={"$select": "mail,userPrincipalName", "$top": "100"},
+            )
+            emails = []
+            for u in data.get("value", []):
+                email = u.get("mail") or u.get("userPrincipalName", "")
+                if email:
+                    emails.append(email.lower())
+            return emails
+        except Exception:
+            return []
+
     async def get_user_manager(self, user_id_or_email: str) -> dict[str, str] | None:
         """Return the manager's display name and mail, or None if not found."""
         try:

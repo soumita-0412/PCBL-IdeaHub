@@ -9,6 +9,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
+from app.core.constants import ROLE_HIERARCHY, Roles
 from app.dependencies.permissions import require_committee_or_l1_reviewer
 from app.models.manager_approval import ManagerApproval
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
@@ -53,7 +54,24 @@ async def list_approvals(
     current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
     docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
-    return SuccessResponse(data=[_to_response(d) for d in docs])
+
+    # L1 reviewer and above (incl. super admin) see all
+    try:
+        if ROLE_HIERARCHY.index(current_user.role) >= ROLE_HIERARCHY.index(Roles.L1_REVIEWER):
+            return SuccessResponse(data=[_to_response(d) for d in docs])
+    except ValueError:
+        pass
+
+    # Committee-only user: restrict to their assigned categories
+    from app.models.category_committee import CategoryCommittee
+    email_lower = current_user.email.lower()
+    committees = await CategoryCommittee.find().to_list()
+    allowed = {
+        c.category_name for c in committees
+        if (c.committee_lead and c.committee_lead.email.lower() == email_lower)
+        or any(m.email.lower() == email_lower for m in c.committee_members)
+    }
+    return SuccessResponse(data=[_to_response(d) for d in docs if d.category in allowed])
 
 
 @router.get(

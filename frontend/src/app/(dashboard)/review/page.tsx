@@ -182,9 +182,10 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
 interface L1DetailPanelProps {
   idea: IdeaResponse;
   onReviewed: (updated: IdeaResponse) => void;
+  readOnly?: boolean;
 }
 
-function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
+function L1DetailPanel({ idea, onReviewed, readOnly = false }: L1DetailPanelProps) {
   const [comment, setComment] = useState(idea.reviewer_comment ?? "");
   const [decision, setDecision] = useState<"approve" | "decline" | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -278,50 +279,56 @@ function L1DetailPanel({ idea, onReviewed }: L1DetailPanelProps) {
           </div>
         )}
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Comments (Optional)</p>
-          <textarea
-            className={styles.commentBox}
-            placeholder="Add comments for the submitter or group panel…"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            rows={4}
-            disabled={submitting}
-          />
-        </div>
+        {readOnly ? (
+          <p className={styles.readOnlyNote}>Super admins have read-only access — you cannot approve or reject ideas.</p>
+        ) : (
+          <>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Comments (Optional)</p>
+              <textarea
+                className={styles.commentBox}
+                placeholder="Add comments for the submitter or group panel…"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={4}
+                disabled={submitting}
+              />
+            </div>
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Decision</p>
-          <div className={styles.decisionRow}>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Decision</p>
+              <div className={styles.decisionRow}>
+                <button
+                  type="button"
+                  className={`${styles.decisionBtn} ${decision === "approve" ? styles.decisionBtnApprove : ""}`}
+                  onClick={() => setDecision(decision === "approve" ? null : "approve")}
+                  disabled={submitting}
+                >
+                  <Check size={15} /> Approve
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.decisionBtn} ${decision === "decline" ? styles.decisionBtnReject : ""}`}
+                  onClick={() => setDecision(decision === "decline" ? null : "decline")}
+                  disabled={submitting}
+                >
+                  <X size={15} /> Decline
+                </button>
+              </div>
+            </div>
+
+            {error && <p className={styles.errorMsg}>{error}</p>}
+
             <button
               type="button"
-              className={`${styles.decisionBtn} ${decision === "approve" ? styles.decisionBtnApprove : ""}`}
-              onClick={() => setDecision(decision === "approve" ? null : "approve")}
-              disabled={submitting}
+              className={styles.submitBtn}
+              onClick={() => void handleSubmit()}
+              disabled={!decision || submitting}
             >
-              <Check size={15} /> Approve
+              {submitting ? "Submitting…" : "Submit Manager Decision"}
             </button>
-            <button
-              type="button"
-              className={`${styles.decisionBtn} ${decision === "decline" ? styles.decisionBtnReject : ""}`}
-              onClick={() => setDecision(decision === "decline" ? null : "decline")}
-              disabled={submitting}
-            >
-              <X size={15} /> Decline
-            </button>
-          </div>
-        </div>
-
-        {error && <p className={styles.errorMsg}>{error}</p>}
-
-        <button
-          type="button"
-          className={styles.submitBtn}
-          onClick={() => void handleSubmit()}
-          disabled={!decision || submitting}
-        >
-          {submitting ? "Submitting…" : "Submit Manager Decision"}
-        </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -333,9 +340,10 @@ interface L2DetailPanelProps {
   approval: ManagerApprovalResponse;
   category: CategoryResponse | undefined;
   onSubmitted: (id: string, decision: NonNullable<L2Decision>) => void;
+  readOnly?: boolean;
 }
 
-function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) {
+function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2DetailPanelProps) {
   const initialScores = useMemo(() => {
     const map: Record<string, number> = {};
     category?.matrix.forEach((c) => { map[c.label] = 0; });
@@ -501,81 +509,89 @@ function L2DetailPanel({ approval, category, onSubmitted }: L2DetailPanelProps) 
           )}
         </div>
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Recommendations</p>
-          <textarea
-            className={styles.commentBox}
-            placeholder="Observations, recommendations…"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            rows={4}
-            disabled={submitting}
-          />
-        </div>
+        {readOnly ? (
+          <p className={styles.readOnlyNote}>
+            {`Only committee leads can score and submit decisions for this idea.`}
+          </p>
+        ) : (
+          <>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Recommendations</p>
+              <textarea
+                className={styles.commentBox}
+                placeholder="Observations, recommendations…"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={4}
+                disabled={submitting}
+              />
+            </div>
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Next Step</p>
-          <textarea
-            className={styles.commentBox}
-            placeholder="Describe the proposed next steps for this idea…"
-            value={nextStep}
-            onChange={(e) => setNextStep(e.target.value)}
-            rows={3}
-            disabled={submitting}
-          />
-        </div>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Next Step</p>
+              <textarea
+                className={styles.commentBox}
+                placeholder="Describe the proposed next steps for this idea…"
+                value={nextStep}
+                onChange={(e) => setNextStep(e.target.value)}
+                rows={3}
+                disabled={submitting}
+              />
+            </div>
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Expected Timeline</p>
-          <input
-            type="date"
-            className={styles.dateInput}
-            value={expectedTimeline}
-            onChange={(e) => setExpectedTimeline(e.target.value)}
-            disabled={submitting}
-          />
-        </div>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Expected Timeline</p>
+              <input
+                type="date"
+                className={styles.dateInput}
+                value={expectedTimeline}
+                onChange={(e) => setExpectedTimeline(e.target.value)}
+                disabled={submitting}
+              />
+            </div>
 
-        <div className={styles.reviewBlock}>
-          <p className={styles.reviewBlockLabel}>Decision</p>
-          <div className={styles.decisionRow3}>
+            <div className={styles.reviewBlock}>
+              <p className={styles.reviewBlockLabel}>Decision</p>
+              <div className={styles.decisionRow3}>
+                <button
+                  type="button"
+                  className={`${styles.decisionBtn} ${decision === "approve" ? styles.decisionBtnApprove : ""}`}
+                  onClick={() => setDecision(decision === "approve" ? null : "approve")}
+                  disabled={submitting}
+                >
+                  <Check size={15} /> Approve
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.decisionBtn} ${decision === "hold" ? styles.decisionBtnHold : ""}`}
+                  onClick={() => setDecision(decision === "hold" ? null : "hold")}
+                  disabled={submitting}
+                >
+                  <Minus size={15} /> Hold
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.decisionBtn} ${decision === "decline" ? styles.decisionBtnReject : ""}`}
+                  onClick={() => setDecision(decision === "decline" ? null : "decline")}
+                  disabled={submitting}
+                >
+                  <X size={15} /> Decline
+                </button>
+              </div>
+            </div>
+
+            {error && <p className={styles.errorMsg}>{error}</p>}
+
             <button
               type="button"
-              className={`${styles.decisionBtn} ${decision === "approve" ? styles.decisionBtnApprove : ""}`}
-              onClick={() => setDecision(decision === "approve" ? null : "approve")}
-              disabled={submitting}
+              className={styles.submitBtn}
+              onClick={() => void handleSubmit()}
+              disabled={!decision || submitting}
             >
-              <Check size={15} /> Approve
+              {submitting ? "Submitting…" : "Submit Group Review"}
             </button>
-            <button
-              type="button"
-              className={`${styles.decisionBtn} ${decision === "hold" ? styles.decisionBtnHold : ""}`}
-              onClick={() => setDecision(decision === "hold" ? null : "hold")}
-              disabled={submitting}
-            >
-              <Minus size={15} /> Hold
-            </button>
-            <button
-              type="button"
-              className={`${styles.decisionBtn} ${decision === "decline" ? styles.decisionBtnReject : ""}`}
-              onClick={() => setDecision(decision === "decline" ? null : "decline")}
-              disabled={submitting}
-            >
-              <X size={15} /> Decline
-            </button>
-          </div>
-        </div>
-
-        {error && <p className={styles.errorMsg}>{error}</p>}
-
-        <button
-          type="button"
-          className={styles.submitBtn}
-          onClick={() => void handleSubmit()}
-          disabled={!decision || submitting}
-        >
-          {submitting ? "Submitting…" : "Submit Group Review"}
-        </button>
+          </>
+        )}
 
       </div>
     </div>
@@ -591,9 +607,12 @@ export default function ReviewDashboardPage() {
 
   const userRole = userProfile?.role ?? "";
   const isManager = hasMinRole(userRole, Roles.L1_REVIEWER);
+  const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
   const committeeStatus = useCommitteeStatus();
   // Super admin gets full access to both modes without needing a committee assignment
-  const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
+  const canAccessManagement = committeeStatus.is_committee || isSuperAdmin;
+  // Only committee leads (not members, not super admin) can submit decisions
+  const canActL2 = committeeStatus.is_committee_lead && !isSuperAdmin;
   const canReview = isManager || canAccessManagement;
 
   // Clamp URL mode to what the user can actually access (defer until committee status is known)
@@ -782,6 +801,7 @@ export default function ReviewDashboardPage() {
                 key={`l1-${selectedIdea.id}`}
                 idea={selectedIdea}
                 onReviewed={handleIdeaReviewed}
+                readOnly={isSuperAdmin}
               />
             ) : (
               <div className={styles.emptyDetail}>
@@ -795,6 +815,7 @@ export default function ReviewDashboardPage() {
                 approval={selectedApproval}
                 category={selectedCategory}
                 onSubmitted={handleApprovalSubmitted}
+                readOnly={!canActL2}
               />
             ) : (
               <div className={styles.emptyDetail}>

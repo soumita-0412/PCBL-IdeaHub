@@ -8,8 +8,10 @@ GET  /api/v1/ideas/{id}   — fetch a single idea by its MongoDB id
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.core.constants import Roles
+from app.core.exceptions import ForbiddenException
 from app.dependencies.auth import get_current_user
-from app.dependencies.permissions import require_committee_or_l1_reviewer, require_employee, require_l1_reviewer
+from app.dependencies.permissions import require_committee_lead, require_committee_or_l1_reviewer, require_employee, require_l1_reviewer
 from app.schemas.auth import CurrentUser
 from app.schemas.common import SuccessResponse
 from app.schemas.idea import IdeaCreate, IdeaL2ReviewUpdate, IdeaListItem, IdeaResponse, IdeaReviewUpdate, IdeaStats
@@ -25,7 +27,7 @@ router = APIRouter(prefix="/ideas", tags=["Ideas"])
 async def list_all_ideas(
     current_user: CurrentUser = Depends(require_l1_reviewer),
 ) -> SuccessResponse[list[IdeaResponse]]:
-    ideas = await idea_service.get_all_ideas()
+    ideas = await idea_service.get_all_ideas(current_user)
     return SuccessResponse(data=ideas)
 
 
@@ -38,6 +40,8 @@ async def review_idea(
     body: IdeaReviewUpdate,
     current_user: CurrentUser = Depends(require_l1_reviewer),
 ) -> SuccessResponse[IdeaResponse]:
+    if current_user.role == Roles.SUPER_ADMIN:
+        raise ForbiddenException("Super admins have read-only access to the review dashboard")
     idea = await idea_service.review_idea(idea_id, body, current_user)
     if idea is None:
         raise HTTPException(status_code=404, detail="Idea not found")
@@ -51,7 +55,7 @@ async def review_idea(
 async def l2_review_idea(
     idea_id: str,
     body: IdeaL2ReviewUpdate,
-    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
+    current_user: CurrentUser = Depends(require_committee_lead),
 ) -> SuccessResponse[IdeaResponse]:
     idea = await idea_service.l2_review_idea(idea_id, body, current_user)
     if idea is None:
