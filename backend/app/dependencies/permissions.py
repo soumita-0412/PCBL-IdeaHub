@@ -58,11 +58,9 @@ async def require_super_admin(
 async def require_committee_lead(
     current_user: CurrentUser = Depends(get_current_user),
 ) -> CurrentUser:
-    """Pass only if the user is a committee lead in at least one category.
-    Super admin is explicitly blocked — admins have read-only access to reviews."""
-    if current_user.role == Roles.SUPER_ADMIN:
-        raise ForbiddenException("Super admins have read-only access to the review dashboard")
-
+    """Pass if the user is a committee lead in at least one category.
+    A super admin who is also a committee lead passes — committee lead
+    membership takes precedence over the super-admin read-only rule."""
     from app.models.category_committee import CategoryCommittee
 
     email_lower = current_user.email.lower()

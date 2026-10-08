@@ -611,8 +611,8 @@ export default function ReviewDashboardPage() {
   const committeeStatus = useCommitteeStatus();
   // Super admin gets full access to both modes without needing a committee assignment
   const canAccessManagement = committeeStatus.is_committee || isSuperAdmin;
-  // Only committee leads (not members, not super admin) can submit decisions
-  const canActL2 = committeeStatus.is_committee_lead && !isSuperAdmin;
+  // Committee leads can always submit decisions — even if also super admin
+  const canActL2 = committeeStatus.is_committee_lead;
   const canReview = isManager || canAccessManagement;
 
   // Clamp URL mode to what the user can actually access (defer until committee status is known)
