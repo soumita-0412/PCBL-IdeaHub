@@ -55,18 +55,21 @@ async def list_approvals(
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
     docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
 
+    # Super admin sees every approval with no category restrictions
+    if current_user.role == Roles.SUPER_ADMIN:
+        return SuccessResponse(data=[_to_response(d) for d in docs])
+
     from app.models.category_committee import CategoryCommittee
     committees = await CategoryCommittee.find().to_list()
 
-    # Always restrict to categories that have a committee configured —
-    # ideas in unconfigured categories have no one to review them
+    # Everyone else: restrict to categories that have a committee configured
     categories_with_committee = {
         c.category_name for c in committees
         if c.committee_lead or c.committee_members
     }
     docs = [d for d in docs if d.category in categories_with_committee]
 
-    # L1 reviewer and above (incl. super admin) see all committee-configured categories
+    # L1 reviewer sees all committee-configured categories
     try:
         if ROLE_HIERARCHY.index(current_user.role) >= ROLE_HIERARCHY.index(Roles.L1_REVIEWER):
             return SuccessResponse(data=[_to_response(d) for d in docs])
