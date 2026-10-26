@@ -43,7 +43,7 @@ interface SidebarProps {
 const NAV_ITEMS_TOP: NavItem[] = [
   { label: "Submit Idea",      href: "/submit",     icon: <Plus size={16} /> },
   { label: "My Ideas",         href: "/my-ideas",   icon: <FileText size={16} /> },
-  { label: "Repository",       href: "/repository", icon: <Archive size={16} />,   minRole: Roles.L1_REVIEWER },
+  { label: "Repository",       href: "/repository", icon: <Archive size={16} /> },
 ];
 
 const NAV_ITEMS_BOTTOM: NavItem[] = [
@@ -127,18 +127,17 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const committeeStatus = useCommitteeStatus();
   // Super admin bypasses committee DB check and gets full access to both modes
   const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
-  const reviewLocked = !isManager && !canAccessManagement;
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
   const reviewCounts = useReviewCounts({ isManager, isCommittee: canAccessManagement });
 
-  // Both sub-items always visible; each carries its own lock state (like Repository / Admin Dashboard)
+  // Sub-items each carry their own lock; collapsed icon is locked only if neither mode is accessible
+  const reviewCollapsedLocked = !isManager && !canAccessManagement;
+  const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
   const reviewSubItems = [
     { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} />,     isLocked: !isManager,           count: reviewCounts.manager },
     { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} />, isLocked: !canAccessManagement, count: reviewCounts.management },
   ];
-  // Collapsed icon links to the first accessible mode
-  const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""} ${mobileOpen ? styles.sidebarMobileOpen : ""}`}>
@@ -195,18 +194,17 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           );
         })}
 
-        {/* Review — expandable item */}
+        {/* Review — expandable; parent always accessible, sub-items locked individually */}
         {collapsed ? (
-          /* Collapsed: single icon linking to the first accessible review mode */
           <Link
-            href={reviewLocked ? "#" : reviewCollapsedHref}
+            href={reviewCollapsedLocked ? "#" : reviewCollapsedHref}
             title={`Review${reviewCounts.total > 0 ? ` (${reviewCounts.total} pending)` : ""}`}
-            className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
-            tabIndex={reviewLocked ? -1 : undefined}
+            className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewCollapsedLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
+            tabIndex={reviewCollapsedLocked ? -1 : undefined}
           >
             <span className={styles.navIconWrap}>
               <ClipboardCheck size={16} />
-              {!reviewLocked && reviewCounts.total > 0 && (
+              {!reviewCollapsedLocked && reviewCounts.total > 0 && (
                 <span className={styles.navIconBadge}>
                   {reviewCounts.total > 99 ? "99+" : reviewCounts.total}
                 </span>
@@ -215,32 +213,25 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </Link>
         ) : (
           <>
-            {/* Review parent toggle */}
+            {/* Review parent — always clickable so locked sub-items are visible */}
             <button
               type="button"
-              onClick={() => !reviewLocked && setReviewExpanded((v) => !v)}
-              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""}`}
-              tabIndex={reviewLocked ? -1 : undefined}
-              title={reviewLocked ? "Review (locked)" : undefined}
+              onClick={() => setReviewExpanded((v) => !v)}
+              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemActive : ""}`}
             >
               <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
               <span className={styles.navLabel}>Review</span>
-              {reviewLocked ? (
-                <span className={styles.navLock}><Lock size={12} /></span>
-              ) : (
-                <>
-                  {reviewCounts.total > 0 && (
-                    <BellBadge count={reviewCounts.total} size={13} />
-                  )}
-                  <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
-                    <ChevronDown size={13} />
-                  </span>
-                </>
-              )}
+              <>
+                {reviewCounts.total > 0 && (
+                  <BellBadge count={reviewCounts.total} size={13} />
+                )}
+                <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
+                  <ChevronDown size={13} />
+                </span>
+              </>
             </button>
 
-            {/* Sub-items — always visible; locked ones match the nav-item lock pattern */}
-            {reviewExpanded && !reviewLocked && (
+            {reviewExpanded && (
               <div className={styles.subNav}>
                 {reviewSubItems.map((sub) => {
                   const isManagementMode = searchParams.get("mode") === "management";
@@ -268,10 +259,11 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </>
         )}
 
-        {/* Dashboard, Admin Dashboard */}
+        {/* Dashboard (locked for non-committee/non-super-admin), Admin Dashboard */}
         {NAV_ITEMS_BOTTOM.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-          const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
+          const isLocked = (!!item.minRole && !hasMinRole(userRole, item.minRole as Role))
+            || (item.href === "/dashboard" && !canAccessManagement);
 
           return (
             <Link
