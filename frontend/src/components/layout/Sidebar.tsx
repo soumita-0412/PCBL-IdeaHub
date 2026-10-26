@@ -6,7 +6,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   Plus,
   FileText,
-  ClipboardCheck,
   BarChart2,
   Archive,
   Lock,
@@ -14,7 +13,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   Settings,
   Users,
   Building2,
@@ -96,19 +94,11 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { userProfile } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
-  const [reviewExpanded, setReviewExpanded] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("sidebar-collapsed");
     if (stored === "true") setCollapsed(true);
   }, []);
-
-  // Auto-expand Review sub-menu when on the review page
-  useEffect(() => {
-    if (pathname.startsWith("/review")) {
-      setReviewExpanded(true);
-    }
-  }, [pathname]);
 
   // Close mobile sidebar on navigation
   useEffect(() => {
@@ -127,18 +117,11 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const committeeStatus = useCommitteeStatus();
   // Super admin bypasses committee DB check and gets full access to both modes
   const canAccessManagement = committeeStatus.is_committee || userRole === Roles.SUPER_ADMIN;
-  const reviewLocked = !isManager && !canAccessManagement;
   const searchParams = useSearchParams();
   const isOnReview = pathname.startsWith("/review");
   const reviewCounts = useReviewCounts({ isManager, isCommittee: canAccessManagement });
-
-  // Both sub-items always visible; each carries its own lock state (like Repository / Admin Dashboard)
-  const reviewSubItems = [
-    { label: "Review as Manager",    href: "/review?mode=manager",    icon: <Users size={13} />,     isLocked: !isManager,           count: reviewCounts.manager },
-    { label: "Review as Management", href: "/review?mode=management", icon: <Building2 size={13} />, isLocked: !canAccessManagement, count: reviewCounts.management },
-  ];
-  // Collapsed icon links to the first accessible mode
-  const reviewCollapsedHref = isManager ? "/review?mode=manager" : "/review?mode=management";
+  const isManagerModeActive = isOnReview && searchParams.get("mode") === "manager";
+  const isManagementModeActive = isOnReview && searchParams.get("mode") === "management";
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""} ${mobileOpen ? styles.sidebarMobileOpen : ""}`}>
@@ -195,81 +178,68 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           );
         })}
 
-        {/* Review — expandable item */}
-        {collapsed ? (
-          /* Collapsed: single icon linking to the first accessible review mode */
-          <Link
-            href={reviewLocked ? "#" : reviewCollapsedHref}
-            title={`Review${reviewCounts.total > 0 ? ` (${reviewCounts.total} pending)` : ""}`}
-            className={`${styles.navItem} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""} ${styles.navItemCollapsed}`}
-            tabIndex={reviewLocked ? -1 : undefined}
-          >
-            <span className={styles.navIconWrap}>
-              <ClipboardCheck size={16} />
-              {!reviewLocked && reviewCounts.total > 0 && (
-                <span className={styles.navIconBadge}>
-                  {reviewCounts.total > 99 ? "99+" : reviewCounts.total}
-                </span>
-              )}
-            </span>
-          </Link>
-        ) : (
-          <>
-            {/* Review parent toggle */}
-            <button
-              type="button"
-              onClick={() => !reviewLocked && setReviewExpanded((v) => !v)}
-              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemActive : ""} ${reviewLocked ? styles.navItemLocked : ""}`}
-              tabIndex={reviewLocked ? -1 : undefined}
-              title={reviewLocked ? "Review (locked)" : undefined}
+        {/* Review as Manager — visible to managers only */}
+        {isManager && (
+          collapsed ? (
+            <Link
+              href="/review?mode=manager"
+              title={`Review as Manager${reviewCounts.manager > 0 ? ` (${reviewCounts.manager} pending)` : ""}`}
+              className={`${styles.navItem} ${isManagerModeActive ? styles.navItemActive : ""} ${styles.navItemCollapsed}`}
             >
-              <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
-              <span className={styles.navLabel}>Review</span>
-              {reviewLocked ? (
-                <span className={styles.navLock}><Lock size={12} /></span>
-              ) : (
-                <>
-                  {reviewCounts.total > 0 && (
-                    <BellBadge count={reviewCounts.total} size={13} />
-                  )}
-                  <span className={`${styles.navChevron} ${reviewExpanded ? styles.navChevronOpen : ""}`}>
-                    <ChevronDown size={13} />
+              <span className={styles.navIconWrap}>
+                <Users size={16} />
+                {reviewCounts.manager > 0 && (
+                  <span className={styles.navIconBadge}>
+                    {reviewCounts.manager > 99 ? "99+" : reviewCounts.manager}
                   </span>
-                </>
-              )}
-            </button>
-
-            {/* Sub-items — always visible; locked ones match the nav-item lock pattern */}
-            {reviewExpanded && !reviewLocked && (
-              <div className={styles.subNav}>
-                {reviewSubItems.map((sub) => {
-                  const isManagementMode = searchParams.get("mode") === "management";
-                  const isSubActive = !sub.isLocked && isOnReview &&
-                    (sub.href.includes("mode=management") ? isManagementMode : !isManagementMode);
-
-                  return (
-                    <Link
-                      key={sub.href}
-                      href={sub.isLocked ? "#" : sub.href}
-                      tabIndex={sub.isLocked ? -1 : undefined}
-                      className={`${styles.subNavItem} ${isSubActive ? styles.subNavItemActive : ""} ${sub.isLocked ? styles.subNavItemLocked : ""}`}
-                    >
-                      <span className={styles.subNavIcon}>{sub.icon}</span>
-                      <span className={styles.subNavLabel}>{sub.label}</span>
-                      {sub.isLocked
-                        ? <span className={styles.subNavIcon}><Lock size={11} /></span>
-                        : sub.count > 0 && <BellBadge count={sub.count} size={12} />
-                      }
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </>
+                )}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href="/review?mode=manager"
+              className={`${styles.navItem} ${isManagerModeActive ? styles.navItemActive : ""}`}
+            >
+              <span className={styles.navIcon}><Users size={16} /></span>
+              <span className={styles.navLabel}>Review as Manager</span>
+              {reviewCounts.manager > 0 && <BellBadge count={reviewCounts.manager} size={13} />}
+            </Link>
+          )
         )}
 
-        {/* Dashboard, Admin Dashboard */}
-        {NAV_ITEMS_BOTTOM.map((item) => {
+        {/* Review as Management — visible to committee leads/members and super admin */}
+        {canAccessManagement && (
+          collapsed ? (
+            <Link
+              href="/review?mode=management"
+              title={`Review as Management${reviewCounts.management > 0 ? ` (${reviewCounts.management} pending)` : ""}`}
+              className={`${styles.navItem} ${isManagementModeActive ? styles.navItemActive : ""} ${styles.navItemCollapsed}`}
+            >
+              <span className={styles.navIconWrap}>
+                <Building2 size={16} />
+                {reviewCounts.management > 0 && (
+                  <span className={styles.navIconBadge}>
+                    {reviewCounts.management > 99 ? "99+" : reviewCounts.management}
+                  </span>
+                )}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href="/review?mode=management"
+              className={`${styles.navItem} ${isManagementModeActive ? styles.navItemActive : ""}`}
+            >
+              <span className={styles.navIcon}><Building2 size={16} /></span>
+              <span className={styles.navLabel}>Review as Management</span>
+              {reviewCounts.management > 0 && <BellBadge count={reviewCounts.management} size={13} />}
+            </Link>
+          )
+        )}
+
+        {/* Dashboard (committee/super admin only), Admin Dashboard */}
+        {NAV_ITEMS_BOTTOM.filter((item) =>
+          item.href !== "/dashboard" || canAccessManagement
+        ).map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
 
