@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle } from "lucide-react";
+import { useAuthStore } from "@/stores/auth.store";
+import { useCommitteeStatus } from "@/hooks/use-committee-status";
+import { Roles } from "@/constants/roles";
 import {
   getDashboardStats,
   getRecentIdeas,
@@ -44,6 +48,18 @@ function formatDate(iso: string) {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const { userProfile } = useAuthStore();
+  const committeeStatus = useCommitteeStatus();
+  const canAccess =
+    committeeStatus.is_committee || userProfile?.role === Roles.SUPER_ADMIN;
+
+  useEffect(() => {
+    if (committeeStatus.isReady && !canAccess) {
+      router.replace("/submit");
+    }
+  }, [committeeStatus.isReady, canAccess, router]);
+
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [ideas, setIdeas] = useState<PaginatedIdeas | null>(null);
   const [page, setPage] = useState(1);

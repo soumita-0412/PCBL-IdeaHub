@@ -268,8 +268,10 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </>
         )}
 
-        {/* Dashboard, Admin Dashboard */}
-        {NAV_ITEMS_BOTTOM.map((item) => {
+        {/* Dashboard (gated), Admin Dashboard */}
+        {NAV_ITEMS_BOTTOM.filter((item) =>
+          item.href !== "/dashboard" || canAccessManagement
+        ).map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           const isLocked = !!item.minRole && !hasMinRole(userRole, item.minRole as Role);
 
