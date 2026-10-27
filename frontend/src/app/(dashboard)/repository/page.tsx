@@ -8,7 +8,6 @@ import { getGroupReviews } from "@/services/groupReviewService";
 import type { IdeaResponse, IdeaStatus } from "@/types/idea";
 import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import type { GroupReviewResponse } from "@/types/groupReview";
-import { useAuthStore } from "@/stores/auth.store";
 import styles from "./repository.module.css";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -146,7 +145,6 @@ function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function RepositoryPage() {
-  const { userProfile } = useAuthStore();
   const [ideas, setIdeas]               = useState<IdeaResponse[] | null>(null);
   const [approvals, setApprovals]       = useState<ManagerApprovalResponse[]>([]);
   const [groupReviews, setGroupReviews] = useState<GroupReviewResponse[]>([]);
