@@ -157,7 +157,7 @@ export default function RepositoryPage() {
 
   useEffect(() => {
     Promise.all([
-      getAllIdeas(),
+      getAllIdeas(true),
       getAllManagerApprovals().catch(() => [] as ManagerApprovalResponse[]),
       getGroupReviews().catch(() => [] as GroupReviewResponse[]),
     ]).then(([ideasData, approvalsData, grData]) => {

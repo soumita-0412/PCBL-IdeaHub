@@ -6,7 +6,7 @@ GET  /api/v1/ideas/mine   — list the caller's own submissions
 GET  /api/v1/ideas/{id}   — fetch a single idea by its MongoDB id
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.core.constants import Roles
 from app.core.exceptions import ForbiddenException
@@ -25,9 +25,10 @@ router = APIRouter(prefix="/ideas", tags=["Ideas"])
     response_model=SuccessResponse[list[IdeaResponse]],
 )
 async def list_all_ideas(
+    all: bool = Query(default=False, description="Return all ideas regardless of role (used by Repository)"),
     current_user: CurrentUser = Depends(require_employee),
 ) -> SuccessResponse[list[IdeaResponse]]:
-    ideas = await idea_service.get_all_ideas(current_user)
+    ideas = await idea_service.get_all_ideas(current_user, show_all=all)
     return SuccessResponse(data=ideas)
 
 
