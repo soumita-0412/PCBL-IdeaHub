@@ -25,7 +25,7 @@ router = APIRouter(prefix="/ideas", tags=["Ideas"])
     response_model=SuccessResponse[list[IdeaResponse]],
 )
 async def list_all_ideas(
-    current_user: CurrentUser = Depends(require_l1_reviewer),
+    current_user: CurrentUser = Depends(require_employee),
 ) -> SuccessResponse[list[IdeaResponse]]:
     ideas = await idea_service.get_all_ideas(current_user)
     return SuccessResponse(data=ideas)

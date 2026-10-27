@@ -8,7 +8,6 @@ import { getGroupReviews } from "@/services/groupReviewService";
 import type { IdeaResponse, IdeaStatus } from "@/types/idea";
 import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import type { GroupReviewResponse } from "@/types/groupReview";
-import { hasMinRole, Roles } from "@/constants/roles";
 import { useAuthStore } from "@/stores/auth.store";
 import styles from "./repository.module.css";
 
@@ -156,10 +155,7 @@ export default function RepositoryPage() {
   const [search, setSearch]             = useState("");
   const [fetchError, setFetchError]     = useState<string | null>(null);
 
-  const canAccess = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
-
   useEffect(() => {
-    if (!canAccess) return;
     Promise.all([
       getAllIdeas(),
       getAllManagerApprovals().catch(() => [] as ManagerApprovalResponse[]),
@@ -169,7 +165,7 @@ export default function RepositoryPage() {
       setApprovals(approvalsData);
       setGroupReviews(grData);
     }).catch(() => setFetchError("Failed to load repository data. Please try again."));
-  }, [canAccess]);
+  }, []);
 
   const approvalByIdeaId = useMemo(() => {
     const map = new Map<string, ManagerApprovalResponse>();
@@ -221,14 +217,6 @@ export default function RepositoryPage() {
     if (!scored.length) return null;
     return scored.reduce((s, i) => s + i.l2_weighted_score!, 0) / scored.length;
   }, [ideas]);
-
-  if (!canAccess) {
-    return (
-      <main className={styles.container}>
-        <p className={styles.accessDenied}>You do not have permission to access the Repository.</p>
-      </main>
-    );
-  }
 
   return (
     <main className={styles.container}>

@@ -94,11 +94,12 @@ async def get_my_stats(actor: CurrentUser) -> IdeaStats:
 
 async def get_all_ideas(actor: CurrentUser) -> list[IdeaResponse]:
     ideas = await _repo.find_all()
-    if actor.role == Roles.SUPER_ADMIN:
-        return [_to_response(i) for i in ideas]
-    # L1 reviewer: filter to their direct reports only
-    direct_emails = await graph_client.get_direct_reports(actor.user_id)
-    return [_to_response(i) for i in ideas if i.submitter_email.lower() in direct_emails]
+    if actor.role == Roles.L1_REVIEWER:
+        # Manager: filter to their direct reports only
+        direct_emails = await graph_client.get_direct_reports(actor.user_id)
+        return [_to_response(i) for i in ideas if i.submitter_email.lower() in direct_emails]
+    # All other roles (employee, admin, super admin, committee): full repository
+    return [_to_response(i) for i in ideas]
 
 
 async def review_idea(idea_id: str, payload: IdeaReviewUpdate, actor: CurrentUser) -> IdeaResponse | None:
