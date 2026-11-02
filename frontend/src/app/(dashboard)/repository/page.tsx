@@ -246,31 +246,37 @@ export default function RepositoryPage() {
             )}
           </div>
 
-          <div className={styles.selectWrap}>
-            <select
-              className={styles.select}
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as FilterValue)}
-            >
-              {STATUS_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className={styles.selectChevron} />
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>Status</span>
+            <div className={styles.selectWrap}>
+              <select
+                className={styles.select}
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as FilterValue)}
+              >
+                {STATUS_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+              <ChevronDown size={13} className={styles.selectChevron} />
+            </div>
           </div>
 
-          <div className={styles.selectWrap}>
-            <select
-              className={styles.select}
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <option value="all">All</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className={styles.selectChevron} />
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>Categories</span>
+            <div className={styles.selectWrap}>
+              <select
+                className={styles.select}
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <ChevronDown size={13} className={styles.selectChevron} />
+            </div>
           </div>
         </div>
 
