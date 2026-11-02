@@ -10,7 +10,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.core.constants import ROLE_HIERARCHY, Roles
-from app.dependencies.permissions import require_committee_or_l1_reviewer
+from app.dependencies.permissions import require_committee_or_l1_reviewer, require_employee
 from app.models.manager_approval import ManagerApproval
 from app.repositories.manager_approval_repository import ManagerApprovalRepository
 from app.schemas.auth import CurrentUser
@@ -51,13 +51,20 @@ def _to_response(doc: ManagerApproval) -> ManagerApprovalResponse:
 )
 async def list_approvals(
     decision: Optional[str] = Query(default=None, description="Filter by decision: approved | rejected"),
-    current_user: CurrentUser = Depends(require_committee_or_l1_reviewer),
+    current_user: CurrentUser = Depends(require_employee),
 ) -> SuccessResponse[list[ManagerApprovalResponse]]:
     docs = await (_repo.find_by_decision(decision) if decision else _repo.find_all())
 
     # Super admin sees every approval with no category restrictions
     if current_user.role == Roles.SUPER_ADMIN:
         return SuccessResponse(data=[_to_response(d) for d in docs])
+
+    # Plain employee (not L1+): full read-only access for Repository
+    try:
+        if ROLE_HIERARCHY.index(current_user.role) < ROLE_HIERARCHY.index(Roles.L1_REVIEWER):
+            return SuccessResponse(data=[_to_response(d) for d in docs])
+    except ValueError:
+        pass
 
     from app.models.category_committee import CategoryCommittee
     committees = await CategoryCommittee.find().to_list()

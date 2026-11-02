@@ -96,8 +96,23 @@
 /* ── Filter bar ─────────────────────────────────────── */
 .filterBar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.filterLabel {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #A97388;
 }
 
 .searchWrap {

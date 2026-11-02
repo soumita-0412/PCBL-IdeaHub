@@ -32,8 +32,10 @@ export async function getMyStats(): Promise<IdeaStats> {
   return data.data;
 }
 
-export async function getAllIdeas(): Promise<IdeaResponse[]> {
-  const { data } = await apiClient.get<Apienvelope<IdeaResponse[]>>("/ideas");
+export async function getAllIdeas(showAll = false): Promise<IdeaResponse[]> {
+  const { data } = await apiClient.get<Apienvelope<IdeaResponse[]>>("/ideas", {
+    params: showAll ? { all: true } : undefined,
+  });
   return data.data;
 }
 

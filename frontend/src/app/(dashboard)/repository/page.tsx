@@ -8,8 +8,6 @@ import { getGroupReviews } from "@/services/groupReviewService";
 import type { IdeaResponse, IdeaStatus } from "@/types/idea";
 import type { ManagerApprovalResponse } from "@/types/managerApproval";
 import type { GroupReviewResponse } from "@/types/groupReview";
-import { hasMinRole, Roles } from "@/constants/roles";
-import { useAuthStore } from "@/stores/auth.store";
 import styles from "./repository.module.css";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -147,7 +145,6 @@ function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function RepositoryPage() {
-  const { userProfile } = useAuthStore();
   const [ideas, setIdeas]               = useState<IdeaResponse[] | null>(null);
   const [approvals, setApprovals]       = useState<ManagerApprovalResponse[]>([]);
   const [groupReviews, setGroupReviews] = useState<GroupReviewResponse[]>([]);
@@ -156,12 +153,9 @@ export default function RepositoryPage() {
   const [search, setSearch]             = useState("");
   const [fetchError, setFetchError]     = useState<string | null>(null);
 
-  const canAccess = hasMinRole(userProfile?.role ?? "", Roles.L1_REVIEWER);
-
   useEffect(() => {
-    if (!canAccess) return;
     Promise.all([
-      getAllIdeas(),
+      getAllIdeas(true),
       getAllManagerApprovals().catch(() => [] as ManagerApprovalResponse[]),
       getGroupReviews().catch(() => [] as GroupReviewResponse[]),
     ]).then(([ideasData, approvalsData, grData]) => {
@@ -169,7 +163,7 @@ export default function RepositoryPage() {
       setApprovals(approvalsData);
       setGroupReviews(grData);
     }).catch(() => setFetchError("Failed to load repository data. Please try again."));
-  }, [canAccess]);
+  }, []);
 
   const approvalByIdeaId = useMemo(() => {
     const map = new Map<string, ManagerApprovalResponse>();
@@ -222,14 +216,6 @@ export default function RepositoryPage() {
     return scored.reduce((s, i) => s + i.l2_weighted_score!, 0) / scored.length;
   }, [ideas]);
 
-  if (!canAccess) {
-    return (
-      <main className={styles.container}>
-        <p className={styles.accessDenied}>You do not have permission to access the Repository.</p>
-      </main>
-    );
-  }
-
   return (
     <main className={styles.container}>
       <div className={styles.inner}>
@@ -260,31 +246,37 @@ export default function RepositoryPage() {
             )}
           </div>
 
-          <div className={styles.selectWrap}>
-            <select
-              className={styles.select}
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as FilterValue)}
-            >
-              {STATUS_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className={styles.selectChevron} />
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>Status</span>
+            <div className={styles.selectWrap}>
+              <select
+                className={styles.select}
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as FilterValue)}
+              >
+                {STATUS_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+              <ChevronDown size={13} className={styles.selectChevron} />
+            </div>
           </div>
 
-          <div className={styles.selectWrap}>
-            <select
-              className={styles.select}
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <option value="all">All</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className={styles.selectChevron} />
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>Categories</span>
+            <div className={styles.selectWrap}>
+              <select
+                className={styles.select}
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <ChevronDown size={13} className={styles.selectChevron} />
+            </div>
           </div>
         </div>
 

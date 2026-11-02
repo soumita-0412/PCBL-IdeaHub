@@ -92,11 +92,12 @@ async def get_my_stats(actor: CurrentUser) -> IdeaStats:
     )
 
 
-async def get_all_ideas(actor: CurrentUser) -> list[IdeaResponse]:
+async def get_all_ideas(actor: CurrentUser, show_all: bool = False) -> list[IdeaResponse]:
     ideas = await _repo.find_all()
-    if actor.role == Roles.SUPER_ADMIN:
+    # Repository mode or non-filtering roles: return everything
+    if show_all or actor.role != Roles.L1_REVIEWER:
         return [_to_response(i) for i in ideas]
-    # L1 reviewer: filter to their direct reports only
+    # Review mode for L1 reviewer: filter to their direct reports only
     direct_emails = await graph_client.get_direct_reports(actor.user_id)
     return [_to_response(i) for i in ideas if i.submitter_email.lower() in direct_emails]
 
