@@ -34,7 +34,7 @@
   display: inline-block;
   width: 3px;
   height: 1.1em;
-  background: linear-gradient(to bottom, #3B82F6, #bfdbfe);
+  background: linear-gradient(to bottom, #1c4b98, #bfdbfe);
   border-radius: 99px;
   flex-shrink: 0;
 }
@@ -84,7 +84,7 @@
   line-height: 1;
 }
 
-.valPurple { color: #3B82F6; }
+.valPurple { color: #1c4b98; }
 .valAmber  { color: #C9A24A; }
 .valGreen  { color: #5F7857; }
 
@@ -149,7 +149,7 @@
 
 .bar {
   width: 100%;
-  background: linear-gradient(180deg, #3B82F6, #bfdbfe);
+  background: linear-gradient(180deg, #1c4b98, #bfdbfe);
   border-radius: 3px 3px 0 0;
   min-height: 4px;
   transition: height 0.35s ease;
@@ -177,12 +177,12 @@
   flex-direction: column;
   gap: 0.375rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+  scrollbar-color: rgba(28, 75, 152, 0.3) transparent;
 }
 
 .funnelList::-webkit-scrollbar { width: 3px; }
 .funnelList::-webkit-scrollbar-track { background: transparent; }
-.funnelList::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 99px; }
+.funnelList::-webkit-scrollbar-thumb { background: rgba(28, 75, 152, 0.3); border-radius: 99px; }
 
 .funnelRow {
   display: flex;
@@ -405,7 +405,7 @@
 .badgeGreen  { background: #E3EAE0; color: #5F7857; }
 .badgeAmber  { background: #F2E8D3; color: #8C6D2F; }
 .badgeRed    { background: #F0DDD3; color: #7A3E2C; }
-.badgeBlue   { background: rgba(59, 130, 246, 0.1); color: #1e40af; }
+.badgeBlue   { background: rgba(28, 75, 152, 0.1); color: #1e40af; }
 .badgePurple { background: #eff6ff; color: #1e40af; }
 
 /* ── L2 Score ──────────────────────────────────────── */
@@ -451,9 +451,9 @@
 }
 
 .pageBtn:hover:not(:disabled) {
-  border-color: #3B82F6;
+  border-color: #1c4b98;
   background: #eff6ff;
-  color: #3B82F6;
+  color: #1c4b98;
 }
 
 .pageBtn:disabled {
@@ -513,7 +513,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid #eff6ff;
-  border-top-color: #3B82F6;
+  border-top-color: #1c4b98;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -544,7 +544,7 @@
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #3B82F6;
+  color: #1c4b98;
   text-transform: uppercase;
 }
 
@@ -575,7 +575,7 @@
 .modalClose:hover {
   background: #eff6ff;
   border-color: #bfdbfe;
-  color: #3B82F6;
+  color: #1c4b98;
 }
 
 /* ── Meta row ──────────────────────────────────────── */
@@ -644,13 +644,13 @@
   gap: 0.625rem;
   background: linear-gradient(135deg, #F8FAFF 0%, #eff6ff 100%);
   border: 1px solid #eff6ff;
-  border-left: 4px solid #3B82F6;
+  border-left: 4px solid #1c4b98;
   border-radius: 0.625rem;
   padding: 0.75rem 1rem;
 }
 
 .commentIcon {
-  color: #3B82F6;
+  color: #1c4b98;
   flex-shrink: 0;
   margin-top: 0.1rem;
 }
@@ -713,7 +713,7 @@
 
 .scoreBarFill {
   height: 100%;
-  background: linear-gradient(90deg, #3B82F6, #bfdbfe);
+  background: linear-gradient(90deg, #1c4b98, #bfdbfe);
   border-radius: 99px;
   transition: width 0.5s ease;
 }
@@ -721,7 +721,7 @@
 .scoreVal {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #3B82F6;
+  color: #1c4b98;
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -760,7 +760,7 @@
 .totalScoreNum {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #3B82F6;
+  color: #1c4b98;
   line-height: 1;
 }
 

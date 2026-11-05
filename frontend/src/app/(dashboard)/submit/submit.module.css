@@ -37,7 +37,7 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  border: 1.5px solid #3B82F6;
+  border: 1.5px solid #1c4b98;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,11 +62,11 @@
 }
 
 .infoHighlight {
-  color: #3B82F6;
+  color: #1c4b98;
 }
 
 .infoAccent {
-  color: #3B82F6;
+  color: #1c4b98;
 }
 
 /* ── Steps indicator ───────────────────────────────── */
@@ -95,7 +95,7 @@
 }
 
 .stepBubbleActive {
-  background: #3B82F6;
+  background: #1c4b98;
   color: #fff;
 }
 
@@ -182,13 +182,13 @@
 }
 
 .categoryCard:hover {
-  border-color: #3B82F6;
+  border-color: #1c4b98;
   background: #eff6ff;
   color: #1e293b;
 }
 
 .categoryCardSelected {
-  border-color: #3B82F6;
+  border-color: #1c4b98;
   background: #eff6ff;
   color: #1e293b;
 }
@@ -202,7 +202,7 @@
 .continueBtn {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: linear-gradient(90deg, #1e40af, #3B82F6, #bfdbfe, #3B82F6, #1e40af);
+  background: linear-gradient(90deg, #1e40af, #1c4b98, #bfdbfe, #1c4b98, #1e40af);
   background-size: 200% 100%;
   animation: shimmer 7s linear infinite;
   color: #fff;
@@ -231,7 +231,7 @@
 
 /* ── Completed step bubble ─────────────────────────── */
 .stepBubbleDone {
-  background: #3B82F6;
+  background: #1c4b98;
   color: #bfdbfe;
   font-size: 0.6rem;
 }
@@ -290,8 +290,8 @@
 .textarea:focus {
   outline: none;
   background-color: #F8FAFF;
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 .charCount {
@@ -322,8 +322,8 @@
 .textInput:focus {
   outline: none;
   background-color: #F8FAFF;
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 /* Remove number input spinner arrows */
@@ -382,12 +382,12 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #3B82F6;
+  background: #1c4b98;
   transition: transform 0.15s ease;
 }
 
 .radioCustomChecked {
-  border-color: #3B82F6;
+  border-color: #1c4b98;
   background: #eff6ff;
 }
 
@@ -444,8 +444,8 @@
 }
 
 .backBtn:hover {
-  border-color: #3B82F6;
-  color: #3B82F6;
+  border-color: #1c4b98;
+  color: #1c4b98;
   background: #F8FAFF;
 }
 
@@ -479,7 +479,7 @@
 .reviewLabel {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #3B82F6;
+  color: #1c4b98;
   padding-top: 2px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -493,7 +493,7 @@
 }
 
 .reviewValueHighlight {
-  color: #3B82F6;
+  color: #1c4b98;
   font-weight: 500;
 }
 
@@ -510,7 +510,7 @@
 
 .reviewNoticeIcon {
   font-size: 1rem;
-  color: #3B82F6;
+  color: #1c4b98;
   flex-shrink: 0;
   padding-top: 1px;
   line-height: 1.5;
@@ -641,7 +641,7 @@
 .successNumber {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #3B82F6;
+  color: #1c4b98;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }

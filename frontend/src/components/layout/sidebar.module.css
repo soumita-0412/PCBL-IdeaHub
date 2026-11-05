@@ -20,13 +20,13 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: linear-gradient(175deg, #93c5fd 0%, #3b82f6 22%, #2563eb 55%, #1d4ed8 100%);
+  background: linear-gradient(175deg, #93c5fd 0%, #1c4b98 22%, #2563eb 55%, #1d4ed8 100%);
   border-right: none;
   border-radius: 0.875rem;
   margin: 0.625rem 0 0.625rem 0.625rem;
   overflow: hidden;
   transition: width 0.22s ease;
-  box-shadow: 0 4px 28px rgba(37, 99, 235, 0.28), 0 1px 6px rgba(59, 130, 246, 0.18);
+  box-shadow: 0 4px 28px rgba(37, 99, 235, 0.28), 0 1px 6px rgba(28, 75, 152, 0.18);
 }
 
 .sidebar::before {
@@ -51,7 +51,7 @@
   bottom: 60px;
   right: 15px;
   border-radius: 50%;
-  background: rgba(59, 130, 246, 0.45);
+  background: rgba(28, 75, 152, 0.45);
   z-index: 0;
   pointer-events: none;
   animation: moveBlob2 15s ease-in-out infinite;
@@ -88,9 +88,9 @@
 }
 
 .toggleBtn:hover {
-  background: #3B82F6;
+  background: #1c4b98;
   color: #fff;
-  border-color: #3B82F6;
+  border-color: #1c4b98;
 }
 
 .toggleBtnCentered {
@@ -120,7 +120,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #bfdbfe, #3B82F6);
+  background: linear-gradient(135deg, #bfdbfe, #1c4b98);
   color: #fff;
   flex-shrink: 0;
 }
@@ -203,7 +203,7 @@
   height: 0.95rem;
   padding: 0 0.2rem;
   border-radius: 99px;
-  background: #3B82F6;
+  background: #1c4b98;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;
@@ -389,7 +389,7 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #3B82F6, #bfdbfe);
+  background: linear-gradient(135deg, #1c4b98, #bfdbfe);
 }
 
 .userName {
@@ -470,7 +470,7 @@
   height: 1rem;
   padding: 0 0.25rem;
   border-radius: 99px;
-  background: #3B82F6;
+  background: #1c4b98;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;

@@ -35,7 +35,7 @@
   display: inline-block;
   width: 3px;
   height: 1.1em;
-  background: linear-gradient(to bottom, #3B82F6, #bfdbfe);
+  background: linear-gradient(to bottom, #1c4b98, #bfdbfe);
   border-radius: 99px;
   flex-shrink: 0;
 }
@@ -68,12 +68,12 @@
 }
 
 .tab:hover {
-  color: #3B82F6;
+  color: #1c4b98;
 }
 
 .tabActive {
-  color: #3B82F6;
-  border-bottom-color: #3B82F6;
+  color: #1c4b98;
+  border-bottom-color: #1c4b98;
   font-weight: 600;
 }
 
@@ -111,8 +111,8 @@
 }
 
 .input:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 .input::placeholder {
@@ -212,8 +212,8 @@
 }
 
 .weightWrap:focus-within {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 .weightInput {
@@ -270,7 +270,7 @@
   border-radius: 0.5rem;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #3B82F6;
+  color: #1c4b98;
   background: transparent;
   cursor: pointer;
   transition: background 0.12s ease, border-color 0.12s ease;
@@ -279,7 +279,7 @@
 
 .addRowBtn:hover {
   background: #F8FAFF;
-  border-color: #3B82F6;
+  border-color: #1c4b98;
 }
 
 /* ── Feedback / validation ───────────────────────────────────────────────── */
@@ -305,7 +305,7 @@
 /* ── Submit button ───────────────────────────────────────────────────────── */
 .submitBtn {
   padding: 0.5625rem 1.5rem;
-  background: linear-gradient(135deg, #1e40af, #3B82F6);
+  background: linear-gradient(135deg, #1e40af, #1c4b98);
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -393,8 +393,8 @@
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #3B82F6;
+  background: rgba(28, 75, 152, 0.08);
+  color: #1c4b98;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -422,8 +422,8 @@
 }
 
 .editBtn:hover {
-  border-color: #3B82F6;
-  color: #3B82F6;
+  border-color: #1c4b98;
+  color: #1c4b98;
   background: #F8FAFF;
 }
 
@@ -470,7 +470,7 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.4375rem 1rem;
-  background: #3B82F6;
+  background: #1c4b98;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -507,7 +507,7 @@
 }
 
 .cancelBtn:hover {
-  border-color: #3B82F6;
+  border-color: #1c4b98;
   color: #1e40af;
   background: #F8FAFF;
 }
@@ -518,9 +518,9 @@
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.07);
-  color: #3B82F6;
-  border: 1px solid rgba(59, 130, 246, 0.18);
+  background: rgba(28, 75, 152, 0.07);
+  color: #1c4b98;
+  border: 1px solid rgba(28, 75, 152, 0.18);
   white-space: nowrap;
   flex-shrink: 0;
 }
