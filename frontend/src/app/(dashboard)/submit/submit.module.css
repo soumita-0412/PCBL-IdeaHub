@@ -136,7 +136,7 @@
 .formTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #000000;
   margin: 0;
 }
 
@@ -169,11 +169,11 @@
 
 .categoryCard {
   padding: 0.6875rem 1rem;
-  background: #F8FAFF;
-  border: 1px solid #bfdbfe;
+  background: #fff;
+  border: 1px solid rgba(11, 48, 72, 0.25);
   border-radius: 0.625rem;
   font-size: 0.875rem;
-  color: #1e40af;
+  color: #0b3048;
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
@@ -182,15 +182,15 @@
 }
 
 .categoryCard:hover {
-  border-color: #1c4b98;
-  background: #eff6ff;
-  color: #1e293b;
+  border-color: #0b3048;
+  background: #e8f0f6;
+  color: #0b3048;
 }
 
 .categoryCardSelected {
-  border-color: #1c4b98;
-  background: #eff6ff;
-  color: #1e293b;
+  border-color: #0b3048;
+  background: #0b3048;
+  color: #fff;
 }
 
 /* ── Continue button ───────────────────────────────── */
