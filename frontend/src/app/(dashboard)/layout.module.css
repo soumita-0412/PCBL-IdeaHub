@@ -62,7 +62,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, #93c5fd, #1e3a8a);
+  background: linear-gradient(135deg, #93c5fd, #0f2a6b);
   color: #fff;
   display: flex;
   align-items: center;
@@ -92,7 +92,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.625rem 1rem;
-    background: linear-gradient(135deg, #1e3a8a, #3b6fd4);
+    background: linear-gradient(135deg, #0f2a6b, #2d56c0);
     flex-shrink: 0;
     position: sticky;
     top: 0;
