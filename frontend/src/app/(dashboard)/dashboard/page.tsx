@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle, Lightbulb, CheckCircle2, Users, Rocket, TrendingUp } from "lucide-react";
 import {
   getDashboardStats,
   getRecentIdeas,
@@ -116,31 +116,54 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {/* ── Info banner ── */}
+        <div className={styles.infoBanner}>
+          <div className={styles.infoBannerIcon}>
+            <TrendingUp size={15} />
+          </div>
+          <div className={styles.infoBannerBody}>
+            <p className={styles.infoBannerTitle}>Two-stage review process</p>
+            <p className={styles.infoBannerDesc}>Ideas go through Level 1 manager approval first, then to Level 2 group scoring if approved.</p>
+          </div>
+        </div>
+
         {/* ── Stats ── */}
         <div className={styles.statsGrid}>
           <div className={`${styles.statCard} ${styles.statCardPurple}`}>
-            <p className={styles.statLabel}>TOTAL SUBMITTED</p>
-            <p className={`${styles.statValue} ${styles.valPurple}`}>
-              {stats?.total_submitted ?? "—"}
-            </p>
+            <div className={`${styles.statIconWrap} ${styles.statIconBlue}`}>
+              <Lightbulb size={16} />
+            </div>
+            <div className={styles.statCardContent}>
+              <p className={styles.statLabel}>TOTAL SUBMITTED</p>
+              <p className={`${styles.statValue} ${styles.valPurple}`}>{stats?.total_submitted ?? "—"}</p>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardYellow}`}>
-            <p className={styles.statLabel}>MANAGER APPROVED</p>
-            <p className={`${styles.statValue} ${styles.valAmber}`}>
-              {stats?.manager_approved ?? "—"}
-            </p>
+            <div className={`${styles.statIconWrap} ${styles.statIconAmber}`}>
+              <CheckCircle2 size={16} />
+            </div>
+            <div className={styles.statCardContent}>
+              <p className={styles.statLabel}>MANAGER APPROVED</p>
+              <p className={`${styles.statValue} ${styles.valAmber}`}>{stats?.manager_approved ?? "—"}</p>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardGreen}`}>
-            <p className={styles.statLabel}>GROUP APPROVED</p>
-            <p className={`${styles.statValue} ${styles.valGreen}`}>
-              {stats?.group_approved ?? "—"}
-            </p>
+            <div className={`${styles.statIconWrap} ${styles.statIconGreen}`}>
+              <Users size={16} />
+            </div>
+            <div className={styles.statCardContent}>
+              <p className={styles.statLabel}>GROUP APPROVED</p>
+              <p className={`${styles.statValue} ${styles.valGreen}`}>{stats?.group_approved ?? "—"}</p>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardPurple}`}>
-            <p className={styles.statLabel}>IMPLEMENTED</p>
-            <p className={`${styles.statValue} ${styles.valPurple}`}>
-              {stats?.implemented ?? "—"}
-            </p>
+            <div className={`${styles.statIconWrap} ${styles.statIconBlue}`}>
+              <Rocket size={16} />
+            </div>
+            <div className={styles.statCardContent}>
+              <p className={styles.statLabel}>IMPLEMENTED</p>
+              <p className={`${styles.statValue} ${styles.valPurple}`}>{stats?.implemented ?? "—"}</p>
+            </div>
           </div>
         </div>
 
@@ -187,7 +210,7 @@ export default function DashboardPage() {
                           className={styles.fBar}
                           style={{
                             width: `${(f.submitted / maxSubmitted) * 100}%`,
-                            background: "#D9B8C4",
+                            background: "#bfdbfe",
                           }}
                         />
                         <div
@@ -213,7 +236,7 @@ export default function DashboardPage() {
             </div>
             <div className={styles.funnelLegend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#D9B8C4" }} />
+                <span className={styles.legendDot} style={{ background: "#bfdbfe" }} />
                 Submitted
               </span>
               <span className={styles.legendItem}>
@@ -360,7 +383,7 @@ export default function DashboardPage() {
         <div className={styles.funnelTooltip} style={{ left: funnelTip.x, top: funnelTip.y }}>
           <p className={styles.tooltipTitle}>{f.category}</p>
           <div className={styles.tooltipRow}>
-            <span className={styles.tooltipDot} style={{ background: "#D9B8C4" }} />
+            <span className={styles.tooltipDot} style={{ background: "#bfdbfe" }} />
             <span className={styles.tooltipLabel}>Submitted</span>
             <span className={styles.tooltipValue}>{f.submitted}</span>
             <span className={styles.tooltipPct}>100%</span>
