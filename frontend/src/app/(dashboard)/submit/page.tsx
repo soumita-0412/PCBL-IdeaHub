@@ -1,11 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DollarSign, Star, Shield, Zap, Heart, Leaf, Package, RefreshCw, Award, ShieldCheck, Check, Circle, Users } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
 import { submitIdea } from "@/services/ideaService";
 import type { IdeaResponse } from "@/types/idea";
 import styles from "./submit.module.css";
+
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  "Cost optimization":                    <DollarSign size={13} />,
+  "Customer experience":                  <Star size={13} />,
+  "Cybersecurity":                        <Shield size={13} />,
+  "Digital transformation & automation":  <Zap size={13} />,
+  "Employee experience":                  <Heart size={13} />,
+  "Environment & Sustainability":         <Leaf size={13} />,
+  "New product":                          <Package size={13} />,
+  "Other":                                <Circle size={13} />,
+  "Process improvement":                  <RefreshCw size={13} />,
+  "Quality improvement":                  <Award size={13} />,
+  "Safety improvement":                   <ShieldCheck size={13} />,
+  "Customer Experience":                  <Users size={13} />,
+};
 
 const PCBL_FUNCTIONS = [
   "Energy",
@@ -226,7 +242,13 @@ export default function SubmitIdeaPage() {
                     className={`${styles.categoryCard} ${category === cat.name ? styles.categoryCardSelected : ""}`}
                     onClick={() => setCategory(cat.name)}
                   >
-                    {cat.name}
+                    <span className={styles.categoryCardIcon}>
+                      {CATEGORY_ICONS[cat.name] ?? <Circle size={13} />}
+                    </span>
+                    <span className={styles.categoryCardName}>{cat.name}</span>
+                    {category === cat.name && (
+                      <span className={styles.categoryCardCheck}><Check size={13} /></span>
+                    )}
                   </button>
                 ))}
               </div>

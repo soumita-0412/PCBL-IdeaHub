@@ -168,9 +168,12 @@
 }
 
 .categoryCard {
-  padding: 0.6875rem 1rem;
-  background: #F8FAFF;
-  border: 1px solid #bfdbfe;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.6875rem 0.875rem;
+  background: #fff;
+  border: 1px solid rgba(191, 219, 254, 0.6);
   border-radius: 0.625rem;
   font-size: 0.875rem;
   color: #1e40af;
@@ -184,13 +187,45 @@
 .categoryCard:hover {
   border-color: #1c4b98;
   background: #eff6ff;
-  color: #1e293b;
+  color: #1c4b98;
+}
+
+.categoryCardIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba(28, 75, 152, 0.18);
+  background: rgba(28, 75, 152, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.categoryCardName {
+  flex: 1;
+  text-align: left;
+}
+
+.categoryCardCheck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
 }
 
 .categoryCardSelected {
   border-color: #1c4b98;
-  background: #eff6ff;
-  color: #1e293b;
+  background: #1c4b98;
+  color: #fff;
+}
+
+.categoryCardSelected .categoryCardIcon {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ── Continue button ───────────────────────────────── */
