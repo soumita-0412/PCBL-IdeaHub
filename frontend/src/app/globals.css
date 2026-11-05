@@ -11,7 +11,7 @@
 @layer base {
   :root {
     /* ── App background — deep dark navy ──────────────────── */
-    --background: 222 47% 7%;
+    --background: 214 100% 99%;
     --foreground: 210 40% 97%;
 
     /* ── Panels / Cards ────────────────────────────────────── */
@@ -22,7 +22,7 @@
     --popover-foreground: 210 40% 97%;
 
     /* ── Primary — amber/gold accent ───────────────────────── */
-    --primary: 38 95% 50%;
+    --primary: 219 70% 51%;
     --primary-foreground: 222 47% 7%;
 
     /* ── Secondary — muted navy ────────────────────────────── */
@@ -34,7 +34,7 @@
     --muted-foreground: 215 16% 55%;
 
     /* ── Accent — active nav / highlight ───────────────────── */
-    --accent: 222 55% 20%;
+    --accent: 219 70% 51%;
     --accent-foreground: 210 40% 97%;
 
     /* ── Destructive ───────────────────────────────────────── */
@@ -44,12 +44,12 @@
     /* ── Borders & Inputs ──────────────────────────────────── */
     --border: 222 35% 18%;
     --input: 222 40% 14%;
-    --ring: 38 95% 50%;
+    --ring: 219 70% 51%;
 
     /* ── Sidebar ───────────────────────────────────────────── */
-    --sidebar: 222 47% 9%;
+    --sidebar: 219 92% 46%;
     --sidebar-foreground: 210 40% 97%;
-    --sidebar-active: 222 55% 20%;
+    --sidebar-active: 217 91% 60%;
     --sidebar-active-foreground: 210 40% 97%;
 
     /* ── Brand amber ───────────────────────────────────────── */
@@ -73,7 +73,7 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 38 95% 50%;
+    --primary: 219 70% 51%;
     --primary-foreground: 222 47% 7%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -85,7 +85,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 38 95% 50%;
+    --ring: 219 70% 51%;
     --sidebar: 0 0% 98%;
     --sidebar-foreground: 222.2 84% 4.9%;
     --sidebar-active: 38 95% 50%;
@@ -98,7 +98,7 @@
   body {
     margin: 0;
     padding: 0;
-    background: #ffffff;
+    background: #F8FAFF;
     font-family: "Cambria Math", Cambria, Georgia, serif;
   }
 

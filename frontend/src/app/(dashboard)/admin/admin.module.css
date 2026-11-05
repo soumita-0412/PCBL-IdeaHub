@@ -16,14 +16,14 @@
 
 /* ── Page header ─────────────────────────────────────────────────────────── */
 .pageHeader {
-  border-bottom: 1px solid #EDE4EA;
+  border-bottom: 1px solid #eff6ff;
   padding-bottom: 0.875rem;
 }
 
 .pageTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #3d2535;
+  color: #1e293b;
   margin: 0 0 0.25rem;
   display: flex;
   align-items: center;
@@ -35,14 +35,14 @@
   display: inline-block;
   width: 3px;
   height: 1.1em;
-  background: linear-gradient(to bottom, #A97388, #D9B8C4);
+  background: linear-gradient(to bottom, #3B82F6, #bfdbfe);
   border-radius: 99px;
   flex-shrink: 0;
 }
 
 .pageSubtitle {
   font-size: 0.875rem;
-  color: #8C7280;
+  color: #64748b;
   margin: 0;
 }
 
@@ -50,14 +50,14 @@
 .tabBar {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid #EDE4EA;
+  border-bottom: 2px solid #eff6ff;
 }
 
 .tab {
   padding: 0.5rem 1.125rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #8C7280;
+  color: #64748b;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -68,12 +68,12 @@
 }
 
 .tab:hover {
-  color: #A97388;
+  color: #3B82F6;
 }
 
 .tabActive {
-  color: #A97388;
-  border-bottom-color: #A97388;
+  color: #3B82F6;
+  border-bottom-color: #3B82F6;
   font-weight: 600;
 }
 
@@ -94,16 +94,16 @@
 .label {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #6B4C5B;
+  color: #1e40af;
 }
 
 .input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #D9B8C4;
+  border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: #3d2535;
+  color: #1e293b;
   background: #fff;
   outline: none;
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
@@ -111,18 +111,18 @@
 }
 
 .input:focus {
-  border-color: #A97388;
-  box-shadow: 0 0 0 3px rgba(169, 115, 136, 0.1);
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .input::placeholder {
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 /* ── Scoring matrix section ──────────────────────────────────────────────── */
 .matrixSection {
-  background: #FAF4F7;
-  border: 1px solid #EDE4EA;
+  background: #F8FAFF;
+  border: 1px solid #eff6ff;
   border-radius: 0.75rem;
   padding: 0.875rem 1rem 0.75rem;
   display: flex;
@@ -140,13 +140,13 @@
 .matrixTitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #3d2535;
+  color: #1e293b;
   margin: 0 0 0.125rem;
 }
 
 .matrixDesc {
   font-size: 0.75rem;
-  color: #a88a96;
+  color: #93c5fd;
   margin: 0;
 }
 
@@ -192,7 +192,7 @@
   flex-shrink: 0;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #a88a96;
+  color: #93c5fd;
   text-align: center;
 }
 
@@ -203,7 +203,7 @@
 .weightWrap {
   display: flex;
   align-items: center;
-  border: 1px solid #D9B8C4;
+  border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
   overflow: hidden;
   background: #fff;
@@ -212,8 +212,8 @@
 }
 
 .weightWrap:focus-within {
-  border-color: #A97388;
-  box-shadow: 0 0 0 3px rgba(169, 115, 136, 0.1);
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .weightInput {
@@ -233,7 +233,7 @@
 .pct {
   padding: 0 0.5rem 0 0.125rem;
   font-size: 0.8125rem;
-  color: #8C7280;
+  color: #64748b;
   font-weight: 500;
   user-select: none;
 }
@@ -266,11 +266,11 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.4375rem 0.875rem;
-  border: 1.5px dashed #D9B8C4;
+  border: 1.5px dashed #bfdbfe;
   border-radius: 0.5rem;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #A97388;
+  color: #3B82F6;
   background: transparent;
   cursor: pointer;
   transition: background 0.12s ease, border-color 0.12s ease;
@@ -278,8 +278,8 @@
 }
 
 .addRowBtn:hover {
-  background: #F9EDF1;
-  border-color: #A97388;
+  background: #F8FAFF;
+  border-color: #3B82F6;
 }
 
 /* ── Feedback / validation ───────────────────────────────────────────────── */
@@ -305,7 +305,7 @@
 /* ── Submit button ───────────────────────────────────────────────────────── */
 .submitBtn {
   padding: 0.5625rem 1.5rem;
-  background: linear-gradient(135deg, #6B4C5B, #A97388);
+  background: linear-gradient(135deg, #1e40af, #3B82F6);
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -314,7 +314,7 @@
   cursor: pointer;
   transition: opacity 0.12s ease, box-shadow 0.12s ease;
   align-self: flex-start;
-  box-shadow: 0 2px 8px rgba(107, 76, 91, 0.22);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.22);
 }
 
 .submitBtn:disabled {
@@ -325,7 +325,7 @@
 
 .submitBtn:not(:disabled):hover {
   opacity: 0.88;
-  box-shadow: 0 4px 14px rgba(107, 76, 91, 0.3);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 /* ── Edit tab: category list ─────────────────────────────────────────────── */
@@ -337,7 +337,7 @@
 
 .emptyMsg {
   font-size: 0.875rem;
-  color: #a88a96;
+  color: #93c5fd;
   text-align: center;
   padding: 2rem 0;
   margin: 0;
@@ -349,7 +349,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.625rem 0.875rem;
-  border: 1px solid #EDE4EA;
+  border: 1px solid #eff6ff;
   border-radius: 0.625rem;
   background: #fff;
   gap: 1rem;
@@ -357,8 +357,8 @@
 }
 
 .catRow:hover {
-  border-color: #D9B8C4;
-  box-shadow: 0 1px 5px rgba(107, 76, 91, 0.07);
+  border-color: #bfdbfe;
+  box-shadow: 0 1px 5px rgba(37, 99, 235, 0.07);
 }
 
 .catInfo {
@@ -371,7 +371,7 @@
 .catName {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #3d2535;
+  color: #1e293b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -393,8 +393,8 @@
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: rgba(169, 115, 136, 0.08);
-  color: #A97388;
+  background: rgba(59, 130, 246, 0.08);
+  color: #3B82F6;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -411,20 +411,20 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.2875rem 0.75rem;
-  border: 1px solid #D9B8C4;
+  border: 1px solid #bfdbfe;
   border-radius: 0.375rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #6B4C5B;
+  color: #1e40af;
   background: #fff;
   cursor: pointer;
   transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
 }
 
 .editBtn:hover {
-  border-color: #A97388;
-  color: #A97388;
-  background: #F9EDF1;
+  border-color: #3B82F6;
+  color: #3B82F6;
+  background: #F8FAFF;
 }
 
 .deleteBtn {
@@ -450,10 +450,10 @@
 
 /* expanded edit panel */
 .catEditPanel {
-  border: 1.5px solid #D9B8C4;
+  border: 1.5px solid #bfdbfe;
   border-radius: 0.75rem;
   padding: 1.125rem;
-  background: #F9EDF1;
+  background: #F8FAFF;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -470,7 +470,7 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.4375rem 1rem;
-  background: #A97388;
+  background: #3B82F6;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -478,7 +478,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.12s ease, box-shadow 0.12s ease;
-  box-shadow: 0 1px 6px rgba(107, 76, 91, 0.2);
+  box-shadow: 0 1px 6px rgba(37, 99, 235, 0.2);
 }
 
 .saveBtn:disabled {
@@ -497,8 +497,8 @@
   gap: 0.375rem;
   padding: 0.4375rem 1rem;
   background: #fff;
-  color: #8C7280;
-  border: 1px solid #D9B8C4;
+  color: #64748b;
+  border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -507,9 +507,9 @@
 }
 
 .cancelBtn:hover {
-  border-color: #A97388;
-  color: #6B4C5B;
-  background: #FAF4F7;
+  border-color: #3B82F6;
+  color: #1e40af;
+  background: #F8FAFF;
 }
 
 /* ── Committee badge (collapsed row) ────────────────────────────────────── */
@@ -518,9 +518,9 @@
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: rgba(169, 115, 136, 0.07);
-  color: #A97388;
-  border: 1px solid rgba(169, 115, 136, 0.18);
+  background: rgba(59, 130, 246, 0.07);
+  color: #3B82F6;
+  border: 1px solid rgba(59, 130, 246, 0.18);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -530,8 +530,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background: #FAF4F7;
-  border: 1px solid #EDE4EA;
+  background: #F8FAFF;
+  border: 1px solid #eff6ff;
   border-radius: 0.75rem;
   padding: 0.875rem 1rem;
 }
