@@ -226,8 +226,10 @@
 }
 
 .navItemActive:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  box-shadow: inset 4px 0 0 #4368a0;
 }
 
 .navItemLocked {
