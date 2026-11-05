@@ -20,7 +20,7 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: linear-gradient(175deg, #93c5fd 0%, #1c4b98 22%, #2563eb 55%, #1d4ed8 100%);
+  background-color: #0f2a6b;
   border-right: none;
   border-radius: 0.875rem;
   margin: 0.625rem 0 0.625rem 0.625rem;
@@ -88,8 +88,8 @@
 }
 
 .toggleBtn:hover {
-  background: #1c4b98;
-  color: #fff;
+  background: #fff;
+  color: #000;
   border-color: #1c4b98;
 }
 
@@ -171,7 +171,7 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #bfdbfe;
+  color: #fff;
   text-decoration: none;
   transition: background 0.12s ease, color 0.12s ease;
   cursor: pointer;
@@ -219,10 +219,10 @@
 }
 
 .navItemActive {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #fff;
+  color: #000;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 #93c5fd;
+  box-shadow: inset 4px 0 0 #4368a0;
 }
 
 .navItemActive:hover {
