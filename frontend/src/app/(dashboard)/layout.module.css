@@ -10,9 +10,7 @@
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: linear-gradient(135deg, #F9EDF1, #F3E1E8, #EDE4EA, #F3E1E8, #F9EDF1);
-  background-size: 300% 300%;
-  animation: blushWash 12s ease infinite;
+  background: #F8FAFF;
 }
 
 .content {
@@ -64,7 +62,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, #D9B8C4, #A97388);
+  background: linear-gradient(135deg, #bfdbfe, #1c4b98);
   color: #fff;
   display: flex;
   align-items: center;
@@ -84,7 +82,7 @@
     display: block;
     position: fixed;
     inset: 0;
-    background: rgba(61, 37, 53, 0.5);
+    background: rgba(30, 41, 59, 0.5);
     z-index: 199;
     backdrop-filter: blur(2px);
   }
@@ -94,7 +92,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.625rem 1rem;
-    background: linear-gradient(135deg, #4e3345, #8a5e70);
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
     flex-shrink: 0;
     position: sticky;
     top: 0;

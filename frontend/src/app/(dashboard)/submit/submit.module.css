@@ -20,8 +20,8 @@
   align-items: flex-start;
   gap: 0.875rem;
   padding: 0.75rem 1rem;
-  background: #F9EDF1;
-  border: 1px solid #D9B8C4;
+  background: #F8FAFF;
+  border: 1px solid #bfdbfe;
   border-radius: 0.75rem;
   margin-bottom: 1.25rem;
 }
@@ -37,36 +37,36 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  border: 1.5px solid #A97388;
+  border: 1.5px solid #1c4b98;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.6rem;
   font-weight: 700;
-  color: #6B4C5B;
+  color: #1e40af;
   line-height: 1;
 }
 
 .infoTitle {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #3d2535;
+  color: #1e293b;
   margin: 0 0 0.2rem;
 }
 
 .infoDesc {
   font-size: 0.75rem;
-  color: #6B4C5B;
+  color: #1e40af;
   margin: 0;
   line-height: 1.45;
 }
 
 .infoHighlight {
-  color: #A97388;
+  color: #1c4b98;
 }
 
 .infoAccent {
-  color: #A97388;
+  color: #1c4b98;
 }
 
 /* ── Steps indicator ───────────────────────────────── */
@@ -95,14 +95,14 @@
 }
 
 .stepBubbleActive {
-  background: #A97388;
+  background: #1c4b98;
   color: #fff;
 }
 
 .stepBubbleInactive {
   background: transparent;
-  border: 1.5px solid #D9B8C4;
-  color: #a88a96;
+  border: 1.5px solid #bfdbfe;
+  color: #93c5fd;
 }
 
 .stepLabel {
@@ -111,17 +111,17 @@
 }
 
 .stepLabelActive {
-  color: #3d2535;
+  color: #1e293b;
 }
 
 .stepLabelInactive {
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 .stepLine {
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, #D9B8C4, rgba(217, 184, 196, 0.2));
+  background: linear-gradient(to right, #bfdbfe, rgba(191, 219, 254, 0.2));
   margin: 0 0.625rem;
   min-width: 2.5rem;
 }
@@ -136,13 +136,13 @@
 .formTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #6B4C5B;
+  color: #1e40af;
   margin: 0;
 }
 
 .formSubtitle {
   font-size: 0.8125rem;
-  color: #8C7280;
+  color: #64748b;
   margin: 0.3rem 0 0;
   line-height: 1.45;
 }
@@ -158,7 +158,7 @@
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 .categoryGrid {
@@ -169,11 +169,11 @@
 
 .categoryCard {
   padding: 0.6875rem 1rem;
-  background: #F9EDF1;
-  border: 1px solid #D9B8C4;
+  background: #F8FAFF;
+  border: 1px solid #bfdbfe;
   border-radius: 0.625rem;
   font-size: 0.875rem;
-  color: #6B4C5B;
+  color: #1e40af;
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
@@ -182,15 +182,15 @@
 }
 
 .categoryCard:hover {
-  border-color: #A97388;
-  background: #EDE4EA;
-  color: #3d2535;
+  border-color: #1c4b98;
+  background: #eff6ff;
+  color: #1e293b;
 }
 
 .categoryCardSelected {
-  border-color: #A97388;
-  background: #EDE4EA;
-  color: #3d2535;
+  border-color: #1c4b98;
+  background: #eff6ff;
+  color: #1e293b;
 }
 
 /* ── Continue button ───────────────────────────────── */
@@ -202,7 +202,7 @@
 .continueBtn {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: linear-gradient(90deg, #6B4C5B, #A97388, #D9B8C4, #A97388, #6B4C5B);
+  background: linear-gradient(90deg, #1e40af, #1c4b98, #bfdbfe, #1c4b98, #1e40af);
   background-size: 200% 100%;
   animation: shimmer 7s linear infinite;
   color: #fff;
@@ -214,7 +214,7 @@
   transition: opacity 0.3s ease;
   font-family: inherit;
   letter-spacing: 0.01em;
-  box-shadow: 0 2px 10px rgba(107, 76, 91, 0.22);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.22);
 }
 
 .continueBtn:hover:not(:disabled) {
@@ -225,14 +225,14 @@
   opacity: 0.45;
   cursor: not-allowed;
   animation: none;
-  background: #D9B8C4;
+  background: #bfdbfe;
   box-shadow: none;
 }
 
 /* ── Completed step bubble ─────────────────────────── */
 .stepBubbleDone {
-  background: #A97388;
-  color: #D9B8C4;
+  background: #1c4b98;
+  color: #bfdbfe;
   font-size: 0.6rem;
 }
 
@@ -246,7 +246,7 @@
 .fieldLabel {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #3d2535;
+  color: #1e293b;
 }
 
 .required {
@@ -255,7 +255,7 @@
 
 .fieldHint {
   font-size: 0.75rem;
-  color: #8C7280;
+  color: #64748b;
   margin: 0;
   line-height: 1.45;
 }
@@ -263,7 +263,7 @@
 .subFieldLabel {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #a88a96;
+  color: #93c5fd;
   margin: 0 0 0.3rem;
 }
 
@@ -272,10 +272,10 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #fff;
-  border: 1px solid #D9B8C4;
+  border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: #3d2535;
+  color: #1e293b;
   font-family: inherit;
   resize: vertical;
   line-height: 1.5;
@@ -284,19 +284,19 @@
 }
 
 .textarea::placeholder {
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 .textarea:focus {
   outline: none;
-  background-color: #F9EDF1;
-  border-color: #A97388;
-  box-shadow: 0 0 0 3px rgba(169, 115, 136, 0.1);
+  background-color: #F8FAFF;
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 .charCount {
   font-size: 0.6875rem;
-  color: #a88a96;
+  color: #93c5fd;
   align-self: flex-end;
   margin-top: -0.125rem;
 }
@@ -306,24 +306,24 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #fff;
-  border: 1px solid #D9B8C4;
+  border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: #3d2535;
+  color: #1e293b;
   font-family: inherit;
   transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   box-sizing: border-box;
 }
 
 .textInput::placeholder {
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 .textInput:focus {
   outline: none;
-  background-color: #F9EDF1;
-  border-color: #A97388;
-  box-shadow: 0 0 0 3px rgba(169, 115, 136, 0.1);
+  background-color: #F8FAFF;
+  border-color: #1c4b98;
+  box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
 /* Remove number input spinner arrows */
@@ -335,7 +335,7 @@
 
 .inputNote {
   font-size: 0.6875rem;
-  color: #a88a96;
+  color: #93c5fd;
   margin: 0.2rem 0 0;
   line-height: 1.4;
 }
@@ -366,7 +366,7 @@
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
-  border: 1.5px solid #D9B8C4;
+  border: 1.5px solid #bfdbfe;
   background: #fff;
   flex-shrink: 0;
   transition: border-color 0.15s ease, background 0.15s ease;
@@ -382,13 +382,13 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #A97388;
+  background: #1c4b98;
   transition: transform 0.15s ease;
 }
 
 .radioCustomChecked {
-  border-color: #A97388;
-  background: #F3E1E8;
+  border-color: #1c4b98;
+  background: #eff6ff;
 }
 
 .radioCustomChecked::after {
@@ -397,7 +397,7 @@
 
 .radioLabel {
   font-size: 0.875rem;
-  color: #3d2535;
+  color: #1e293b;
   font-weight: 500;
 }
 
@@ -432,8 +432,8 @@
 .backBtn {
   padding: 0.875rem 1.25rem;
   background: transparent;
-  color: #6B4C5B;
-  border: 1.5px solid #D9B8C4;
+  color: #1e40af;
+  border: 1.5px solid #bfdbfe;
   border-radius: 0.625rem;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -444,9 +444,9 @@
 }
 
 .backBtn:hover {
-  border-color: #A97388;
-  color: #A97388;
-  background: #F9EDF1;
+  border-color: #1c4b98;
+  color: #1c4b98;
+  background: #F8FAFF;
 }
 
 .navRow .continueBtn {
@@ -459,7 +459,7 @@
   flex-direction: column;
   gap: 0;
   background: #fff;
-  border: 1px solid #EDE4EA;
+  border: 1px solid #eff6ff;
   border-radius: 0.75rem;
   overflow: hidden;
 }
@@ -469,7 +469,7 @@
   grid-template-columns: 9rem 1fr;
   gap: 1rem;
   padding: 0.75rem 1.125rem;
-  border-bottom: 1px solid #FAF4F7;
+  border-bottom: 1px solid #F8FAFF;
 }
 
 .reviewRow:last-child {
@@ -479,7 +479,7 @@
 .reviewLabel {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #A97388;
+  color: #1c4b98;
   padding-top: 2px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -487,13 +487,13 @@
 
 .reviewValue {
   font-size: 0.875rem;
-  color: #3d2535;
+  color: #1e293b;
   line-height: 1.5;
   word-break: break-word;
 }
 
 .reviewValueHighlight {
-  color: #A97388;
+  color: #1c4b98;
   font-weight: 500;
 }
 
@@ -503,14 +503,14 @@
   gap: 0.75rem;
   align-items: flex-start;
   padding: 0.75rem 1rem;
-  background: #F9EDF1;
-  border: 1px solid #EDE4EA;
+  background: #F8FAFF;
+  border: 1px solid #eff6ff;
   border-radius: 0.625rem;
 }
 
 .reviewNoticeIcon {
   font-size: 1rem;
-  color: #A97388;
+  color: #1c4b98;
   flex-shrink: 0;
   padding-top: 1px;
   line-height: 1.5;
@@ -518,7 +518,7 @@
 
 .reviewNoticeText {
   font-size: 0.8125rem;
-  color: #6B4C5B;
+  color: #1e40af;
   margin: 0;
   line-height: 1.55;
 }
@@ -587,8 +587,8 @@
   align-items: center;
   gap: 1rem;
   padding: 2.5rem 2rem;
-  background: linear-gradient(135deg, #F9EDF1, #EDE4EA, #F9EDF1);
-  border: 1px solid #D9B8C4;
+  background: linear-gradient(135deg, #F8FAFF, #eff6ff, #F8FAFF);
+  border: 1px solid #bfdbfe;
   border-radius: 1rem;
   text-align: center;
 }
@@ -610,13 +610,13 @@
 .successTitle {
   font-size: 1.375rem;
   font-weight: 700;
-  color: #3d2535;
+  color: #1e293b;
   margin: 0;
 }
 
 .successDesc {
   font-size: 0.875rem;
-  color: #8C7280;
+  color: #64748b;
   margin: 0;
   max-width: 28rem;
   line-height: 1.5;
@@ -635,18 +635,18 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #a88a96;
+  color: #93c5fd;
 }
 
 .successNumber {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #A97388;
+  color: #1c4b98;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }
 
 .successValue {
   font-size: 0.875rem;
-  color: #8C7280;
+  color: #64748b;
 }
