@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
-  TrendingDown, ShieldCheck, Heart, DollarSign,
-  Cog, Monitor, UserCheck, Circle, BatteryCharging, Star, Lightbulb,
+  TrendingDown, ShieldCheck, Users, Banknote,
+  Factory, Cpu, UserCog, Disc, BatteryCharging, FlaskConical, Lightbulb,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
@@ -14,14 +14,14 @@ import styles from "./submit.module.css";
 const CATEGORY_ICONS: Record<string, React.ReactElement> = {
   "Cost Optimization":   <TrendingDown size={15} />,
   "Cyber Security":      <ShieldCheck size={15} />,
-  "Employee Experience": <Heart size={15} />,
-  "Finance":             <DollarSign size={15} />,
-  "Operations":          <Cog size={15} />,
-  "IT":                  <Monitor size={15} />,
-  "HR":                  <UserCheck size={15} />,
-  "Rubber Business":     <Circle size={15} />,
+  "Employee Experience": <Users size={15} />,
+  "Finance":             <Banknote size={15} />,
+  "Operations":          <Factory size={15} />,
+  "IT":                  <Cpu size={15} />,
+  "HR":                  <UserCog size={15} />,
+  "Rubber Business":     <Disc size={15} />,
   "Battery Business":    <BatteryCharging size={15} />,
-  "Specialty Business":  <Star size={15} />,
+  "Specialty Business":  <FlaskConical size={15} />,
 };
 
 function getCategoryIcon(name: string): React.ReactElement {

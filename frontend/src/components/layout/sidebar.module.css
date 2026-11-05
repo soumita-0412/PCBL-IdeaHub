@@ -20,13 +20,13 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: linear-gradient(175deg, #145a7d 0%, #0f4265 28%, #0c3852 60%, #0b3048 100%);
+  background: linear-gradient(175deg, #3b6fd4 0%, #2a5abf 25%, #2247aa 55%, #1e3a8a 100%);
   border-right: none;
   border-radius: 0.875rem;
   margin: 0.625rem 0 0.625rem 0.625rem;
   overflow: hidden;
   transition: width 0.22s ease;
-  box-shadow: 0 4px 28px rgba(11, 48, 72, 0.35), 0 1px 6px rgba(11, 48, 72, 0.2);
+  box-shadow: 0 4px 28px rgba(30, 58, 138, 0.35), 0 1px 6px rgba(30, 58, 138, 0.2);
 }
 
 .sidebar::before {
@@ -37,7 +37,7 @@
   bottom: 130px;
   left: 20px;
   border-radius: 50%;
-  background: rgba(20, 90, 125, 0.45);
+  background: rgba(59, 111, 212, 0.35);
   z-index: 0;
   pointer-events: none;
   animation: moveBlob1 12s ease-in-out infinite;
@@ -51,7 +51,7 @@
   bottom: 60px;
   right: 15px;
   border-radius: 50%;
-  background: rgba(11, 48, 72, 0.6);
+  background: rgba(30, 58, 138, 0.5);
   z-index: 0;
   pointer-events: none;
   animation: moveBlob2 15s ease-in-out infinite;
@@ -88,9 +88,9 @@
 }
 
 .toggleBtn:hover {
-  background: #145a7d;
+  background: #2247aa;
   color: #fff;
-  border-color: #145a7d;
+  border-color: #2247aa;
 }
 
 .toggleBtnCentered {
@@ -120,7 +120,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #93c5fd, #0b3048);
+  background: linear-gradient(135deg, #93c5fd, #1e3a8a);
   color: #fff;
   flex-shrink: 0;
 }
@@ -203,7 +203,7 @@
   height: 0.95rem;
   padding: 0 0.2rem;
   border-radius: 99px;
-  background: #1a6080;
+  background: #2247aa;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;
@@ -219,15 +219,15 @@
 }
 
 .navItemActive {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #ffffff;
+  color: #1e3a8a;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 #93c5fd;
+  box-shadow: inset 3px 0 0 #1e3a8a;
 }
 
 .navItemActive:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #ffffff;
+  color: #1e3a8a;
 }
 
 .navItemLocked {
@@ -312,10 +312,10 @@
 }
 
 .subNavItemActive {
-  color: #fff;
+  color: #1e3a8a;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 3px 0 0 #93c5fd;
+  background: #ffffff;
+  box-shadow: inset 3px 0 0 #1e3a8a;
 }
 
 .subNavIcon {
@@ -389,7 +389,7 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #0b3048, #93c5fd);
+  background: linear-gradient(135deg, #1e3a8a, #93c5fd);
 }
 
 .userName {
@@ -470,7 +470,7 @@
   height: 1rem;
   padding: 0 0.25rem;
   border-radius: 99px;
-  background: #1a6080;
+  background: #2247aa;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;
