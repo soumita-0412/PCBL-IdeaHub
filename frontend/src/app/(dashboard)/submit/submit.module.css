@@ -220,7 +220,7 @@
 .continueBtn {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: linear-gradient(90deg, #1e40af, #1c4b98, #bfdbfe, #1c4b98, #1e40af);
+  background: linear-gradient(90deg, #0c226b, #113775, #759bcb, #0b3272, #09216f);
   background-size: 200% 100%;
   animation: shimmer 7s linear infinite;
   color: #fff;
@@ -290,7 +290,7 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #fff;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #1e559a;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   color: #1e293b;
@@ -302,13 +302,13 @@
 }
 
 .textarea::placeholder {
-  color: #93c5fd;
+  color: #22466e;
 }
 
 .textarea:focus {
   outline: none;
   background-color: #F8FAFF;
-  border-color: #1c4b98;
+  border-color: #001538;
   box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
@@ -324,7 +324,7 @@
   width: 100%;
   padding: 0.6875rem 0.875rem;
   background: #fff;
-  border: 1px solid #bfdbfe;
+  border:1px solid #1e559a;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   color: #1e293b;
@@ -334,13 +334,13 @@
 }
 
 .textInput::placeholder {
-  color: #93c5fd;
+  color: #22466e;
 }
 
 .textInput:focus {
   outline: none;
   background-color: #F8FAFF;
-  border-color: #1c4b98;
+  border-color: #001538;
   box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
 }
 
@@ -606,7 +606,7 @@
   gap: 1rem;
   padding: 2.5rem 2rem;
   background: linear-gradient(135deg, #F8FAFF, #eff6ff, #F8FAFF);
-  border: 1px solid #bfdbfe;
+  border: 1px solid #1856a2;
   border-radius: 1rem;
   text-align: center;
 }
@@ -615,7 +615,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: #8FA888;
+  background: #078c38 ;
   color: #fff;
   display: flex;
   align-items: center;
@@ -653,7 +653,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #93c5fd;
+  color: #053a76;
 }
 
 .successNumber {
