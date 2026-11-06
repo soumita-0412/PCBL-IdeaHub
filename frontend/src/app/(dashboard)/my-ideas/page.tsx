@@ -41,16 +41,29 @@ function getL2(s: IdeaStatus): { label: string; cls: string; progress: number } 
   }
 }
 
-function popupStatusStyle(s: IdeaStatus): { label: string; dotCls: string; textCls: string } {
+function popupStatusStyle(s: IdeaStatus): { label: string; dotCls: string; textCls: string; pillCls: string } {
   switch (s) {
-    case "submitted":       return { label: "Submitted",    dotCls: styles.statusDotBlue!,  textCls: styles.statusTextBlue! };
+    case "submitted":       return { label: "Submitted",    dotCls: styles.statusDotBlue!,  textCls: styles.statusTextBlue!,  pillCls: styles.pillBlue! };
     case "under_review_l1":
-    case "under_review_l2": return { label: "Under Review", dotCls: styles.statusDotAmber!, textCls: styles.statusTextAmber! };
+    case "under_review_l2": return { label: "Under Review", dotCls: styles.statusDotAmber!, textCls: styles.statusTextAmber!, pillCls: styles.pillAmber! };
     case "approved_l1":
     case "approved_l2":
-    case "implemented":     return { label: "Approved",     dotCls: styles.statusDotGreen!, textCls: styles.statusTextGreen! };
+    case "implemented":     return { label: "Approved",     dotCls: styles.statusDotGreen!, textCls: styles.statusTextGreen!, pillCls: styles.pillGreen! };
     case "rejected_l1":
-    case "rejected_l2":     return { label: "Declined",     dotCls: styles.statusDotRed!,   textCls: styles.statusTextRed! };
+    case "rejected_l2":     return { label: "Declined",     dotCls: styles.statusDotRed!,   textCls: styles.statusTextRed!,   pillCls: styles.pillRed! };
+  }
+}
+
+function getPopupCls(s: IdeaStatus): string {
+  switch (s) {
+    case "submitted":       return styles.popupSubmitted!;
+    case "under_review_l1":
+    case "under_review_l2": return styles.popupPending!;
+    case "approved_l1":
+    case "approved_l2":
+    case "implemented":     return styles.popupApproved!;
+    case "rejected_l1":
+    case "rejected_l2":     return styles.popupDeclined!;
   }
 }
 
@@ -169,7 +182,7 @@ export default function MyIdeasPage() {
 
       {modalOpen && (
         <div className={styles.overlay} onClick={closeModal}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={`${styles.popup} ${selected ? getPopupCls(selected.status) : ""}`} onClick={(e) => e.stopPropagation()}>
 
             {/* Close button */}
             <button className={styles.popupClose} onClick={closeModal} aria-label="Close">
@@ -206,7 +219,7 @@ export default function MyIdeasPage() {
                       <span className={styles.popupMeta}>
                         {selected.submission_number}&nbsp;·&nbsp;{date}
                       </span>
-                      <span className={styles.popupStatus}>
+                      <span className={`${styles.popupStatus} ${st.pillCls}`}>
                         <span className={`${styles.statusDot} ${st.dotCls}`} />
                         <span className={`${styles.statusText} ${st.textCls}`}>{st.label}</span>
                       </span>

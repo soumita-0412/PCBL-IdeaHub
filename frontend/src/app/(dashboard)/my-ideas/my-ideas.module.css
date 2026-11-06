@@ -103,17 +103,17 @@
   border-radius: 0.75rem;
   padding: 0.875rem 1.375rem 0.75rem;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
 .card:hover {
-  /* border:1px solid #81c451; */
-  background: #e6f1ff;
+  background: #dce8ff;
   color: #0d1d51;
-  box-shadow: 0 2px 16px rgba(28, 75, 152, 0.06);
+  box-shadow: 0 8px 28px rgba(15, 42, 107, 0.14);
+  transform: translateY(-3px);
 }
 
 .card:focus-visible {
@@ -316,9 +316,9 @@
   max-width: 700px;
   max-height: 88vh;
   overflow-y: auto;
-  background: linear-gradient(160deg, #bfdbfe,#fff,#bfdbfe);
+  background: linear-gradient(160deg, #e8eeff, #fff, #e8eeff);
   border-radius: 1.125rem;
-  box-shadow: 0 24px 56px rgba(37, 99, 235, 0.22), 0 4px 12px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 24px 56px rgba(15, 42, 107, 0.18), 0 4px 12px rgba(15, 42, 107, 0.08);
 }
 
 /* accent bar at top */
@@ -328,10 +328,43 @@
   top: 0;
   display: block;
   height: 3px;
-  background: linear-gradient(90deg, #1e40af, #1c4b98, #bfdbfe);
+  background: linear-gradient(90deg, #0f2a6b, #1c4b98, #dbd0f5);
   border-radius: 1.125rem 1.125rem 0 0;
   flex-shrink: 0;
   z-index: 2;
+}
+
+/* ── Popup status colour variants ──────────────────── */
+.popupApproved {
+  background: linear-gradient(160deg, #d3f1c5, #fff, #d3f1c5);
+  box-shadow: 0 24px 56px rgba(39, 110, 6, 0.15), 0 4px 12px rgba(39, 110, 6, 0.08);
+}
+.popupApproved::before {
+  background: linear-gradient(90deg, #276e06, #8FA888, #d3f1c5);
+}
+
+.popupDeclined {
+  background: linear-gradient(160deg, #F0DDD3, #fff, #F0DDD3);
+  box-shadow: 0 24px 56px rgba(181, 101, 74, 0.15), 0 4px 12px rgba(181, 101, 74, 0.08);
+}
+.popupDeclined::before {
+  background: linear-gradient(90deg, #7A3E2C, #B5654A, #F0DDD3);
+}
+
+.popupPending {
+  background: linear-gradient(160deg, #f5ecdb, #fff, #f5ecdb);
+  box-shadow: 0 24px 56px rgba(161, 104, 7, 0.15), 0 4px 12px rgba(161, 104, 7, 0.08);
+}
+.popupPending::before {
+  background: linear-gradient(90deg, #8C6D2F, #C9A24A, #f5ecdb);
+}
+
+.popupSubmitted {
+  background: linear-gradient(160deg, #dbd0f5, #fff, #dbd0f5);
+  box-shadow: 0 24px 56px rgba(57, 16, 149, 0.12), 0 4px 12px rgba(57, 16, 149, 0.06);
+}
+.popupSubmitted::before {
+  background: linear-gradient(90deg, #391095, #6d28d9, #dbd0f5);
 }
 
 .popupClose {
@@ -399,8 +432,13 @@
   gap: 0.35rem;
   padding: 0.2rem 0.6rem;
   border-radius: 99px;
-  background: #dbd0f5;
+  background: #e8eeff;
 }
+
+.pillGreen  { background: #d3f1c5; }
+.pillAmber  { background: #f5ecdb; }
+.pillBlue   { background: #dbd0f5; }
+.pillRed    { background: #F0DDD3; }
 
 .statusDot {
   width: 0.4375rem;
@@ -435,7 +473,7 @@
 
 .popupSubtitle {
   font-size: 0.8125rem;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
@@ -466,7 +504,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
@@ -480,12 +518,12 @@
 
 .sectionMuted {
   font-size: 0.6875rem;
-  color: #1c4b98;
+  color: #64748b;
   margin: 0;
 }
 
 .link {
-  color: #1e40af;
+  color: #0f2a6b;
   text-decoration: underline;
 }
 
@@ -511,7 +549,7 @@
 
 .reviewLevelName {
   font-size: 0.8125rem;
-  color: #1e40af;
+  color: #0f2a6b;
   font-weight: 500;
 }
 
@@ -588,7 +626,7 @@
 
 .loadingText {
   font-size: 0.8125rem;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
