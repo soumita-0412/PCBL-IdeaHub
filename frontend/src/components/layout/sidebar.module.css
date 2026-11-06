@@ -20,13 +20,13 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: linear-gradient(175deg, #2d56c0 0%, #1f3e90 25%, #172e7a 55%, #0f2a6b 100%);
-  border-right: none;
-  border-radius: 0.875rem;
-  margin: 0.625rem 0 0.625rem 0.625rem;
-  overflow: hidden;
-  transition: width 0.22s ease;
-  box-shadow: 0 4px 28px rgba(15, 42, 107, 0.35), 0 1px 6px rgba(15, 42, 107, 0.2);
+background: linear-gradient(175deg, #0a2858 0%, #0a2858 22%, #0a2858 55%, #0a2858 100%);
+border-right: none;
+border-radius: 0.875rem;
+margin: 0.625rem 0 0.625rem 0.625rem;
+overflow: hidden;
+transition: width 0.22s ease;
+box-shadow: 0 4px 28px rgba(15, 42, 107, 0.35), 0 1px 6px rgba(15, 42, 107, 0.2);
 }
 
 .sidebar::before {
@@ -120,9 +120,14 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #93c5fd, #0f2a6b);
   color: #fff;
   flex-shrink: 0;
+}
+.brandIcon svg {
+   width: 2rem;
+    height: 2rem;
+    stroke-width: 2;
+    flex-shrink: 0;
 }
 
 .brandName {
@@ -171,7 +176,7 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #bfdbfe;
+  color: #e7eef7;
   text-decoration: none;
   transition: background 0.12s ease, color 0.12s ease;
   cursor: pointer;
@@ -222,7 +227,9 @@
   background: #ffffff;
   color: #0f2a6b;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 #0f2a6b;
+
+  box-shadow: inset 3px 0 0 #7293b8;
+
 }
 
 .navItemActive:hover {
@@ -389,7 +396,9 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #0f2a6b, #93c5fd);
+
+  background: linear-gradient(135deg, #163d7b, #052245);
+
 }
 
 .userName {

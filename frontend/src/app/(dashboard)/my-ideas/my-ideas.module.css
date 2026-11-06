@@ -41,7 +41,7 @@
 .title {
   font-size: 1.375rem;
   font-weight: 500;
-  color: #1e40af;
+  color: #000;
   margin: 0;
 }
 
@@ -60,9 +60,10 @@
 
 .totalBadge {
   padding: 0.3rem 0.75rem;
-  background: #8FA888;
+      background: #d3f1c5;
+    color: #276e06;
   /* border: 1px solid #5F7857; */
-  color:#fff ;
+  /* color:#fff ; */
   border-radius: 99px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -97,22 +98,22 @@
 
 /* ── Idea card ─────────────────────────────────────── */
 .card {
-  background: #fff;
+  background: #e6efff;
   border: none;
   border-radius: 0.75rem;
   padding: 0.875rem 1.375rem 0.75rem;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
 .card:hover {
-  /* border:1px solid #81c451; */
-  background: #bfdbfe;
-  color: #1e40af;
-  box-shadow: 0 2px 16px rgba(28, 75, 152, 0.06);
+  background: #dce8ff;
+  color: #0d1d51;
+  box-shadow: 0 8px 28px rgba(15, 42, 107, 0.14);
+  transform: translateY(-3px);
 }
 
 .card:focus-visible {
@@ -131,7 +132,7 @@
 
 .cardMeta {
   font-size: 0.75rem;
-  color: #1e40af;
+  color: #0a1c55;
   letter-spacing: 0.01em;
 }
 
@@ -139,7 +140,7 @@
 .cardTitle {
   font-size: 1rem;
   font-weight: 500;
-  color: #1e40af;
+  color: #000000;
   line-height: 1.3;
   margin: 0;
 }
@@ -166,19 +167,19 @@
   flex-shrink: 0;
 }
 
-.dotGreen  { background: #5F7857; }
-.dotAmber  { background: #C9A24A; }
-.dotRed    { background: #B5654A; }
-.dotLocked { background: #1e40af; }
+.dotGreen  { background: #276e06; }
+.dotAmber  { background: #d59931; }
+.dotRed    { background: #93140f; }
+.dotLocked { background: #391095; }
 
 .footerLabel {
   font-size: 0.75rem;
-  color: #1e40af;
+  color: #021962;
 }
 
 .footerLabel strong {
   font-weight: 600;
-  color: #1e40af;
+  color: #060353;
 }
 
 .footerSep {
@@ -199,18 +200,18 @@
 }
 
 .badgeAmber {
-  background: #C9A24A;
-  color: #fff;
+     background: #f5ecdb;
+    color: #a16807;
 }
 
 .badgeBlue {
-  background: #1c4b98;
-  color: #fff;
+      background: #dbd0f5;
+    color: #391095;
 }
 
 .badgeGreen {
-  background: #8FA888;
-  color: #fff;
+  background: #d3f1c5;
+  color: #276e06;
 }
 
 .badgeRed {
@@ -299,7 +300,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(37, 99, 235, 0.3);
+  background: rgb(37 99 235 / 0%);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -315,9 +316,9 @@
   max-width: 700px;
   max-height: 88vh;
   overflow-y: auto;
-  background: linear-gradient(160deg, #bfdbfe,#fff,#bfdbfe);
+  background: linear-gradient(160deg, #e8eeff, #fff, #e8eeff);
   border-radius: 1.125rem;
-  box-shadow: 0 24px 56px rgba(37, 99, 235, 0.22), 0 4px 12px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 24px 56px rgba(15, 42, 107, 0.18), 0 4px 12px rgba(15, 42, 107, 0.08);
 }
 
 /* accent bar at top */
@@ -327,10 +328,43 @@
   top: 0;
   display: block;
   height: 3px;
-  background: linear-gradient(90deg, #1e40af, #1c4b98, #bfdbfe);
+  background: linear-gradient(90deg, #0f2a6b, #1c4b98, #dbd0f5);
   border-radius: 1.125rem 1.125rem 0 0;
   flex-shrink: 0;
   z-index: 2;
+}
+
+/* ── Popup status colour variants ──────────────────── */
+.popupApproved {
+  background: linear-gradient(160deg, #d3f1c5, #fff, #d3f1c5);
+  box-shadow: 0 24px 56px rgba(39, 110, 6, 0.15), 0 4px 12px rgba(39, 110, 6, 0.08);
+}
+.popupApproved::before {
+  background: linear-gradient(90deg, #276e06, #8FA888, #d3f1c5);
+}
+
+.popupDeclined {
+  background: linear-gradient(160deg, #F0DDD3, #fff, #F0DDD3);
+  box-shadow: 0 24px 56px rgba(181, 101, 74, 0.15), 0 4px 12px rgba(181, 101, 74, 0.08);
+}
+.popupDeclined::before {
+  background: linear-gradient(90deg, #7A3E2C, #B5654A, #F0DDD3);
+}
+
+.popupPending {
+  background: linear-gradient(160deg, #f5ecdb, #fff, #f5ecdb);
+  box-shadow: 0 24px 56px rgba(161, 104, 7, 0.15), 0 4px 12px rgba(161, 104, 7, 0.08);
+}
+.popupPending::before {
+  background: linear-gradient(90deg, #8C6D2F, #C9A24A, #f5ecdb);
+}
+
+.popupSubmitted {
+  background: linear-gradient(160deg, #dbd0f5, #fff, #dbd0f5);
+  box-shadow: 0 24px 56px rgba(57, 16, 149, 0.12), 0 4px 12px rgba(57, 16, 149, 0.06);
+}
+.popupSubmitted::before {
+  background: linear-gradient(90deg, #391095, #6d28d9, #dbd0f5);
 }
 
 .popupClose {
@@ -387,7 +421,7 @@
 .popupMeta {
   font-size: 0.6875rem;
   font-weight: 600;
-  color: #1c4b98;
+  color: #052251;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
@@ -398,8 +432,13 @@
   gap: 0.35rem;
   padding: 0.2rem 0.6rem;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.6);
+  background: #e8eeff;
 }
+
+.pillGreen  { background: #d3f1c5; }
+.pillAmber  { background: #f5ecdb; }
+.pillBlue   { background: #dbd0f5; }
+.pillRed    { background: #F0DDD3; }
 
 .statusDot {
   width: 0.4375rem;
@@ -418,7 +457,7 @@
   font-weight: 600;
 }
 
-.statusTextBlue  { color: #1e40af; }
+.statusTextBlue  { color: #391095; }
 .statusTextAmber { color: #8C6D2F; }
 .statusTextGreen { color: #5F7857; }
 .statusTextRed   { color: #7A3E2C; }
@@ -427,14 +466,14 @@
 .popupTitle {
   font-size: 1.1875rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #000;
   margin: 0.1rem 0 0;
   line-height: 1.3;
 }
 
 .popupSubtitle {
   font-size: 0.8125rem;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
@@ -465,7 +504,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
@@ -479,12 +518,12 @@
 
 .sectionMuted {
   font-size: 0.6875rem;
-  color: #1c4b98;
+  color: #64748b;
   margin: 0;
 }
 
 .link {
-  color: #1e40af;
+  color: #0f2a6b;
   text-decoration: underline;
 }
 
@@ -510,7 +549,7 @@
 
 .reviewLevelName {
   font-size: 0.8125rem;
-  color: #1e40af;
+  color: #0f2a6b;
   font-weight: 500;
 }
 
@@ -522,10 +561,13 @@
   letter-spacing: 0.03em;
 }
 
-.reviewBadgeGreen  { background: #E3EAE0; color: #5F7857; }
-.reviewBadgeAmber  { background: #F2E8D3; color: #8C6D2F; }
-.reviewBadgeRed    { background: #F0DDD3; color: #7A3E2C; }
-.reviewBadgeLocked { background: rgba(37, 99, 235, 0.1); color: #1e40af; }
+.reviewBadgeGreen  {     background: #d3f1c5;
+    color: #276e06;}
+.reviewBadgeAmber  {     background: #f5ecdb;
+    color: #ae6e00; }
+.reviewBadgeRed    { background: #F0DDD3; color: #801717; }
+.reviewBadgeLocked { background: #dbd0f5;
+    color: #391095; }
 
 .progressTrack {
   height: 4px;
@@ -584,7 +626,7 @@
 
 .loadingText {
   font-size: 0.8125rem;
-  color: #1c4b98;
+  color: #0f2a6b;
   margin: 0;
 }
 
