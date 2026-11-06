@@ -38,7 +38,7 @@
 .pageTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #000;
   margin: 0;
   letter-spacing: -0.02em;
   display: flex;
@@ -51,14 +51,14 @@
   display: inline-block;
   width: 3px;
   height: 1.1em;
-  background: linear-gradient(to bottom, #1c4b98, #bfdbfe);
+  background: linear-gradient(to bottom, #0f2a6b, #dbd0f5);
   border-radius: 99px;
   flex-shrink: 0;
 }
 
 .pageSubtitle {
   font-size: 0.75rem;
-  color: #1c4b98;
+  color: #64748b;
   margin: 0;
 }
 
@@ -82,14 +82,14 @@
 .statPillValue {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #0f2a6b;
 }
 
-.statPillValueGreen { color: #5F7857; }
+.statPillValueGreen { color: #276e06; }
 
 .statPillLabel {
   font-size: 0.625rem;
-  color: #1c4b98;
+  color: #64748b;
   font-weight: 500;
 }
 
@@ -112,7 +112,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #1c4b98;
+  color: #0f2a6b;
 }
 
 .searchWrap {
@@ -135,17 +135,17 @@
   height: 2.25rem;
   padding: 0 2.25rem 0 2.375rem;
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(191, 219, 254, 0.45);
+  border: 1px solid rgba(15, 42, 107, 0.2);
   border-radius: 0.5rem;
   font-size: 0.8125rem;
-  color: #1e40af;
+  color: #1e293b;
   font-family: inherit;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 
-.searchInput::placeholder { color: rgba(28, 75, 152, 0.5); }
+.searchInput::placeholder { color: rgba(15, 42, 107, 0.4); }
 
 .searchInput:focus {
   border-color: #1c4b98;
@@ -183,10 +183,10 @@
   height: 2.25rem;
   padding: 0 2rem 0 0.75rem;
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(191, 219, 254, 0.45);
+  border: 1px solid rgba(15, 42, 107, 0.2);
   border-radius: 0.5rem;
   font-size: 0.8125rem;
-  color: #1e40af;
+  color: #1e293b;
   font-family: inherit;
   outline: none;
   cursor: pointer;
@@ -197,14 +197,14 @@
 }
 
 .select:focus {
-  border-color: #1c4b98;
+  border-color: #0f2a6b;
   background: #fff;
 }
 
 .selectChevron {
   position: absolute;
   right: 0.5rem;
-  color: #1c4b98;
+  color: #0f2a6b;
   pointer-events: none;
 }
 
@@ -217,7 +217,7 @@
 
 /* ── Individual card ────────────────────────────────── */
 .card {
-  background: rgba(255, 255, 255, 0.76);
+  background: #fff;
   border: 1px solid rgba(191, 219, 254, 0.25);
   border-left: 3px solid rgba(28, 75, 152, 0.3);
   border-radius: 0.75rem;
@@ -225,14 +225,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover {
-  border-color: rgba(191, 219, 254, 0.5);
-  border-left-color: #1c4b98;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.1);
+  background: #fff;
+  border-left-color: #0f2a6b;
+  box-shadow: 0 8px 28px rgba(15, 42, 107, 0.14);
+  transform: translateY(-3px);
 }
 
 /* ── Top row: meta + status ─────────────────────────── */
@@ -245,7 +245,7 @@
 
 .cardMeta {
   font-size: 0.625rem;
-  color: #1c4b98;
+  color: #0a1c55;
   letter-spacing: 0.05em;
   font-weight: 600;
   text-transform: uppercase;
@@ -271,21 +271,21 @@
   flex-shrink: 0;
 }
 
-.dotBlue  { background: #1c4b98; }
+.dotBlue  { background: #391095; }
 .dotAmber { background: #C9A24A; }
-.dotGreen { background: #5F7857; }
+.dotGreen { background: #276e06; }
 .dotRed   { background: #B5654A; }
 
-.textBlue  { color: #1e40af; background: rgba(28, 75, 152, 0.1); }
-.textAmber { color: #8C6D2F; background: #F2E8D3; }
-.textGreen { color: #5F7857; background: #E3EAE0; }
+.textBlue  { color: #391095; background: #dbd0f5; }
+.textAmber { color: #a16807; background: #f5ecdb; }
+.textGreen { color: #276e06; background: #d3f1c5; }
 .textRed   { color: #7A3E2C; background: #F0DDD3; }
 
 /* ── Title ──────────────────────────────────────────── */
 .cardTitle {
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #000;
   margin: 0.1rem 0 0;
   line-height: 1.3;
 }
@@ -333,10 +333,10 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.2rem 0.5rem;
-  background: #E3EAE0;
+  background: #d3f1c5;
   border-radius: 99px;
   flex: 0 0 auto;
-  border: 1px solid rgba(95, 120, 87, 0.2);
+  border: 1px solid rgba(39, 110, 6, 0.2);
 }
 
 .chipBoxLabel {
@@ -344,12 +344,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #5F7857;
+  color: #276e06;
 }
 
 .chipBoxText {
   font-size: 0.6875rem;
-  color: #5F7857;
+  color: #276e06;
   line-height: 1;
   max-width: 160px;
   overflow: hidden;
@@ -358,8 +358,8 @@
 }
 
 .chipBoxSavings {
-  background: #F2E8D3;
-  border: 1px solid rgba(201, 162, 74, 0.25);
+  background: #f5ecdb;
+  border: 1px solid rgba(161, 104, 7, 0.25);
   flex: 0 0 auto;
   padding: 0.2rem 0.5rem;
 }
@@ -369,13 +369,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #8C6D2F;
+  color: #a16807;
 }
 
 .chipBoxValue {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #8C6D2F;
+  color: #a16807;
   white-space: nowrap;
 }
 
@@ -393,7 +393,7 @@
 .cardReviewer {
   font-size: 0.5625rem;
   font-weight: 600;
-  color: #1c4b98;
+  color: #0f2a6b;
   text-align: center;
   white-space: nowrap;
   text-transform: uppercase;
@@ -404,7 +404,7 @@
 .skeletonCard {
   height: 5.5rem;
   border-radius: 0.75rem;
-  background: linear-gradient(90deg, #dbeafe 25%, #eff6ff 50%, #dbeafe 75%);
+  background: linear-gradient(90deg, #dce8ff 25%, #e6efff 50%, #dce8ff 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
@@ -422,7 +422,7 @@
 
 .emptyStateText {
   font-size: 0.8125rem;
-  color: #1c4b98;
+  color: #64748b;
   margin: 0;
 }
 
@@ -439,7 +439,7 @@
 /* ── Access denied ──────────────────────────────────── */
 .accessDenied {
   font-size: 0.875rem;
-  color: #1c4b98;
+  color: #64748b;
   padding: 4rem 2rem;
   text-align: center;
   margin: 0;
