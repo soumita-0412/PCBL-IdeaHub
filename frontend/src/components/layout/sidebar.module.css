@@ -20,13 +20,13 @@
   width: 250px;
   flex-shrink: 0;
   align-self: stretch;
-  background: linear-gradient(175deg, #93c5fd 0%, #1c4b98 22%, #2563eb 55%, #1d4ed8 100%);
+  background: linear-gradient(175deg, #2d56c0 0%, #1f3e90 25%, #172e7a 55%, #0f2a6b 100%);
   border-right: none;
   border-radius: 0.875rem;
   margin: 0.625rem 0 0.625rem 0.625rem;
   overflow: hidden;
   transition: width 0.22s ease;
-  box-shadow: 0 4px 28px rgba(37, 99, 235, 0.28), 0 1px 6px rgba(28, 75, 152, 0.18);
+  box-shadow: 0 4px 28px rgba(15, 42, 107, 0.35), 0 1px 6px rgba(15, 42, 107, 0.2);
 }
 
 .sidebar::before {
@@ -37,7 +37,7 @@
   bottom: 130px;
   left: 20px;
   border-radius: 50%;
-  background: rgba(191, 219, 254, 0.38);
+  background: rgba(45, 86, 192, 0.35);
   z-index: 0;
   pointer-events: none;
   animation: moveBlob1 12s ease-in-out infinite;
@@ -51,7 +51,7 @@
   bottom: 60px;
   right: 15px;
   border-radius: 50%;
-  background: rgba(28, 75, 152, 0.45);
+  background: rgba(15, 42, 107, 0.5);
   z-index: 0;
   pointer-events: none;
   animation: moveBlob2 15s ease-in-out infinite;
@@ -88,9 +88,9 @@
 }
 
 .toggleBtn:hover {
-  background: #1c4b98;
+  background: #1f3e90;
   color: #fff;
-  border-color: #1c4b98;
+  border-color: #1f3e90;
 }
 
 .toggleBtnCentered {
@@ -120,7 +120,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #bfdbfe, #1c4b98);
+  background: linear-gradient(135deg, #93c5fd, #0f2a6b);
   color: #fff;
   flex-shrink: 0;
 }
@@ -203,7 +203,7 @@
   height: 0.95rem;
   padding: 0 0.2rem;
   border-radius: 99px;
-  background: #1c4b98;
+  background: #1f3e90;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;
@@ -219,15 +219,15 @@
 }
 
 .navItemActive {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #ffffff;
+  color: #0f2a6b;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 #93c5fd;
+  box-shadow: inset 3px 0 0 #0f2a6b;
 }
 
 .navItemActive:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: #ffffff;
+  color: #0f2a6b;
 }
 
 .navItemLocked {
@@ -312,10 +312,10 @@
 }
 
 .subNavItemActive {
-  color: #fff;
+  color: #0f2a6b;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 3px 0 0 #93c5fd;
+  background: #ffffff;
+  box-shadow: inset 3px 0 0 #0f2a6b;
 }
 
 .subNavIcon {
@@ -352,7 +352,7 @@
   padding: 0.75rem 0.875rem;
   border-radius: 0.75rem;
   background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
-  border: 1px solid rgba(191, 219, 254, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
   transition: opacity 0.12s ease;
 }
@@ -389,7 +389,7 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #1c4b98, #bfdbfe);
+  background: linear-gradient(135deg, #0f2a6b, #93c5fd);
 }
 
 .userName {
@@ -470,7 +470,7 @@
   height: 1rem;
   padding: 0 0.25rem;
   border-radius: 99px;
-  background: #1c4b98;
+  background: #1f3e90;
   color: #fff;
   font-size: 0.5rem;
   font-weight: 700;

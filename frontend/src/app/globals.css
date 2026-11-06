@@ -47,7 +47,7 @@
     --ring: 217 69% 35%;
 
     /* ── Sidebar ───────────────────────────────────────────── */
-    --sidebar: 219 92% 46%;
+    --sidebar: 228 75% 24%;
     --sidebar-foreground: 210 40% 97%;
     --sidebar-active: 217 69% 35%;
     --sidebar-active-foreground: 210 40% 97%;
@@ -98,7 +98,7 @@
   body {
     margin: 0;
     padding: 0;
-    background: #F8FAFF;
+    background: #f2f0e9;
     font-family: "Cambria Math", Cambria, Georgia, serif;
   }
 

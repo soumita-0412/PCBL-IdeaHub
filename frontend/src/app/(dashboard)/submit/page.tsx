@@ -1,11 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  TrendingDown, ShieldCheck, Users, Banknote,
+  Factory, Cpu, UserCog, Disc, BatteryCharging, FlaskConical, Lightbulb,
+} from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
 import { submitIdea } from "@/services/ideaService";
 import type { IdeaResponse } from "@/types/idea";
 import styles from "./submit.module.css";
+
+const CATEGORY_ICONS: Record<string, React.ReactElement> = {
+  "Cost Optimization":   <TrendingDown size={15} />,
+  "Cyber Security":      <ShieldCheck size={15} />,
+  "Employee Experience": <Users size={15} />,
+  "Finance":             <Banknote size={15} />,
+  "Operations":          <Factory size={15} />,
+  "IT":                  <Cpu size={15} />,
+  "HR":                  <UserCog size={15} />,
+  "Rubber Business":     <Disc size={15} />,
+  "Battery Business":    <BatteryCharging size={15} />,
+  "Specialty Business":  <FlaskConical size={15} />,
+};
+
+function getCategoryIcon(name: string): React.ReactElement {
+  return CATEGORY_ICONS[name] ?? <Lightbulb size={15} />;
+}
 
 const PCBL_FUNCTIONS = [
   "Energy",
@@ -226,6 +247,7 @@ export default function SubmitIdeaPage() {
                     className={`${styles.categoryCard} ${category === cat.name ? styles.categoryCardSelected : ""}`}
                     onClick={() => setCategory(cat.name)}
                   >
+                    <span className={styles.categoryCardIcon}>{getCategoryIcon(cat.name)}</span>
                     {cat.name}
                   </button>
                 ))}
