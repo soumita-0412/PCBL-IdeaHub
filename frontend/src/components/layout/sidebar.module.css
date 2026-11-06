@@ -227,14 +227,18 @@ box-shadow: 0 4px 28px rgba(15, 42, 107, 0.35), 0 1px 6px rgba(15, 42, 107, 0.2)
   background: #ffffff;
   color: #0f2a6b;
   font-weight: 600;
-
   box-shadow: inset 3px 0 0 #7293b8;
-
 }
 
 .navItemActive:hover {
   background: #ffffff;
   color: #0f2a6b;
+}
+
+.navItemReviewActive {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .navItemLocked {
@@ -322,7 +326,7 @@ box-shadow: 0 4px 28px rgba(15, 42, 107, 0.35), 0 1px 6px rgba(15, 42, 107, 0.2)
   color: #0f2a6b;
   font-weight: 600;
   background: #ffffff;
-  box-shadow: inset 3px 0 0 #0f2a6b;
+  box-shadow: inset 3px 0 0 #7293b8;
 }
 
 .subNavIcon {

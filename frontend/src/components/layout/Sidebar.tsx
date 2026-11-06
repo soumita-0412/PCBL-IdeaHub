@@ -217,7 +217,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             <button
               type="button"
               onClick={() => setReviewExpanded((v) => !v)}
-              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemActive : ""}`}
+              className={`${styles.navItem} ${styles.navToggle} ${isOnReview ? styles.navItemReviewActive : ""}`}
             >
               <span className={styles.navIcon}><ClipboardCheck size={16} /></span>
               <span className={styles.navLabel}>Review</span>
