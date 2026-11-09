@@ -182,28 +182,17 @@ export default function DashboardPage() {
                       onMouseLeave={() => setFunnelTip(null)}
                     >
                       <span className={styles.funnelCat}>{f.category}</span>
-                      <div className={styles.funnelTrack}>
-                        <div
-                          className={styles.fBar}
-                          style={{
-                            width: `${(f.submitted / maxSubmitted) * 100}%`,
-                            background: "#D9B8C4",
-                          }}
-                        />
-                        <div
-                          className={styles.fBar}
-                          style={{
-                            width: `${(f.l1_approved / maxSubmitted) * 100}%`,
-                            background: "#C9A24A",
-                          }}
-                        />
-                        <div
-                          className={styles.fBar}
-                          style={{
-                            width: `${(f.l2_approved / maxSubmitted) * 100}%`,
-                            background: "#5F7857",
-                          }}
-                        />
+                      <div
+                        className={styles.funnelTrack}
+                        style={{
+                          "--sub-pct": `${(f.submitted / maxSubmitted) * 100}%`,
+                          "--l1-pct": `${(f.l1_approved / maxSubmitted) * 100}%`,
+                          "--l2-pct": `${(f.l2_approved / maxSubmitted) * 100}%`,
+                        } as React.CSSProperties}
+                      >
+                        <div className={`${styles.fBar} ${styles.fBarSub}`} />
+                        <div className={`${styles.fBar} ${styles.fBarL1}`} />
+                        <div className={`${styles.fBar} ${styles.fBarL2}`} />
                       </div>
                       <span className={styles.funnelNums}>
                         {f.l1_approved}/{f.submitted} → {f.l2_approved}
@@ -213,15 +202,15 @@ export default function DashboardPage() {
             </div>
             <div className={styles.funnelLegend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#D9B8C4" }} />
+                <span className={styles.legendDot} style={{ background: "#9B4FF0" }} />
                 Submitted
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#C9A24A" }} />
+                <span className={styles.legendDot} style={{ background: "#F29A1F" }} />
                 L1 Approved
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: "#5F7857" }} />
+                <span className={styles.legendDot} style={{ background: "#3FAE2A" }} />
                 L2 Approved
               </span>
             </div>
@@ -360,19 +349,19 @@ export default function DashboardPage() {
         <div className={styles.funnelTooltip} style={{ left: funnelTip.x, top: funnelTip.y }}>
           <p className={styles.tooltipTitle}>{f.category}</p>
           <div className={styles.tooltipRow}>
-            <span className={styles.tooltipDot} style={{ background: "#D9B8C4" }} />
+            <span className={styles.tooltipDot} style={{ background: "#9B4FF0" }} />
             <span className={styles.tooltipLabel}>Submitted</span>
             <span className={styles.tooltipValue}>{f.submitted}</span>
             <span className={styles.tooltipPct}>100%</span>
           </div>
           <div className={styles.tooltipRow}>
-            <span className={styles.tooltipDot} style={{ background: "#C9A24A" }} />
+            <span className={styles.tooltipDot} style={{ background: "#F29A1F" }} />
             <span className={styles.tooltipLabel}>L1 Approved</span>
             <span className={styles.tooltipValue}>{f.l1_approved}</span>
             <span className={styles.tooltipPct}>{pct(f.l1_approved)}</span>
           </div>
           <div className={styles.tooltipRow}>
-            <span className={styles.tooltipDot} style={{ background: "#5F7857" }} />
+            <span className={styles.tooltipDot} style={{ background: "#3FAE2A" }} />
             <span className={styles.tooltipLabel}>L2 Approved</span>
             <span className={styles.tooltipValue}>{f.l2_approved}</span>
             <span className={styles.tooltipPct}>{pct(f.l2_approved)}</span>
