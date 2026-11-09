@@ -28,6 +28,7 @@ function apiErrorMessage(err: unknown, fallback: string): string {
 
 function statusDotClass(s: IdeaStatus): string {
   switch (s) {
+    case "submitted":    return styles.dotPurple!;
     case "approved_l1":
     case "approved_l2":
     case "implemented":  return styles.dotGreen!;
@@ -127,7 +128,7 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
         <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
           <path
             d="M 8 26 L 20 37 L 40 12"
-            stroke="#5F7857"
+            stroke="#276e06"
             strokeWidth="4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -144,10 +145,10 @@ function DecisionSuccessOverlay({ type }: DecisionSuccessOverlayProps) {
       sub: "The idea has been assigned to pending review.",
       icon: (
         <svg width="52" height="52" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="18" stroke="#C9A24A" strokeWidth="2.5" />
-          <line x1="24" y1="24" x2="24" y2="11" stroke="#C9A24A" strokeWidth="3" strokeLinecap="round" />
+          <circle cx="24" cy="24" r="18" stroke="#a16807" strokeWidth="2.5" />
+          <line x1="24" y1="24" x2="24" y2="11" stroke="#a16807" strokeWidth="3" strokeLinecap="round" />
           <g style={{ transformOrigin: "24px 24px" }} className={styles.clockMinuteHand}>
-            <line x1="24" y1="24" x2="35" y2="24" stroke="#C9A24A" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="24" y1="24" x2="35" y2="24" stroke="#a16807" strokeWidth="2.5" strokeLinecap="round" />
           </g>
         </svg>
       ),
