@@ -11,6 +11,18 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.labelIcon {
+  color: #0f2a6b;
+  flex-shrink: 0;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
 }
 
 /* ── Selected chips ──────────────────────────────────────────────────────── */
