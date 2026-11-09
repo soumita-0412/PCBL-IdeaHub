@@ -98,13 +98,13 @@
 
 .ideaRowOnHold {
   background: #f5ecdb;
-  border-color: #a16807;
+  border-color: #be8627;
 }
 
 .ideaRowOnHold:hover {
   background: #ecdcbb;
-  border-color: #a16807;
-  box-shadow: 0 1px 5px rgba(161,104,7,0.1);
+  border-color: #be8627;
+  box-shadow: 0 1px 5px rgba(190,134,39,0.1);
 }
 
 .ideaRowNumber {
@@ -552,8 +552,8 @@
   flex-direction: column;
   gap: 0.75rem;
   border: 1px solid rgba(191, 219, 254, 0.25);
-  border-left: 3px solid #a16807;
-  box-shadow: 0 1px 3px rgba(15, 42, 107, 0.045);
+  border-left: 3px solid #391095;
+  box-shadow: 0 1px 3px rgba(57, 16, 149, 0.06);
 }
 
 .matrixCardHeader {
@@ -568,7 +568,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #a16807;
+  color: #391095;
   margin: 0;
 }
 
@@ -581,7 +581,7 @@
 .weightedScoreValue {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #a16807;
+  color: #391095;
 }
 
 .matrixEmpty {
@@ -630,7 +630,7 @@
 
 .scoreValue {
   font-weight: 700;
-  color: #a16807;
+  color: #391095;
 }
 
 .scoreRowControls {
@@ -657,10 +657,10 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background: #a16807;
+  background: #391095;
   cursor: pointer;
   border: 2.5px solid #fff;
-  box-shadow: 0 0 0 1.5px #a16807, 0 2px 4px rgba(161,104,7,0.2);
+  box-shadow: 0 0 0 1.5px #391095, 0 2px 4px rgba(57,16,149,0.2);
   transition: transform 0.12s ease;
 }
 
@@ -672,10 +672,10 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background: #a16807;
+  background: #391095;
   cursor: pointer;
   border: 2.5px solid #fff;
-  box-shadow: 0 0 0 1.5px #a16807;
+  box-shadow: 0 0 0 1.5px #391095;
 }
 
 /* ── Score dots ──────────────────────────────────────── */
@@ -694,7 +694,7 @@
 }
 
 .scoreDotFilled {
-  background: #a16807;
+  background: #391095;
 }
 
 .scoreDotEmpty {
