@@ -3,7 +3,12 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
-import { Check, X, Minus } from "lucide-react";
+import {
+  Check, X, Minus,
+  Lightbulb, AlertTriangle, Zap, TrendingUp, Info, Banknote,
+  MessageSquare, Gavel, ClipboardList, User, Calendar,
+  ArrowRight, SlidersHorizontal, Briefcase, Award,
+} from "lucide-react";
 import { getAllIdeas, reviewIdea, l2ReviewIdea } from "@/services/ideaService";
 import { getApprovedManagerApprovals } from "@/services/managerApprovalService";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
@@ -44,12 +49,13 @@ interface IdeaRowProps {
   submissionNumber: string;
   title: string;
   sub: string;
+  subIcon?: React.ReactNode;
   selected: boolean;
   isOnHold?: boolean;
   onClick: () => void;
 }
 
-function IdeaRow({ submissionNumber, title, sub, selected, isOnHold, onClick }: IdeaRowProps) {
+function IdeaRow({ submissionNumber, title, sub, subIcon, selected, isOnHold, onClick }: IdeaRowProps) {
   return (
     <div
       className={`${styles.ideaRow} ${selected ? styles.ideaRowSelected : ""} ${isOnHold ? styles.ideaRowOnHold : ""}`}
@@ -60,7 +66,10 @@ function IdeaRow({ submissionNumber, title, sub, selected, isOnHold, onClick }: 
     >
       <span className={styles.ideaRowNumber}>{submissionNumber}</span>
       <p className={styles.ideaRowTitle}>{title}</p>
-      <p className={styles.ideaRowSub}>{sub}</p>
+      <p className={styles.ideaRowSub}>
+        {subIcon && <span className={styles.ideaRowSubIcon}>{subIcon}</span>}
+        {sub}
+      </p>
     </div>
   );
 }
@@ -245,37 +254,59 @@ function L1DetailPanel({ idea, onReviewed, readOnly = false }: L1DetailPanelProp
           <span className={styles.detailSubmitter}>{idea.submitter_name}</span>
         </div>
         <h2 className={styles.detailTitle}>{idea.category}</h2>
-        <p className={styles.detailSubtitle}>Submitted by {idea.submitter_name} on {date}</p>
+        <p className={styles.detailSubtitle}>
+          <User size={11} />{idea.submitter_name}
+          &ensp;·&ensp;
+          <Calendar size={11} />{date}
+        </p>
 
         {idea.idea_title && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Idea Title</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardIdea}`}>
+            <p className={styles.sectionLabel}>
+              <Lightbulb size={11} style={{ color: "#a16807", flexShrink: 0 }} />
+              Idea Title
+            </p>
             <p className={styles.sectionText}>{idea.idea_title}</p>
           </div>
         )}
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Problem Statement</p>
+        <div className={`${styles.sectionCard} ${styles.sectionCardProblem}`}>
+          <p className={styles.sectionLabel}>
+            <AlertTriangle size={11} style={{ color: "#B5654A", flexShrink: 0 }} />
+            Problem Statement
+          </p>
           <p className={styles.sectionText}>{idea.problem}</p>
         </div>
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Proposed Solution</p>
+        <div className={`${styles.sectionCard} ${styles.sectionCardSolution}`}>
+          <p className={styles.sectionLabel}>
+            <Zap size={11} style={{ color: "#391095", flexShrink: 0 }} />
+            Proposed Solution
+          </p>
           <p className={styles.sectionText}>{idea.idea_description}</p>
         </div>
         {idea.benefit && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Benefit</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardBenefit}`}>
+            <p className={styles.sectionLabel}>
+              <TrendingUp size={11} style={{ color: "#276e06", flexShrink: 0 }} />
+              Benefit
+            </p>
             <p className={styles.sectionText}>{idea.benefit}</p>
           </div>
         )}
         {idea.additional_info && (
           <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Additional Information</p>
+            <p className={styles.sectionLabel}>
+              <Info size={11} style={{ flexShrink: 0, opacity: 0.8 }} />
+              Additional Information
+            </p>
             <p className={styles.sectionText}>{idea.additional_info}</p>
           </div>
         )}
         {idea.annual_estimate !== null && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Estimated Savings</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardSavings}`}>
+            <p className={styles.sectionLabel}>
+              <Banknote size={11} style={{ color: "#276e06", flexShrink: 0 }} />
+              Estimated Savings
+            </p>
             <p className={styles.sectionText}>₹ {idea.annual_estimate.toLocaleString("en-IN")} annual</p>
           </div>
         )}
@@ -285,7 +316,10 @@ function L1DetailPanel({ idea, onReviewed, readOnly = false }: L1DetailPanelProp
         ) : (
           <>
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Comments (Optional)</p>
+              <p className={styles.reviewBlockLabel}>
+                <MessageSquare size={12} style={{ flexShrink: 0 }} />
+                Comments (Optional)
+              </p>
               <textarea
                 className={styles.commentBox}
                 placeholder="Add comments for the submitter or group panel…"
@@ -297,7 +331,10 @@ function L1DetailPanel({ idea, onReviewed, readOnly = false }: L1DetailPanelProp
             </div>
 
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Decision</p>
+              <p className={styles.reviewBlockLabel}>
+                <Gavel size={12} style={{ flexShrink: 0 }} />
+                Decision
+              </p>
               <div className={styles.decisionRow}>
                 <button
                   type="button"
@@ -326,6 +363,7 @@ function L1DetailPanel({ idea, onReviewed, readOnly = false }: L1DetailPanelProp
               onClick={() => void handleSubmit()}
               disabled={!decision || submitting}
             >
+              <ArrowRight size={15} />
               {submitting ? "Submitting…" : "Submit Manager Decision"}
             </button>
           </>
@@ -423,46 +461,69 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
     <div className={styles.detailPanel}>
       <div className={styles.detailScroll}>
 
-        <div className={styles.l2Badge}>Level 2 — Group Scoring</div>
+        <div className={styles.l2Badge}>
+          <Award size={12} style={{ flexShrink: 0 }} />
+          Level 2 — Group Scoring
+        </div>
         <p className={styles.l2IdeaMeta}>{approval.submission_number} · {approval.category}</p>
         <h2 className={styles.detailTitle}>{approval.category}</h2>
         <p className={styles.detailSubtitle}>
-          Submitted by {approval.employee_name} on {date}
+          <User size={11} />{approval.employee_name}
+          &ensp;·&ensp;
+          <Calendar size={11} />{date}
           &ensp;·&ensp;
           <span className={styles.managerApprovedBy}>
-            Approved by manager: {approval.reviewed_by_name}
+            ✓ {approval.reviewed_by_name}
           </span>
         </p>
 
         {approval.idea_title && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Idea Title</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardIdea}`}>
+            <p className={styles.sectionLabel}>
+              <Lightbulb size={11} style={{ color: "#a16807", flexShrink: 0 }} />
+              Idea Title
+            </p>
             <p className={styles.sectionText}>{approval.idea_title}</p>
           </div>
         )}
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Problem Statement</p>
+        <div className={`${styles.sectionCard} ${styles.sectionCardProblem}`}>
+          <p className={styles.sectionLabel}>
+            <AlertTriangle size={11} style={{ color: "#B5654A", flexShrink: 0 }} />
+            Problem Statement
+          </p>
           <p className={styles.sectionText}>{approval.problem}</p>
         </div>
-        <div className={styles.sectionCard}>
-          <p className={styles.sectionLabel}>Proposed Solution</p>
+        <div className={`${styles.sectionCard} ${styles.sectionCardSolution}`}>
+          <p className={styles.sectionLabel}>
+            <Zap size={11} style={{ color: "#391095", flexShrink: 0 }} />
+            Proposed Solution
+          </p>
           <p className={styles.sectionText}>{approval.idea_description}</p>
         </div>
         {approval.benefit && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Benefit</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardBenefit}`}>
+            <p className={styles.sectionLabel}>
+              <TrendingUp size={11} style={{ color: "#276e06", flexShrink: 0 }} />
+              Benefit
+            </p>
             <p className={styles.sectionText}>{approval.benefit}</p>
           </div>
         )}
         {approval.additional_info && (
           <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Additional Information</p>
+            <p className={styles.sectionLabel}>
+              <Info size={11} style={{ flexShrink: 0, opacity: 0.8 }} />
+              Additional Information
+            </p>
             <p className={styles.sectionText}>{approval.additional_info}</p>
           </div>
         )}
         {approval.annual_estimate !== null && (
-          <div className={styles.sectionCard}>
-            <p className={styles.sectionLabel}>Estimated Savings</p>
+          <div className={`${styles.sectionCard} ${styles.sectionCardSavings}`}>
+            <p className={styles.sectionLabel}>
+              <Banknote size={11} style={{ color: "#276e06", flexShrink: 0 }} />
+              Estimated Savings
+            </p>
             <p className={styles.sectionText}>₹ {approval.annual_estimate.toLocaleString("en-IN")} annual</p>
           </div>
         )}
@@ -471,6 +532,7 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
         <div className={styles.matrixCard}>
           <div className={styles.matrixCardHeader}>
             <p className={styles.matrixCardTitle}>
+              <SlidersHorizontal size={11} style={{ flexShrink: 0 }} />
               Scoring Matrix{category ? ` — ${category.name}` : ""}
             </p>
             {category && category.matrix.length > 0 && (
@@ -517,7 +579,10 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
         ) : (
           <>
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Recommendations</p>
+              <p className={styles.reviewBlockLabel}>
+                <MessageSquare size={12} style={{ flexShrink: 0 }} />
+                Recommendations
+              </p>
               <textarea
                 className={styles.commentBox}
                 placeholder="Observations, recommendations…"
@@ -529,7 +594,10 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
             </div>
 
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Next Step</p>
+              <p className={styles.reviewBlockLabel}>
+                <ArrowRight size={12} style={{ flexShrink: 0 }} />
+                Next Step
+              </p>
               <textarea
                 className={styles.commentBox}
                 placeholder="Describe the proposed next steps for this idea…"
@@ -541,7 +609,10 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
             </div>
 
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Expected Timeline</p>
+              <p className={styles.reviewBlockLabel}>
+                <Calendar size={12} style={{ flexShrink: 0 }} />
+                Expected Timeline
+              </p>
               <input
                 type="date"
                 className={styles.dateInput}
@@ -552,7 +623,10 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
             </div>
 
             <div className={styles.reviewBlock}>
-              <p className={styles.reviewBlockLabel}>Decision</p>
+              <p className={styles.reviewBlockLabel}>
+                <Gavel size={12} style={{ flexShrink: 0 }} />
+                Decision
+              </p>
               <div className={styles.decisionRow3}>
                 <button
                   type="button"
@@ -589,6 +663,7 @@ function L2DetailPanel({ approval, category, onSubmitted, readOnly = false }: L2
               onClick={() => void handleSubmit()}
               disabled={!decision || submitting}
             >
+              <ArrowRight size={15} />
               {submitting ? "Submitting…" : "Submit Group Review"}
             </button>
           </>
@@ -752,6 +827,7 @@ export default function ReviewDashboardPage() {
               {mode === "manager" ? "Pending Approval" : "Manager Approved"}
             </p>
             <p className={styles.leftHeaderSub}>
+              <ClipboardList size={13} style={{ flexShrink: 0 }} />
               {mode === "manager" ? "L1 Manager Review" : "L2 Group Scoring"}
             </p>
           </div>
@@ -775,6 +851,7 @@ export default function ReviewDashboardPage() {
                 submissionNumber={idea.submission_number}
                 title={idea.category}
                 sub={idea.pcbl_function}
+                subIcon={<Briefcase size={9} />}
                 selected={selectedIdea?.id === idea.id}
                 onClick={() => setSelectedIdea(idea)}
               />
@@ -786,6 +863,7 @@ export default function ReviewDashboardPage() {
                 submissionNumber={approval.submission_number}
                 title={approval.category}
                 sub={approval.employee_name}
+                subIcon={<User size={9} />}
                 selected={selectedApproval?.id === approval.id}
                 isOnHold={ideaStatusMap.get(approval.idea_id) === "under_review_l2"}
                 onClick={() => setSelectedApproval(approval)}
