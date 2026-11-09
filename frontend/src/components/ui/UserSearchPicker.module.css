@@ -24,8 +24,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(28, 75, 152, 0.07);
-  border: 1px solid rgba(28, 75, 152, 0.2);
+  background: #dbd0f5;
+  border: 1px solid rgba(57, 16, 149, 0.4);
   border-radius: 0.5rem;
   padding: 0.3125rem 0.625rem;
   max-width: 100%;
@@ -40,7 +40,7 @@
 .chipName {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #111827;
+  color: #391095;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -63,7 +63,7 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #1c4b98;
+  color: #391095;
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
@@ -71,7 +71,7 @@
 }
 
 .chipRemove:hover {
-  background: rgba(28, 75, 152, 0.15);
+  background: rgba(57, 16, 149, 0.15);
 }
 
 /* ── Search input row ────────────────────────────────────────────────────── */
