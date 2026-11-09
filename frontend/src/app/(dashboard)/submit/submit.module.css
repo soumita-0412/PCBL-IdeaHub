@@ -299,7 +299,7 @@
 .subFieldLabel {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #93c5fd;
+  color: #000;
   margin: 0 0 0.3rem;
 }
 
@@ -360,6 +360,18 @@
   background-color: #F8FAFF;
   border-color: #001538;
   box-shadow: 0 0 0 3px rgba(28, 75, 152, 0.1);
+}
+
+.textInput:read-only {
+  background: #f1f5f9;
+  color: #475569;
+  cursor: default;
+  border-color: #e2e8f0;
+}
+
+.textInput:read-only:focus {
+  border-color: #e2e8f0;
+  box-shadow: none;
 }
 
 /* Remove number input spinner arrows */

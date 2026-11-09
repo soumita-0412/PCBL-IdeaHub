@@ -497,23 +497,21 @@ export default function SubmitIdeaPage() {
               </p>
               <div className={styles.twoCol}>
                 <div>
-                  <p className={styles.subFieldLabel}>Name <span className={styles.required}>*</span></p>
+                  <p className={styles.subFieldLabel}>Name</p>
                   <input
                     type="text"
                     className={styles.textInput}
-                    placeholder="Full name"
                     value={form.submitterName}
-                    onChange={(e) => patch("submitterName", e.target.value)}
+                    readOnly
                   />
                 </div>
                 <div>
-                  <p className={styles.subFieldLabel}>Email address <span className={styles.required}>*</span></p>
+                  <p className={styles.subFieldLabel}>Email address</p>
                   <input
                     type="email"
                     className={styles.textInput}
-                    placeholder="you@pcbl.com"
                     value={form.submitterEmail}
-                    onChange={(e) => patch("submitterEmail", e.target.value)}
+                    readOnly
                   />
                 </div>
               </div>
