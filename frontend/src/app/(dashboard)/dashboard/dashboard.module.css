@@ -263,19 +263,39 @@
 .funnelTrack {
   flex: 1;
   position: relative;
-  height: 8px;
-  border-radius: 99px;
-  background: #e6efff;
-  overflow: hidden;
+  height: 6px;
+  border-radius: 999px;
+  background: #EEF2FB;
+  overflow: visible;
 }
 
 .fBar {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  border-radius: 99px;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
   transition: width 0.4s ease;
+  --gloss: linear-gradient(180deg,
+    rgba(255,255,255,.45) 0%,
+    rgba(255,255,255,.08) 50%,
+    rgba(255,255,255,0) 100%);
+}
+
+.fBarSub {
+  width: var(--sub-pct);
+  background: var(--gloss), linear-gradient(90deg, #B68AF9, #9B4FF0);
+  box-shadow: 0 1px 3px rgba(155,79,240,.35);
+}
+
+.fBarL1 {
+  width: var(--l1-pct);
+  background: var(--gloss), linear-gradient(90deg, #FBC85C, #F29A1F);
+  box-shadow: 0 1px 3px rgba(242,154,31,.35);
+}
+
+.fBarL2 {
+  width: var(--l2-pct);
+  background: var(--gloss), linear-gradient(90deg, #A6C91A, #3FAE2A);
+  box-shadow: 0 1px 3px rgba(63,174,42,.35);
 }
 
 .funnelNums {
