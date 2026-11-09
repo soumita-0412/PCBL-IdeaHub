@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import {
   TrendingDown, ShieldCheck, Users, Banknote,
   Factory, Cpu, UserCog, Disc, BatteryCharging, FlaskConical, Lightbulb,
+  AlertTriangle, Zap, Briefcase, Search, TrendingUp, Info, User,
+  Layers, PenLine, ClipboardCheck, Tag, ArrowRight, ChevronLeft,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
@@ -233,13 +235,13 @@ export default function SubmitIdeaPage() {
         {step === 1 && (
           <div className={styles.formSection}>
             <div>
-              <h2 className={styles.formTitle}>What type of idea is this?</h2>
+              <h2 className={styles.formTitle}><Layers size={22} className={styles.formTitleIcon} />What type of idea is this?</h2>
               <p className={styles.formSubtitle}>
                 Selecting a category routes your idea to the right managers and reviewers.
               </p>
             </div>
             <div className={styles.categoryGroup}>
-              <p className={styles.categoryLabel}>Function / Category</p>
+              <p className={styles.categoryLabel}><Tag size={11} />Function / Category</p>
               <div className={styles.categoryGrid}>
                 {categories.map((cat) => (
                   <button
@@ -258,7 +260,7 @@ export default function SubmitIdeaPage() {
               disabled={!category}
               onClick={() => setStep(2)}
             >
-              Continue →
+              Continue <ArrowRight size={15} />
             </button>
           </div>
         )}
@@ -267,7 +269,7 @@ export default function SubmitIdeaPage() {
         {step === 2 && (
           <div className={styles.formSection}>
             <div>
-              <h2 className={styles.formTitle}>Describe your idea</h2>
+              <h2 className={styles.formTitle}><PenLine size={22} className={styles.formTitleIcon} />Describe your idea</h2>
               <p className={styles.formSubtitle}>
                 Category: <span className={styles.infoHighlight}>{category}</span>
               </p>
@@ -276,6 +278,7 @@ export default function SubmitIdeaPage() {
             {/* Idea title */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <Lightbulb size={13} style={{ color: "#a16807", flexShrink: 0 }} />
                 Idea title <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -295,6 +298,7 @@ export default function SubmitIdeaPage() {
             {/* Problem statement */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <AlertTriangle size={13} style={{ color: "#B5654A", flexShrink: 0 }} />
                 Problem statement <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -314,6 +318,7 @@ export default function SubmitIdeaPage() {
             {/* Idea description */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <Zap size={13} style={{ color: "#391095", flexShrink: 0 }} />
                 Idea description <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -333,6 +338,7 @@ export default function SubmitIdeaPage() {
             {/* PCBL Function */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <Briefcase size={13} style={{ color: "#0f2a6b", flexShrink: 0 }} />
                 PCBL Function / Application Market <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -368,6 +374,7 @@ export default function SubmitIdeaPage() {
             {/* Patent search */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <Search size={13} style={{ color: "#0f2a6b", flexShrink: 0 }} />
                 Patent search completed? <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -413,6 +420,7 @@ export default function SubmitIdeaPage() {
             {/* Benefit */}
             <div className={styles.fieldGroup}>
               <label className={styles.fieldLabel}>
+                <TrendingUp size={13} style={{ color: "#276e06", flexShrink: 0 }} />
                 Benefit <span className={styles.required}>*</span>
               </label>
               <p className={styles.fieldHint}>
@@ -431,7 +439,7 @@ export default function SubmitIdeaPage() {
 
             {/* Annual estimate */}
             <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Annual value estimate (₹)</label>
+              <label className={styles.fieldLabel}><Banknote size={13} style={{ color: "#276e06", flexShrink: 0 }} />Annual value estimate (₹)</label>
               <p className={styles.fieldHint}>
                 Please provide an estimate of how much money your idea can earn or save for PCBL Chemical on an annual basis.
               </p>
@@ -447,7 +455,7 @@ export default function SubmitIdeaPage() {
 
             {/* Additional info */}
             <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Additional information</label>
+              <label className={styles.fieldLabel}><Info size={13} style={{ color: "#0f2a6b", flexShrink: 0 }} />Additional information</label>
               <p className={styles.fieldHint}>
                 Please share any other information that will assist with the review of your idea.
               </p>
@@ -464,7 +472,7 @@ export default function SubmitIdeaPage() {
 
             {/* Submitter info */}
             <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Your details</label>
+              <label className={styles.fieldLabel}><User size={13} style={{ color: "#0f2a6b", flexShrink: 0 }} />Your details</label>
               <p className={styles.fieldHint}>
                 Pre-filled from your session. Will be fetched automatically from SSO once configured.
               </p>
@@ -494,7 +502,7 @@ export default function SubmitIdeaPage() {
 
             <div className={styles.navRow}>
               <button type="button" className={styles.backBtn} onClick={() => setStep(1)}>
-                ← Back
+                <ChevronLeft size={15} /> Back
               </button>
               <button
                 type="button"
@@ -502,7 +510,7 @@ export default function SubmitIdeaPage() {
                 disabled={!describeValid}
                 onClick={() => setStep(3)}
               >
-                Continue →
+                Continue <ArrowRight size={15} />
               </button>
             </div>
           </div>
@@ -512,7 +520,7 @@ export default function SubmitIdeaPage() {
         {step === 3 && (
           <div className={styles.formSection}>
             <div>
-              <h2 className={styles.formTitle}>Review your submission</h2>
+              <h2 className={styles.formTitle}><ClipboardCheck size={22} className={styles.formTitleIcon} />Review your submission</h2>
               <p className={styles.formSubtitle}>Confirm the details below before submitting.</p>
             </div>
 
@@ -539,7 +547,7 @@ export default function SubmitIdeaPage() {
             </div>
 
             <div className={styles.reviewNotice}>
-              <span className={styles.reviewNoticeIcon}>ⓘ</span>
+              <span className={styles.reviewNoticeIcon}><Info size={16} /></span>
               <p className={styles.reviewNoticeText}>
                 Submissions cannot be edited after this point. Your idea will enter Level 1 manager review, then
                 proceed to the <span className={styles.infoHighlight}>{category}</span> group panel if approved.
@@ -552,7 +560,7 @@ export default function SubmitIdeaPage() {
 
             <div className={styles.navRow}>
               <button type="button" className={styles.backBtn} onClick={() => setStep(2)} disabled={submitting}>
-                ← Back
+                <ChevronLeft size={15} /> Back
               </button>
               <button
                 type="button"
@@ -560,7 +568,7 @@ export default function SubmitIdeaPage() {
                 disabled={submitting}
                 onClick={() => void handleSubmit()}
               >
-                {submitting ? "Submitting…" : "Submit Idea →"}
+                {submitting ? "Submitting…" : <>Submit Idea <ArrowRight size={15} /></>}
               </button>
             </div>
           </div>
