@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import {
   TrendingDown, ShieldCheck, Users, Banknote,
-  Factory, Cpu, UserCog, Disc, BatteryCharging, FlaskConical, Lightbulb,
+  Factory, Cpu, UserCog, Disc, FlaskConical, Lightbulb,
   AlertTriangle, Zap, Briefcase, Search, TrendingUp, Info, User,
   Layers, PenLine, ClipboardCheck, Tag, ArrowRight, ChevronLeft,
+  Droplets, Cog, BadgeCheck, Scale, Building2, MoreHorizontal,
+  Leaf, Star, ShieldAlert,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCategories, type CategoryResponse } from "@/services/categoryService";
@@ -14,16 +16,17 @@ import type { IdeaResponse } from "@/types/idea";
 import styles from "./submit.module.css";
 
 const CATEGORY_ICONS: Record<string, React.ReactElement> = {
-  "Cost Optimization":   <TrendingDown size={15} />,
-  "Cyber Security":      <ShieldCheck size={15} />,
-  "Employee Experience": <Users size={15} />,
-  "Finance":             <Banknote size={15} />,
-  "Operations":          <Factory size={15} />,
-  "IT":                  <Cpu size={15} />,
-  "HR":                  <UserCog size={15} />,
-  "Rubber Business":     <Disc size={15} />,
-  "Battery Business":    <BatteryCharging size={15} />,
-  "Specialty Business":  <FlaskConical size={15} />,
+  "Cost optimization":                   <TrendingDown size={15} />,
+  "Customer experience":                 <Star size={15} />,
+  "Cybersecurity":                       <ShieldCheck size={15} />,
+  "Digital transformation & automation": <Cpu size={15} />,
+  "Employee experience":                 <Users size={15} />,
+  "Environment & Sustainability":        <Leaf size={15} />,
+  "New product":                         <Lightbulb size={15} />,
+  "Other":                               <MoreHorizontal size={15} />,
+  "Process improvement":                 <Cog size={15} />,
+  "Quality improvement":                 <BadgeCheck size={15} />,
+  "Safety improvement":                  <ShieldAlert size={15} />,
 };
 
 function getCategoryIcon(name: string): React.ReactElement {
@@ -44,6 +47,21 @@ const PCBL_FUNCTIONS = [
   "Facilities",
   "Other",
 ];
+
+const PCBL_FUNCTION_ICONS: Record<string, React.ReactElement> = {
+  "Energy":             <Zap size={14} />,
+  "Liquid Systems":     <Droplets size={14} />,
+  "Polymers":           <FlaskConical size={14} />,
+  "Tire and Rubber":    <Disc size={14} />,
+  "Process Technology": <Cog size={14} />,
+  "Quality":            <BadgeCheck size={14} />,
+  "Human Resources":    <UserCog size={14} />,
+  "Manufacturing":      <Factory size={14} />,
+  "Finance":            <Banknote size={14} />,
+  "Legal":              <Scale size={14} />,
+  "Facilities":         <Building2 size={14} />,
+  "Other":              <MoreHorizontal size={14} />,
+};
 
 interface DescribeForm {
   problem: string;
@@ -355,6 +373,7 @@ export default function SubmitIdeaPage() {
                       if (fn !== "Other") patch("pcblFunctionOther", "");
                     }}
                   >
+                    <span className={styles.categoryCardIcon}>{PCBL_FUNCTION_ICONS[fn]}</span>
                     {fn}
                   </button>
                 ))}
