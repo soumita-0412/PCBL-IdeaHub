@@ -2,7 +2,11 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { X } from "lucide-react";
+import {
+  X, Lightbulb, PenLine, SlidersHorizontal, MessageSquare, Gavel,
+  ArrowRight, Zap, AlertTriangle, Briefcase, Search, Banknote,
+  Info, User, Users, FolderOpen,
+} from "lucide-react";
 import { getMyIdeas, getIdeaById } from "@/services/ideaService";
 import type { IdeaListItem, IdeaResponse, IdeaStatus } from "@/types/idea";
 import styles from "./my-ideas.module.css";
@@ -115,14 +119,14 @@ export default function MyIdeasPage() {
 
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>My Ideas</h1>
+            <h1 className={styles.title}><Lightbulb size={18} className={styles.titleIcon} />My Ideas</h1>
             <p className={styles.subtitle}>Track your ideas through the two-stage review process</p>
           </div>
           <div className={styles.headerRight}>
             {ideas !== null && (
               <span className={styles.totalBadge}>{ideas.length} total</span>
             )}
-            <Link href="/submit" className={styles.submitBtn}>+ Submit Idea</Link>
+            <Link href="/submit" className={styles.submitBtn}><PenLine size={13} />Submit Idea</Link>
           </div>
         </div>
 
@@ -136,8 +140,9 @@ export default function MyIdeasPage() {
 
         {ideas !== null && ideas.length === 0 && (
           <div className={styles.emptyState}>
+            <FolderOpen size={40} className={styles.emptyIcon} />
             <p className={styles.emptyTitle}>Yet to submit?</p>
-            <Link href="/submit" className={styles.emptyBtn}>Submit your first idea →</Link>
+            <Link href="/submit" className={styles.emptyBtn}>Submit your first idea <ArrowRight size={14} /></Link>
           </div>
         )}
 
@@ -167,10 +172,10 @@ export default function MyIdeasPage() {
                   <div className={styles.cardDesc}>{idea.pcbl_function}</div>
                   <div className={styles.cardFooter}>
                     <span className={`${styles.dot} ${l1.cls}`} />
-                    <span className={styles.footerLabel}>L1: <strong>{l1.label}</strong></span>
+                    <span className={styles.footerLabel}><User size={9} style={{ flexShrink: 0, opacity: 0.7 }} />L1: <strong>{l1.label}</strong></span>
                     <span className={styles.footerSep}>·</span>
                     <span className={`${styles.dot} ${l2.cls}`} />
-                    <span className={styles.footerLabel}>L2: <strong>{l2.label}</strong></span>
+                    <span className={styles.footerLabel}><Users size={9} style={{ flexShrink: 0, opacity: 0.7 }} />L2: <strong>{l2.label}</strong></span>
                   </div>
                 </div>
               );
@@ -225,12 +230,12 @@ export default function MyIdeasPage() {
                       </span>
                     </div>
                     <h2 className={styles.popupTitle}>{selected.category}</h2>
-                    <p className={styles.popupSubtitle}>{selected.pcbl_function}</p>
+                    <p className={styles.popupSubtitle}><Briefcase size={12} style={{ flexShrink: 0 }} />{selected.pcbl_function}</p>
                   </div>
 
                   {/* Review Progress — spans both columns */}
                   <div className={styles.sectionCardFull}>
-                    <p className={styles.sectionLabel}>Review Progress</p>
+                    <p className={styles.sectionLabel}><SlidersHorizontal size={10} style={{ flexShrink: 0 }} />Review Progress</p>
                     <div className={styles.reviewLevels}>
                       <div className={styles.reviewLevel}>
                         <div className={styles.reviewLevelRow}>
@@ -276,7 +281,7 @@ export default function MyIdeasPage() {
                         ? styles.commentCardRed
                         : styles.commentCardGreen
                     }`}>
-                      <p className={styles.sectionLabel}>L1 Manager: Feedback</p>
+                      <p className={styles.sectionLabel}><MessageSquare size={10} style={{ flexShrink: 0 }} />L1 Manager: Feedback</p>
                       <p className={styles.sectionText}>{selected.reviewer_comment}</p>
                     </div>
                   )}
@@ -288,7 +293,7 @@ export default function MyIdeasPage() {
                         ? styles.commentCardRed
                         : styles.commentCardGreen
                     }`}>
-                      <p className={styles.sectionLabel}>L2 Manager: Recommendation</p>
+                      <p className={styles.sectionLabel}><Gavel size={10} style={{ flexShrink: 0 }} />L2 Manager: Recommendation</p>
                       <p className={styles.sectionText}>{selected.l2_comment}</p>
                     </div>
                   )}
@@ -300,26 +305,26 @@ export default function MyIdeasPage() {
                         ? styles.commentCardRed
                         : styles.commentCardGreen
                     }`}>
-                      <p className={styles.sectionLabel}>L2 Manager: Next Steps</p>
+                      <p className={styles.sectionLabel}><ArrowRight size={10} style={{ flexShrink: 0 }} />L2 Manager: Next Steps</p>
                       <p className={styles.sectionText}>{selected.l2_next_step}</p>
                     </div>
                   )}
 
                   {/* Description — half width */}
                   <div className={styles.sectionCard}>
-                    <p className={styles.sectionLabel}>Description</p>
+                    <p className={styles.sectionLabel}><Zap size={10} style={{ flexShrink: 0 }} />Description</p>
                     <p className={styles.sectionText}>{selected.idea_description}</p>
                   </div>
 
                   {/* Problem Statement */}
                   <div className={styles.sectionCard}>
-                    <p className={styles.sectionLabel}>Problem Statement</p>
+                    <p className={styles.sectionLabel}><AlertTriangle size={10} style={{ flexShrink: 0 }} />Problem Statement</p>
                     <p className={styles.sectionText}>{selected.problem}</p>
                   </div>
 
                   {/* PCBL Function */}
                   <div className={styles.sectionCard}>
-                    <p className={styles.sectionLabel}>PCBL Function</p>
+                    <p className={styles.sectionLabel}><Briefcase size={10} style={{ flexShrink: 0 }} />PCBL Function</p>
                     <p className={styles.sectionText}>
                       {selected.pcbl_function === "Other" && selected.pcbl_function_other
                         ? `Other — ${selected.pcbl_function_other}`
@@ -329,7 +334,7 @@ export default function MyIdeasPage() {
 
                   {/* Patent */}
                   <div className={styles.sectionCard}>
-                    <p className={styles.sectionLabel}>Patent Search</p>
+                    <p className={styles.sectionLabel}><Search size={10} style={{ flexShrink: 0 }} />Patent Search</p>
                     <p className={styles.sectionText}>
                       {selected.patent_search_done ? "Yes" : "No"}
                       {selected.patent_link && (
@@ -341,7 +346,7 @@ export default function MyIdeasPage() {
                   {/* Annual Estimate */}
                   {selected.annual_estimate !== null && (
                     <div className={styles.sectionCard}>
-                      <p className={styles.sectionLabel}>Estimated Savings</p>
+                      <p className={styles.sectionLabel}><Banknote size={10} style={{ flexShrink: 0 }} />Estimated Savings</p>
                       <p className={styles.sectionText}>
                         ₹ {selected.annual_estimate.toLocaleString("en-IN")} annual
                       </p>
@@ -351,14 +356,14 @@ export default function MyIdeasPage() {
                   {/* Additional Info — spans full */}
                   {selected.additional_info && (
                     <div className={styles.sectionCardFull}>
-                      <p className={styles.sectionLabel}>Additional Info</p>
+                      <p className={styles.sectionLabel}><Info size={10} style={{ flexShrink: 0 }} />Additional Info</p>
                       <p className={styles.sectionText}>{selected.additional_info}</p>
                     </div>
                   )}
 
                   {/* Submitted by — spans full */}
                   <div className={styles.sectionCardFull}>
-                    <p className={styles.sectionLabel}>Submitted By</p>
+                    <p className={styles.sectionLabel}><User size={10} style={{ flexShrink: 0 }} />Submitted By</p>
                     <p className={styles.sectionText}>
                       {selected.submitter_name} — {selected.submitter_email}
                     </p>
