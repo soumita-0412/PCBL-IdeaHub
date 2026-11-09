@@ -68,6 +68,22 @@
 .statCardYellow { border-left-color: #f5ecdb; }
 .statCardGreen  { border-left-color: #d3f1c5; }
 
+.statCardBody {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.625rem;
+}
+
+.statCardIcon {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.statIconPurple { color: #391095; }
+.statIconAmber  { color: #a16807; }
+.statIconGreen  { color: #276e06; }
+
 .statLabel {
   font-size: 0.5875rem;
   font-weight: 700;
@@ -107,6 +123,18 @@
   gap: 0.625rem;
   height: 230px;
   overflow: hidden;
+}
+
+.chartTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chartTitleIcon {
+  color: #0f2a6b;
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 .chartTitle {
