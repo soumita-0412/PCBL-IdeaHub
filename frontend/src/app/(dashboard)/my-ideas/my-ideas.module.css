@@ -43,6 +43,15 @@
   font-weight: 500;
   color: #000;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.titleIcon {
+  color: #0f2a6b;
+  flex-shrink: 0;
+  opacity: 0.75;
 }
 
 .subtitle {
@@ -81,6 +90,9 @@
   text-decoration: none;
   white-space: nowrap;
   transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 .submitBtn:hover {
@@ -175,6 +187,9 @@
 .footerLabel {
   font-size: 0.75rem;
   color: #021962;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .footerLabel strong {
@@ -253,6 +268,14 @@
   font-weight: 700;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.emptyIcon {
+  color: #1c4b98;
+  opacity: 0.3;
 }
 
 .emptyBtn:hover {
@@ -475,6 +498,9 @@
   font-size: 0.8125rem;
   color: #0f2a6b;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 /* ── Section card ──────────────────────────────────── */
@@ -506,6 +532,9 @@
   text-transform: uppercase;
   color: #0f2a6b;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 .sectionText {
