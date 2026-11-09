@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, User, Calendar, Tag, AlertCircle, Send, UserCheck, ShieldCheck, Target, BarChart2, Filter, Activity } from "lucide-react";
 import {
   getDashboardStats,
   getRecentIdeas,
@@ -119,28 +119,40 @@ export default function DashboardPage() {
         {/* ── Stats ── */}
         <div className={styles.statsGrid}>
           <div className={`${styles.statCard} ${styles.statCardPurple}`}>
-            <p className={styles.statLabel}>TOTAL SUBMITTED</p>
-            <p className={`${styles.statValue} ${styles.valPurple}`}>
-              {stats?.total_submitted ?? "—"}
-            </p>
+            <div className={styles.statCardBody}>
+              <Send size={22} className={`${styles.statCardIcon} ${styles.statIconPurple}`} />
+              <div>
+                <p className={styles.statLabel}>TOTAL SUBMITTED</p>
+                <p className={`${styles.statValue} ${styles.valPurple}`}>{stats?.total_submitted ?? "—"}</p>
+              </div>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardYellow}`}>
-            <p className={styles.statLabel}>MANAGER APPROVED</p>
-            <p className={`${styles.statValue} ${styles.valAmber}`}>
-              {stats?.manager_approved ?? "—"}
-            </p>
+            <div className={styles.statCardBody}>
+              <UserCheck size={22} className={`${styles.statCardIcon} ${styles.statIconAmber}`} />
+              <div>
+                <p className={styles.statLabel}>MANAGER APPROVED</p>
+                <p className={`${styles.statValue} ${styles.valAmber}`}>{stats?.manager_approved ?? "—"}</p>
+              </div>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardGreen}`}>
-            <p className={styles.statLabel}>GROUP APPROVED</p>
-            <p className={`${styles.statValue} ${styles.valGreen}`}>
-              {stats?.group_approved ?? "—"}
-            </p>
+            <div className={styles.statCardBody}>
+              <ShieldCheck size={22} className={`${styles.statCardIcon} ${styles.statIconGreen}`} />
+              <div>
+                <p className={styles.statLabel}>GROUP APPROVED</p>
+                <p className={`${styles.statValue} ${styles.valGreen}`}>{stats?.group_approved ?? "—"}</p>
+              </div>
+            </div>
           </div>
           <div className={`${styles.statCard} ${styles.statCardPurple}`}>
-            <p className={styles.statLabel}>IMPLEMENTED</p>
-            <p className={`${styles.statValue} ${styles.valPurple}`}>
-              {stats?.implemented ?? "—"}
-            </p>
+            <div className={styles.statCardBody}>
+              <Target size={22} className={`${styles.statCardIcon} ${styles.statIconPurple}`} />
+              <div>
+                <p className={styles.statLabel}>IMPLEMENTED</p>
+                <p className={`${styles.statValue} ${styles.valPurple}`}>{stats?.implemented ?? "—"}</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -148,7 +160,10 @@ export default function DashboardPage() {
         <div className={styles.chartsRow}>
           {/* Bar chart */}
           <div className={styles.chartCard}>
-            <p className={styles.chartTitle}>MONTHLY SUBMISSIONS</p>
+            <div className={styles.chartTitleRow}>
+              <BarChart2 size={18} className={styles.chartTitleIcon} />
+              <p className={styles.chartTitle}>MONTHLY SUBMISSIONS</p>
+            </div>
             <div className={styles.barChart}>
               {monthly.length === 0
                 ? <p className={styles.chartEmpty}>No data yet</p>
@@ -167,7 +182,10 @@ export default function DashboardPage() {
 
           {/* Funnel */}
           <div className={styles.chartCard}>
-            <p className={styles.chartTitle}>BY FUNCTION — TWO-STAGE FUNNEL</p>
+            <div className={styles.chartTitleRow}>
+              <Filter size={18} className={styles.chartTitleIcon} />
+              <p className={styles.chartTitle}>BY FUNCTION — TWO-STAGE FUNNEL</p>
+            </div>
             <div className={styles.funnelList}>
               {funnel.length === 0
                 ? <p className={styles.chartEmpty}>No data yet</p>
@@ -220,7 +238,10 @@ export default function DashboardPage() {
         {/* ── Recent activity ── */}
         <div className={styles.recentCard}>
           <div className={styles.recentHeader}>
-            <p className={styles.chartTitle}>RECENT ACTIVITY</p>
+            <div className={styles.chartTitleRow}>
+              <Activity size={18} className={styles.chartTitleIcon} />
+              <p className={styles.chartTitle}>RECENT ACTIVITY</p>
+            </div>
             <span className={styles.recentMeta}>Latest {ideas?.total ?? 0} ideas</span>
           </div>
 
