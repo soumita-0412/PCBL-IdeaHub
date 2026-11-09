@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { X, Search, Loader2 } from "lucide-react";
 import { searchUsers, type CommitteePerson } from "@/services/categoryService";
 import styles from "./UserSearchPicker.module.css";
 
 interface UserSearchPickerProps {
   label: string;
+  icon?: React.ReactNode;
   selected: CommitteePerson[];
   onChange: (users: CommitteePerson[]) => void;
   maxSelections: number;
@@ -15,6 +16,7 @@ interface UserSearchPickerProps {
 
 export function UserSearchPicker({
   label,
+  icon,
   selected,
   onChange,
   maxSelections,
@@ -84,7 +86,10 @@ export function UserSearchPicker({
 
   return (
     <div className={styles.root} ref={containerRef}>
-      <p className={styles.label}>{label}</p>
+      <p className={styles.label}>
+        {icon && <span className={styles.labelIcon}>{icon}</span>}
+        {label}
+      </p>
 
       {/* Selected chips */}
       {selected.length > 0 && (

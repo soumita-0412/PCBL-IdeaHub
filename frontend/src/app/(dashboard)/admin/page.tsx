@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Plus, Trash2, Pencil, X, Check } from "lucide-react";
+import { Plus, Trash2, Pencil, X, Check, Settings2, Building2, Tag, SlidersHorizontal, Crown, Users, FolderPlus } from "lucide-react";
 import {
   getCategories,
   createCategory,
@@ -82,7 +82,10 @@ function MatrixEditor({
     <div className={styles.matrixSection}>
       <div className={styles.matrixHeader}>
         <div>
-          <p className={styles.matrixTitle}>Scoring Matrix</p>
+          <p className={styles.matrixTitle}>
+            <SlidersHorizontal size={14} className={styles.sectionIcon} />
+            Scoring Matrix
+          </p>
           <p className={styles.matrixDesc}>All weights must total exactly 100%</p>
         </div>
         {options.length > 0 && (
@@ -276,7 +279,9 @@ function EditCategoryRow({
   return (
     <div className={styles.catEditPanel}>
       <div className={styles.field}>
-        <label className={styles.label}>Department</label>
+        <label className={styles.label}>
+          <Building2 size={13} className={styles.labelIcon} /> Department
+        </label>
         <input
           className={styles.input}
           type="text"
@@ -287,7 +292,9 @@ function EditCategoryRow({
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>Category Name</label>
+        <label className={styles.label}>
+          <Tag size={13} className={styles.labelIcon} /> Category Name
+        </label>
         <input
           className={styles.input}
           type="text"
@@ -308,12 +315,14 @@ function EditCategoryRow({
       <div className={styles.committeeSection}>
         <UserSearchPicker
           label="Idea Category Committee Lead"
+          icon={<Crown size={13} />}
           selected={committeeLead}
           onChange={setCommitteeLead}
           maxSelections={1}
         />
         <UserSearchPicker
           label="Idea Category Committee Members"
+          icon={<Users size={13} />}
           selected={committeeMembers}
           onChange={setCommitteeMembers}
           maxSelections={5}
@@ -416,7 +425,10 @@ export default function AdminDashboardPage() {
     <main className={styles.container}>
       <div className={styles.inner}>
         <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>Admin Dashboard</h1>
+          <h1 className={styles.pageTitle}>
+            <Settings2 size={16} className={styles.pageTitleIcon} />
+            Admin Dashboard
+          </h1>
           <p className={styles.pageSubtitle}>Manage idea categories and their scoring matrices</p>
         </div>
 
@@ -427,14 +439,14 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab("add")}
             type="button"
           >
-            Add Category
+            <FolderPlus size={14} className={styles.tabIcon} /> Add Category
           </button>
           <button
             className={`${styles.tab} ${activeTab === "edit" ? styles.tabActive : ""}`}
             onClick={() => setActiveTab("edit")}
             type="button"
           >
-            Edit Existing Category
+            <Pencil size={14} className={styles.tabIcon} /> Edit Existing Category
           </button>
         </div>
 
@@ -446,7 +458,9 @@ export default function AdminDashboardPage() {
             )}
 
             <div className={styles.field}>
-              <label className={styles.label}>Department</label>
+              <label className={styles.label}>
+                <Building2 size={13} className={styles.labelIcon} /> Department
+              </label>
               <input
                 className={styles.input}
                 type="text"
@@ -457,7 +471,9 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Category Name</label>
+              <label className={styles.label}>
+                <Tag size={13} className={styles.labelIcon} /> Category Name
+              </label>
               <input
                 className={styles.input}
                 type="text"
@@ -478,12 +494,14 @@ export default function AdminDashboardPage() {
             <div className={styles.committeeSection}>
               <UserSearchPicker
                 label="Idea Category Committee Lead"
+                icon={<Crown size={13} />}
                 selected={committeeLead}
                 onChange={setCommitteeLead}
                 maxSelections={1}
               />
               <UserSearchPicker
                 label="Idea Category Committee Members"
+                icon={<Users size={13} />}
                 selected={committeeMembers}
                 onChange={setCommitteeMembers}
                 maxSelections={5}
