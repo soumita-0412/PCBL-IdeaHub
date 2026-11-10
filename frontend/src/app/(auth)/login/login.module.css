@@ -140,12 +140,26 @@
 }
 
 .brandBox {
+  position: relative;
+  z-index: 1;
+}
+
+.brandHeading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
+.brandHeading svg {
+  margin-top: -6px;
+  flex-shrink: 0;
+}
+
+.brandText {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.625rem;
-  position: relative;
-  z-index: 1;
 }
 
 .brandTitle {
@@ -196,7 +210,8 @@
     border-radius: 0 0 1.5rem 1.5rem;
   }
   .rightBlobTop, .rightBlobBottom { display: none; }
-  .brandBox { align-items: center; text-align: center; }
+  .brandHeading { justify-content: center; }
+  .brandText { align-items: center; text-align: center; }
 
   .blobTopLeft, .blobBottomLeft { display: none; }
 }
