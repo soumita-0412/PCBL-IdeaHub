@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Search, X, ChevronDown } from "lucide-react";
+import { Search, X, ChevronDown, BookOpen, TrendingUp, Banknote, SlidersHorizontal, Tag, SearchX } from "lucide-react";
 import { getAllIdeas } from "@/services/ideaService";
 import { getAllManagerApprovals } from "@/services/managerApprovalService";
 import { getGroupReviews } from "@/services/groupReviewService";
@@ -114,12 +114,14 @@ function IdeaCard({ idea, l1Approval, groupReview }: IdeaCardProps) {
           <div className={styles.cardChips}>
             {idea.benefit && (
               <div className={styles.chipBox}>
+                <TrendingUp size={9} style={{ color: "#276e06", flexShrink: 0 }} />
                 <span className={styles.chipBoxLabel}>Benefits</span>
                 <span className={styles.chipBoxText}>{idea.benefit}</span>
               </div>
             )}
             {idea.annual_estimate !== null && (
               <div className={`${styles.chipBox} ${styles.chipBoxSavings}`}>
+                <Banknote size={9} style={{ color: "#a16807", flexShrink: 0 }} />
                 <span className={styles.chipBoxLabelSavings}>Savings</span>
                 <span className={styles.chipBoxValue}>
                   ₹ {idea.annual_estimate.toLocaleString("en-IN")} annual
@@ -222,7 +224,7 @@ export default function RepositoryPage() {
 
         {/* Page header */}
         <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>Knowledge Repository</h1>
+          <h1 className={styles.pageTitle}><BookOpen size={16} className={styles.pageTitleIcon} />Knowledge Repository</h1>
           <p className={styles.pageSubtitle}>
             Searchable archive of ideas and outcomes. Declined ideas display anonymously.
           </p>
@@ -247,7 +249,7 @@ export default function RepositoryPage() {
           </div>
 
           <div className={styles.filterGroup}>
-            <span className={styles.filterLabel}>Status</span>
+            <span className={styles.filterLabel}><SlidersHorizontal size={8} />Status</span>
             <div className={styles.selectWrap}>
               <select
                 className={styles.select}
@@ -263,7 +265,7 @@ export default function RepositoryPage() {
           </div>
 
           <div className={styles.filterGroup}>
-            <span className={styles.filterLabel}>Categories</span>
+            <span className={styles.filterLabel}><Tag size={8} />Categories</span>
             <div className={styles.selectWrap}>
               <select
                 className={styles.select}
@@ -290,6 +292,7 @@ export default function RepositoryPage() {
 
           {filtered !== null && filtered.length === 0 && (
             <div className={styles.emptyState}>
+              <SearchX size={28} className={styles.emptyStateIcon} />
               <p className={styles.emptyStateText}>No ideas match your filters.</p>
             </div>
           )}
