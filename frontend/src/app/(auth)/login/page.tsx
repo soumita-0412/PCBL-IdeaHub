@@ -13,9 +13,62 @@ export default function LoginPage() {
   return (
     <div className={styles.page}>
 
-      <div className={styles.blobTopLeft}     aria-hidden="true" />
-      <div className={styles.blobBottomLeft}  aria-hidden="true" />
-      <div className={styles.blobBottomRight} aria-hidden="true" />
+      <div className={styles.blobTopLeft}    aria-hidden="true" />
+      <div className={styles.blobBottomLeft} aria-hidden="true" />
+
+      {/*
+        Full-page SVG:
+        - Navy fill whose LEFT EDGE is the S-curve
+        - Animated dots and stroke travel along that exact same S-curve path
+        preserveAspectRatio="none" maps viewBox 0-100 directly to page width/height %.
+      */}
+      <svg
+        className={styles.dividerBg}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <path id="dividerPath" d="M50 0 C62 22 38 38 50 50 C62 62 38 78 50 100" />
+        </defs>
+
+        {/* Navy fill — right side of the S-curve */}
+        <path
+          d="M50 0 C62 22 38 38 50 50 C62 62 38 78 50 100 L100 100 L100 0 Z"
+          fill="#0f2a6b"
+        />
+
+        {/* Stroke along the curve boundary */}
+        <use
+          href="#dividerPath"
+          stroke="rgba(255,255,255,0.35)"
+          strokeWidth="0.2"
+          vectorEffect="non-scaling-stroke"
+          fill="none"
+        />
+
+        {/* Static anchor nodes */}
+        <circle cx="50" cy="0"   r="0.4" fill="white" opacity="0.4" />
+        <circle cx="50" cy="50"  r="0.5" fill="white" opacity="0.5" />
+        <circle cx="50" cy="100" r="0.4" fill="white" opacity="0.4" />
+
+        {/* Animated dots flowing along the divider */}
+        <circle r="0.5" fill="white" opacity="0.85">
+          <animateMotion dur="3.8s" repeatCount="indefinite" begin="0s">
+            <mpath href="#dividerPath" />
+          </animateMotion>
+        </circle>
+        <circle r="0.37" fill="white" opacity="0.55">
+          <animateMotion dur="3.8s" repeatCount="indefinite" begin="1.27s">
+            <mpath href="#dividerPath" />
+          </animateMotion>
+        </circle>
+        <circle r="0.27" fill="white" opacity="0.3">
+          <animateMotion dur="3.8s" repeatCount="indefinite" begin="2.53s">
+            <mpath href="#dividerPath" />
+          </animateMotion>
+        </circle>
+      </svg>
 
       {/* Left — Sign in */}
       <div className={styles.leftPanel}>
@@ -35,51 +88,10 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Center — flowing S-curve */}
-      <div className={styles.centerPanel}>
-        <svg
-          className={styles.flowSvg}
-          viewBox="0 0 100 570"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <defs>
-            <path
-              id="flowPath"
-              d="M50 20 C85 125 15 215 50 295 C85 375 15 465 50 550"
-            />
-          </defs>
-
-          {/* S-curve track */}
-          <use href="#flowPath" stroke="rgba(15,42,107,0.18)" strokeWidth="1.5" />
-
-          {/* Static anchor nodes */}
-          <circle cx="50" cy="20"  r="4.5" fill="#0f2a6b" opacity="0.45" />
-          <circle cx="50" cy="295" r="5.5" fill="#0f2a6b" opacity="0.55" />
-          <circle cx="50" cy="550" r="4.5" fill="#0f2a6b" opacity="0.45" />
-
-          {/* Flowing dots — staggered along the path */}
-          <circle r="5.5" fill="#0f2a6b">
-            <animateMotion dur="3.8s" repeatCount="indefinite" begin="0s">
-              <mpath href="#flowPath" />
-            </animateMotion>
-          </circle>
-          <circle r="4" fill="#1c4b98" opacity="0.65">
-            <animateMotion dur="3.8s" repeatCount="indefinite" begin="1.27s">
-              <mpath href="#flowPath" />
-            </animateMotion>
-          </circle>
-          <circle r="2.8" fill="#3b6fd4" opacity="0.4">
-            <animateMotion dur="3.8s" repeatCount="indefinite" begin="2.53s">
-              <mpath href="#flowPath" />
-            </animateMotion>
-          </circle>
-        </svg>
-      </div>
-
       {/* Right — brand */}
       <div className={styles.rightPanel}>
+        <div className={styles.rightBlobTop}    aria-hidden="true" />
+        <div className={styles.rightBlobBottom} aria-hidden="true" />
         <div className={styles.brandBox}>
           <h1 className={styles.brandTitle}>IdeaHub</h1>
           <p className={styles.brandTagline}>Where great ideas<br />come to life</p>
