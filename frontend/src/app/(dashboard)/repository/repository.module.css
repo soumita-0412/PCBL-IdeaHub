@@ -46,6 +46,12 @@
   gap: 0.5rem;
 }
 
+.pageTitleIcon {
+  color: #0f2a6b;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
 .pageTitle::before {
   content: '';
   display: inline-block;
@@ -113,6 +119,9 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #0f2a6b;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
 }
 
 .searchWrap {
@@ -418,6 +427,15 @@
 .emptyState {
   padding: 3rem 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emptyStateIcon {
+  color: #64748b;
+  opacity: 0.35;
 }
 
 .emptyStateText {
